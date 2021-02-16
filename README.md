@@ -19,3 +19,13 @@
 ## Database
 
 - storage: Storage
+
+
+## User Interface Design
+
+Notes:
+
+- Summary button at the top (tabs)
+- Tasks as a list of "cards"
+- Separate the stopped/running tasks
+- Drop down for tags/sizes
