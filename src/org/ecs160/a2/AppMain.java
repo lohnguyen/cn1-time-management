@@ -56,17 +56,27 @@ public class MyApplication {
         }
         Form hi = new Form("Task Management App", new BorderLayout());
 
-        Tabs t = new Tabs();
-        hi.add(BorderLayout.NORTH, t);
-        Container taskContainer = new Container((new BoxLayout(BoxLayout.Y_AXIS)));
-        taskContainer.add(new Label("Tasks will show up here."));
-        t.addTab("Tasks", taskContainer);
-        Container summaryContainer = new Container((new BoxLayout(BoxLayout.Y_AXIS)));
-        summaryContainer.add(new Label("Summary and/or options will be displayed here."));
-        t.addTab("Summary", summaryContainer);
+        Tabs tabs = new Tabs();
+        hi.add(BorderLayout.CENTER, tabs);
+        tabs.addTab("Tasks", BoxLayout.encloseXCenter(new Label("Tasks will show up here.")));
+        tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary and/or options will show up here.")));
 
 
         hi.show();
+
+//        Tabs t = new Tabs();
+//        hi.add(BorderLayout.NORTH, t);
+//        Container taskContainer = new Container((new BoxLayout(BoxLayout.Y_AXIS)));
+//        taskContainer.add(new Label("Tasks will show up here."));
+//        t.addTab("Tasks", taskContainer);
+//        t.addComponent(taskContainer);
+//        Container summaryContainer = new Container((new BoxLayout(BoxLayout.Y_AXIS)));
+//        summaryContainer.add(new Label("Summary and/or options will be displayed here."));
+//        t.addTab("Summary", summaryContainer);
+//        t.addComponent(summaryContainer);
+
+
+
     }
 
     public void stop() {
