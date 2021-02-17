@@ -1,5 +1,6 @@
 package org.ecs160.a2;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,20 @@ public class Task {
       TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
       // TODO return the check if most recent time span is in progress
    }
-   
-   public void startNewTimeSpan (LocalDateTime startTime) {
+
+   public void start (LocalDateTime startTime) {
       this.timeSpanList.add(new TimeSpan(startTime));
+   }
+
+   public void stop (LocalDateTime stopTime) {
+      TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
+      // TODO check if most recent time span is in progress, throw
+      // an exception if it's not.  If it is, update it's recent time
+   }
+
+   // NOTE: could be public, or called every time total time is
+   private void calculateTotalTime () {
+      Duration currentDuration = Duration.ZERO;
+      // TODO loop through time span list, and add up the total time spent
    }
 }
