@@ -90,7 +90,7 @@ public class Test implements Externalizable {
         description = Util.readUTF(in);
         size = Util.readUTF(in);
         totalTime = in.readLong();
-        tags = (List<String>)Util.readObject(in);
+        tags = (List<String>) Util.readObject(in);
     }
 
     @Override

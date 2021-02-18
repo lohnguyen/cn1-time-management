@@ -12,6 +12,7 @@ public class Database {
     static Storage db = Storage.getInstance();
 
     static void init() {
+        Util.register(Task.OBJECT_ID, Task.class);
         Util.register(Test.OBJECT_ID, Test.class);
     }
 
