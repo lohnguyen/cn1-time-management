@@ -3,18 +3,14 @@ package org.ecs160.a2;
 
 import static com.codename1.ui.CN.*;
 
-import com.codename1.components.SpanLabel;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
-import com.codename1.ui.plaf.Border;
-import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
-import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.io.NetworkEvent;
+
 import java.lang.Object;
 
 /**
@@ -41,7 +37,7 @@ public class AppMain {
         addNetworkErrorListener(err -> {
             // prevent the event from propagating
             err.consume();
-            if(err.getError() != null) {
+            if (err.getError() != null) {
                 Log.e(err.getError());
             }
             Log.sendLogAsync();
@@ -50,10 +46,14 @@ public class AppMain {
     }
 
     public void start() {
-        if(current != null){
+        if (current != null) {
             current.show();
             return;
         }
+
+        // TODO: Test, take out when done
+        Database.init();
+        Database.test();
 
         Form hi = new Form("Task Management App", new BorderLayout());
 
@@ -67,8 +67,8 @@ public class AppMain {
 
     public void stop() {
         current = getCurrentForm();
-        if(current instanceof Dialog) {
-            ((Dialog)current).dispose();
+        if (current instanceof Dialog) {
+            ((Dialog) current).dispose();
             current = getCurrentForm();
         }
     }
