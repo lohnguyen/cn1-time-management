@@ -1,6 +1,5 @@
 package org.ecs160.a2;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +108,7 @@ public class Task {
    public void stop () {
       this.stop(LocalDateTime.now());
    }
-   
+
    // NOTE: could be public, or called every time total time is
    private void calculateTotalTime () {
       return TimeSpan.getTotalDuration(this.timeSpanList);
