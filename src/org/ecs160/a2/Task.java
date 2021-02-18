@@ -49,30 +49,69 @@ public class Task {
    public List<TimeSpan> getTimeSpans () { return this.timeSpanList; }
    public List<String> getTags() { return this.tags; }
 
-   // get the most recently added time span/window
+   /**
+    * Gets the most recently added time span/window
+    *
+    * @return The TimeSpan object of the most recently added time span
+    */
    public TimeSpan getMostRecentTimeSpan () {
       return this.timeSpanList.get(timeSpanList.size() - 1);
    }
 
-   // checks whether the most recent time span is currently in progress
+   /**
+    * Checks whether the most recent time span is currently in progress
+    *
+    * @return Boolean that indicates whether the Task is running
+    */
    public boolean isInProgress () {
       TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-      // TODO return the check if most recent time span is in progress
+      return currentTimeSpan.isRunning();
    }
 
+   /**
+    * Starts the task according to the given LocalDateTime
+    *
+    * @param startTime The start time of the new TimeSpan
+    */
    public void start (LocalDateTime startTime) {
-      this.timeSpanList.add(new TimeSpan(startTime));
+      TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
+      if (!currentTimeSpan.isRunning()) { // task not running
+         this.timeSpanList.add(new TimeSpan(startTime, null));
+      } else {
+         // TODO throw a custom exception if something is running
+      }
    }
 
+   /**
+    * Starts the task at the current system time
+    */
+   public void start () {
+      this.start(LocalDateTime.now());
+   }
+
+   /**
+    * Stops the task according to the given LocalDateTime
+    *
+    * @param startTime The stop time of the currently running TimeSpan
+    */
    public void stop (LocalDateTime stopTime) {
       TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-      // TODO check if most recent time span is in progress, throw
-      // an exception if it's not.  If it is, update it's recent time
+      if (currentTimeSpan.isRunning()) {
+         currentTimeSpan.stopSpan(stopTime);
+      } else {
+         // TODO throw a custom exception if nothing is running
+      }
    }
 
+   /**
+    * Stops the task at the current system time
+    */
+   public void stop () {
+      this.stop(LocalDateTime.now());
+   }
+   
    // NOTE: could be public, or called every time total time is
    private void calculateTotalTime () {
-      Duration currentDuration = Duration.ZERO;
-      // TODO loop through time span list, and add up the total time spent
+      return TimeSpan.getTotalDuration(this.timeSpanList);
    }
 }
