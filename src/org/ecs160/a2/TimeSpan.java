@@ -101,9 +101,6 @@ public class TimeSpan {
                         duration.plus(span.getDuration(LocalDateTime.now()));
             }
         }
-        for (final TimeSpan timespan : timespans) {
-            duration = duration.plus(timespan.getDuration());
-        }
         return duration;
     }
 }
