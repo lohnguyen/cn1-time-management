@@ -13,6 +13,7 @@ import com.codename1.io.Log;
 
 import com.codename1.ui.layouts.BoxLayout;
 
+import java.io.IOException;
 import java.lang.Object;
 
 /**
@@ -62,6 +63,21 @@ public class AppMain {
 
         Form hi = new Form("Task Management App", new BorderLayout());
 
+        Toolbar toolbar = new Toolbar();
+        hi.setToolbar(toolbar);
+        toolbar.setTitle("Tasks");
+        Button addTaskButton = new Button();
+
+        try {
+            addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        toolbar.addComponent(BorderLayout.EAST, addTaskButton);
+
+        addTaskButton.addActionListener(e->showNewTaskForm());
+
         final FontImage taskOn =
                 FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON, "Label"
                         , 6);
@@ -93,6 +109,10 @@ public class AppMain {
         tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary " +
                 "and/or options will show up here.")));
         hi.show();
+    }
+
+    private void showNewTaskForm() {
+        log("New Task Form.");
     }
 
     public void stop() {
