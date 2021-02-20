@@ -6,6 +6,7 @@ import com.codename1.io.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class Task implements Externalizable {
     /**
      * Stops the task according to the given LocalDateTime
      *
-     * @param startTime The stop time of the currently running TimeSpan
+     * @param stopTime The stop time of the currently running TimeSpan
      */
     public void stop(LocalDateTime stopTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
@@ -142,7 +143,7 @@ public class Task implements Externalizable {
     }
 
     // NOTE: could be public, or called every time total time is
-    private void calculateTotalTime() {
+    private Duration calculateTotalTime() {
         return TimeSpan.getTotalDuration(this.timeSpans);
     }
 
