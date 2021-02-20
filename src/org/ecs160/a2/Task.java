@@ -29,8 +29,8 @@ public class Task implements Externalizable {
 
         // task time internals
         this.totalTime = 0L;
-        this.timeSpans = new ArrayList<TimeSpan>();
-        this.tags = new ArrayList<String>();
+        this.timeSpans = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
 
     // allow for the construction of a Task based on a title
