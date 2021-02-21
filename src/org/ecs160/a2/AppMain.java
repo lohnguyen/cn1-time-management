@@ -7,6 +7,7 @@ import com.codename1.components.MultiButton;
 import com.codename1.components.ToastBar;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.layouts.TextModeLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
@@ -60,7 +61,7 @@ public class AppMain {
 
         // TODO: Test, take out when done
         Database.init();
-        Database.test();
+        //Database.test();
 
         Form hi = new Form("Task Management App", new BorderLayout());
 
@@ -77,43 +78,95 @@ public class AppMain {
 
         toolbar.addComponent(BorderLayout.EAST, addTaskButton);
 
-        addTaskButton.addActionListener(e->showNewTaskForm());
+        addTaskButton.addActionListener(e->showAddTaskDialog());
 
         final FontImage taskOn =
                 FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON, "Label"
                         , 6);
 
-        Container taskList = new InfiniteContainer() {
-            @Override
-            public Component[] fetchComponents(int index, int amount) {
-                Component[] allTasks = new Component[20];
-
-                for (int i = 0; i < allTasks.length; i++) {
-                    final int taskNum = i;
-                    MultiButton buttons = new MultiButton("Task " + taskNum);
-                    buttons.setTextLine2("details");
-                    FontImage.setMaterialIcon(buttons,
-                            FontImage.MATERIAL_ALARM_ON);
-                    buttons.addActionListener(ee ->
-                            ToastBar.showMessage("Clicked: " + taskNum,
-                                    FontImage.MATERIAL_ALARM_ON));
-                    allTasks[i] = buttons;
-                }
-
-                return allTasks;
-            }
-        };
+//        Container taskList = new InfiniteContainer() {
+//            @Override
+//            public Component[] fetchComponents(int index, int amount) {
+//                Component[] allTasks = new Component[20];
+//
+//                for (int i = 0; i < allTasks.length; i++) {
+//                    final int taskNum = i;
+//                    MultiButton buttons = new MultiButton("Task " + taskNum);
+//                    buttons.setTextLine2("details");
+//                    FontImage.setMaterialIcon(buttons,
+//                            FontImage.MATERIAL_ALARM_ON);
+//                    buttons.addActionListener(ee ->
+//                            ToastBar.showMessage("Clicked: " + taskNum,
+//                                    FontImage.MATERIAL_ALARM_ON));
+//                    allTasks[i] = buttons;
+//                }
+//
+//                return allTasks;
+//            }
+//        };
 
         Tabs tabs = new Tabs();
         hi.add(BorderLayout.CENTER, tabs);
-        tabs.addTab("Tasks", taskOn, taskList);
+        //tabs.addTab("Tasks", taskOn, taskList);
+        tabs.addTab("Tasks", BoxLayout.encloseXCenter(new Label("Tasks will show up here")));
         tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary " +
                 "and/or options will show up here.")));
         hi.show();
     }
 
-    private void showNewTaskForm() {
-        log("New Task Form.");
+    private void showAddTaskDialog() {
+        Dialog addNewTaskDialog = new Dialog("New Task");
+        addNewTaskDialog.setLayout(new BorderLayout());
+        int h = Display.getInstance().getDisplayHeight();
+        addNewTaskDialog.setDisposeWhenPointerOutOfBounds(true);
+        displayTaskForm(addNewTaskDialog);
+        addNewTaskDialog.show(h/4, 0, 0, 0);
+    }
+
+    private void displayTaskForm(Dialog addNewTaskDialog) {
+        TextModeLayout textLayout = new TextModeLayout(3,2);
+        Form newTaskForm = new Form("Enter Task Details", textLayout);
+
+        TextComponent taskName = new TextComponent().label("Task Name");
+        TextComponent taskTags = new TextComponent().label("Task Tags");
+
+        // Sizes start -----------------------
+        String[] sizes = {"None", "S", "M", "L", "XL"};
+        MultiButton sizeButton = new MultiButton("Size");
+        sizeButton.addActionListener(e->showSizePopup(sizes, sizeButton));
+        // Sizes Stop -----------------------
+
+        TextComponent taskDescription = new TextComponent().label("Description").multiline(true);
+
+        newTaskForm.add(textLayout.createConstraint(), taskName);
+        newTaskForm.add(sizeButton);
+        newTaskForm.add(taskTags);
+        newTaskForm.add(taskDescription);
+
+
+        Button btn = new Button("Add Task");
+
+        addNewTaskDialog.add(BorderLayout.SOUTH, btn);
+        addNewTaskDialog.add(BorderLayout.NORTH, newTaskForm);
+    }
+
+    private void showSizePopup(String[] sizes, MultiButton sizeButton) {
+        Dialog sizeDialog = new Dialog();
+        sizeDialog.setLayout(BoxLayout.y());
+        sizeDialog.getContentPane().setScrollableY(true);
+
+        for (int i = 0; i < sizes.length; i++) {
+            MultiButton oneSizeButton = new MultiButton(sizes[i]);
+            sizeDialog.add(oneSizeButton);
+            oneSizeButton.addActionListener(e->displaySelectedSize(sizeDialog, oneSizeButton, sizeButton));
+        }
+        sizeDialog.showPopupDialog(sizeButton);
+    }
+
+    private void displaySelectedSize(Dialog sizeDialog, MultiButton oneSizeButton, MultiButton sizeButton) {
+        sizeButton.setText(oneSizeButton.getText());
+        sizeDialog.dispose();
+        sizeButton.revalidate();
     }
 
     public void stop() {
