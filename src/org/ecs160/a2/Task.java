@@ -67,6 +67,10 @@ public class Task implements Externalizable {
         this.size = size;
     }
 
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    } 
+
     // for the time internals
     public long getTotalTime() {
         return this.totalTime;
