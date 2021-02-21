@@ -1,4 +1,4 @@
-package org.ecs160.a2;
+package org.ecs160.a2.models;
 
 import com.codename1.io.Externalizable;
 import com.codename1.io.Util;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Task implements Externalizable {
 
-    static final String OBJECT_ID = "Task";
+    public static final String OBJECT_ID = "Task";
 
     private String title, description, size;
     private long totalTime; // total time spent (excluding in progress)

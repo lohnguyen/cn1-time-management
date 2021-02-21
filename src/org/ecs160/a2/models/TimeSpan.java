@@ -1,4 +1,4 @@
-package org.ecs160.a2;
+package org.ecs160.a2.models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

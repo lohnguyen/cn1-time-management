@@ -3,15 +3,15 @@ package org.ecs160.a2;
 
 import static com.codename1.ui.CN.*;
 
-import com.codename1.components.MultiButton;
-import com.codename1.components.ToastBar;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
-import com.codename1.ui.layouts.BoxLayout;
+import org.ecs160.a2.ui.Summary;
+import org.ecs160.a2.ui.TaskList;
+import org.ecs160.a2.utils.Database;
 
 import java.io.IOException;
 import java.lang.Object;
@@ -51,21 +51,15 @@ public class AppMain {
       });
 
       Database.init();
-//        Database.test();
    }
 
-   public void start() {
-      if (current != null) {
-         current.show();
-         return;
-      }
-
-      Form hi = new Form("Task Management App", new BorderLayout());
-
+   private void setToolbar() {
       Toolbar toolbar = new Toolbar();
-      hi.setToolbar(toolbar);
-      toolbar.setTitle("Tasks");
+      current.setToolbar(toolbar);
+//      toolbar.setTitle("Tasks");
+
       Button addTaskButton = new Button();
+      addTaskButton.addActionListener(e->showNewTaskForm());
 
       try {
          addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
@@ -74,40 +68,30 @@ public class AppMain {
       }
 
       toolbar.addComponent(BorderLayout.EAST, addTaskButton);
+   }
 
-      addTaskButton.addActionListener(e->showNewTaskForm());
-
-      final FontImage taskOn =
-              FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON, "Label"
-                      , 6);
-
-      Container taskList = new InfiniteContainer() {
-         @Override
-         public Component[] fetchComponents(int index, int amount) {
-            Component[] allTasks = new Component[20];
-
-            for (int i = 0; i < allTasks.length; i++) {
-               final int taskNum = i;
-               MultiButton buttons = new MultiButton("Task " + taskNum);
-               buttons.setTextLine2("details");
-               FontImage.setMaterialIcon(buttons,
-                       FontImage.MATERIAL_ALARM_ON);
-               buttons.addActionListener(ee ->
-                       ToastBar.showMessage("Clicked: " + taskNum,
-                               FontImage.MATERIAL_ALARM_ON));
-               allTasks[i] = buttons;
-            }
-
-            return allTasks;
-         }
-      };
+   private void setBottomTabs() {
+      FontImage taskIcon = FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON,
+              "Label", 6);
 
       Tabs tabs = new Tabs();
-      hi.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskOn, taskList);
-      tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary " +
-              "and/or options will show up here.")));
-      hi.show();
+      current.add(BorderLayout.CENTER, tabs);
+      tabs.addTab("Tasks", taskIcon, new TaskList().get());
+      tabs.addTab("Summary", new Summary().get());
+   }
+
+   public void start() {
+      if (current != null) {
+         current.show();
+         return;
+      }
+
+      current = new Form("Task Management App", new BorderLayout());
+
+      setToolbar();
+      setBottomTabs();
+
+      current.show();
    }
 
    private void showNewTaskForm() {

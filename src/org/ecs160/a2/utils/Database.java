@@ -1,8 +1,9 @@
-package org.ecs160.a2;
+package org.ecs160.a2.utils;
 
 import com.codename1.io.Log;
 import com.codename1.io.Storage;
 import com.codename1.io.Util;
+import org.ecs160.a2.models.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class Database {
     static Storage db = Storage.getInstance();
 
-    static void init() {
+    public static void init() {
         Util.register(Task.OBJECT_ID, Task.class);
     }
 
