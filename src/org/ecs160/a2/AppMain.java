@@ -103,14 +103,10 @@ public class AppMain {
             }
         };
 
-        // NOTE: may want to move this to its own class later on
-        Container summaryContainer = new Container () {
-        };
-
         Tabs tabs = new Tabs();
         hi.add(BorderLayout.CENTER, tabs);
         tabs.addTab("Tasks", taskOn, taskList);
-        tabs.addTab("Summary", summaryContainer);
+        tabs.addTab("Summary", new SummaryContainer());
         hi.show();
     }
 
