@@ -1,0 +1,7 @@
+# artifacts
+build/
+dist/
+
+# some build stuff
+build.xml
+codenameone_kotlin.properties
