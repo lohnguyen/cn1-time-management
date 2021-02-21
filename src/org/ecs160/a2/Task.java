@@ -91,7 +91,8 @@ public class Task implements Externalizable {
      * @return The TimeSpan object of the most recently added time span
      */
     public TimeSpan getMostRecentTimeSpan() {
-        return this.timeSpans.get(timeSpans.size() - 1);
+        if (timeSpans.size() == 0) return null;
+        else return this.timeSpans.get(timeSpans.size() - 1);
     }
 
     /**
