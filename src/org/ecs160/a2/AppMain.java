@@ -49,11 +49,6 @@ public class AppMain {
                             err.getConnectionRequest().getUrl(), "OK",
                     null);
         });
-<<<<<<< HEAD
-
-        Database.init();
-    }
-=======
 
         Database.init();
 //        Database.test();
@@ -66,13 +61,10 @@ public class AppMain {
         }
 
         Form hi = new Form("Task Management App", new BorderLayout());
->>>>>>> main
 
-    private void setToolbar() {
         Toolbar toolbar = new Toolbar();
-        current.setToolbar(toolbar);
+        hi.setToolbar(toolbar);
         toolbar.setTitle("Tasks");
-
         Button addTaskButton = new Button();
 
         try {
@@ -81,27 +73,13 @@ public class AppMain {
             e.printStackTrace();
         }
 
-        addTaskButton.addActionListener(e->showNewTaskForm());
         toolbar.addComponent(BorderLayout.EAST, addTaskButton);
-    }
 
-    public void start() {
-        if (current != null) {
-            current.show();
-            return;
-        }
+        addTaskButton.addActionListener(e->showNewTaskForm());
 
-        current = new Form("Task Management App", new BorderLayout());
-        setToolbar();
-        setTabs();
-
-        current.show();
-    }
-
-    private void setTabs() {
-        Tabs tabs = new Tabs();
-        FontImage taskIcon = FontImage.createMaterial(
-                FontImage.MATERIAL_ALARM_ON, "Label", 6);
+        final FontImage taskOn =
+                FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON, "Label"
+                        , 6);
 
         Container taskList = new InfiniteContainer() {
             @Override
@@ -124,13 +102,15 @@ public class AppMain {
             }
         };
 
-        tabs.addTab("Tasks", taskIcon, taskList);
-        tabs.addTab("Summary", UISummary.instance());
-        current.add(BorderLayout.CENTER, tabs);
+        Tabs tabs = new Tabs();
+        hi.add(BorderLayout.CENTER, tabs);
+        tabs.addTab("Tasks", taskOn, taskList);
+        tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary " +
+                "and/or options will show up here.")));
+        hi.show();
     }
 
     private void showNewTaskForm() {
-        UIEditTask edit = new UIEditTask();
         log("New Task Form.");
     }
 
