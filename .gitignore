@@ -1,0 +1,11 @@
+.idea
+lib/
+native/
+out/
+override/
+codenameone_kotlin.properties
+CodeNameOneBuildClient.jar
+Final\ Project.iml
+JavaSE.jar
+Versions.properties
+
