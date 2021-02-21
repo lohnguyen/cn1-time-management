@@ -22,113 +22,107 @@ import java.lang.Object;
  */
 public class AppMain {
 
-    private Form current;
-    private Resources theme;
+   private Form current;
+   private Resources theme;
 
-    public void init(Object context) {
-        // use two network threads instead of one
-        updateNetworkThreadCount(2);
+   public void init(Object context) {
+      // use two network threads instead of one
+      updateNetworkThreadCount(2);
 
-        theme = UIManager.initFirstTheme("/theme");
+      theme = UIManager.initFirstTheme("/theme");
 
-        // Enable Toolbar on all Forms by default
-        Toolbar.setGlobalToolbar(true);
+      // Enable Toolbar on all Forms by default
+      Toolbar.setGlobalToolbar(true);
 
-        // Pro only feature
-        Log.bindCrashProtection(true);
+      // Pro only feature
+      Log.bindCrashProtection(true);
 
-        addNetworkErrorListener(err -> {
-            // prevent the event from propagating
-            err.consume();
-            if (err.getError() != null) {
-                Log.e(err.getError());
-            }
-            Log.sendLogAsync();
-            Dialog.show("Connection Error",
-                    "There was a networking error in the connection to " +
-                            err.getConnectionRequest().getUrl(), "OK",
-                    null);
-        });
+      addNetworkErrorListener(err -> {
+         // prevent the event from propagating
+         err.consume();
+         if (err.getError() != null) {
+            Log.e(err.getError());
+         }
+         Log.sendLogAsync();
+         Dialog.show("Connection Error",
+                 "There was a networking error in the connection to " +
+                         err.getConnectionRequest().getUrl(), "OK",
+                 null);
+      });
 
-        Database.init();
+      Database.init();
 //        Database.test();
-    }
+   }
 
-    public void start() {
-        if (current != null) {
-            current.show();
-            return;
-        }
+   public void start() {
+      if (current != null) {
+         current.show();
+         return;
+      }
 
-<<<<<<< HEAD
-        // TODO: Test, take out when done
-        Database.init();
-        // Database.test();
+      Form hi = new Form("Task Management App", new BorderLayout());
 
-=======
->>>>>>> main
-        Form hi = new Form("Task Management App", new BorderLayout());
+      Toolbar toolbar = new Toolbar();
+      hi.setToolbar(toolbar);
+      toolbar.setTitle("Tasks");
+      Button addTaskButton = new Button();
 
-        Toolbar toolbar = new Toolbar();
-        hi.setToolbar(toolbar);
-        toolbar.setTitle("Tasks");
-        Button addTaskButton = new Button();
+      try {
+         addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
 
-        try {
-            addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+      toolbar.addComponent(BorderLayout.EAST, addTaskButton);
 
-        toolbar.addComponent(BorderLayout.EAST, addTaskButton);
+      addTaskButton.addActionListener(e->showNewTaskForm());
 
-        addTaskButton.addActionListener(e->showNewTaskForm());
+      final FontImage taskOn =
+              FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON, "Label"
+                      , 6);
 
-        final FontImage taskOn =
-                FontImage.createMaterial(FontImage.MATERIAL_ALARM_ON, "Label"
-                        , 6);
+      Container taskList = new InfiniteContainer() {
+         @Override
+         public Component[] fetchComponents(int index, int amount) {
+            Component[] allTasks = new Component[20];
 
-        Container taskList = new InfiniteContainer() {
-            @Override
-            public Component[] fetchComponents(int index, int amount) {
-                Component[] allTasks = new Component[20];
-
-                for (int i = 0; i < allTasks.length; i++) {
-                    final int taskNum = i;
-                    MultiButton buttons = new MultiButton("Task " + taskNum);
-                    buttons.setTextLine2("details");
-                    FontImage.setMaterialIcon(buttons,
-                            FontImage.MATERIAL_ALARM_ON);
-                    buttons.addActionListener(ee ->
-                            ToastBar.showMessage("Clicked: " + taskNum,
-                                    FontImage.MATERIAL_ALARM_ON));
-                    allTasks[i] = buttons;
-                }
-
-                return allTasks;
+            for (int i = 0; i < allTasks.length; i++) {
+               final int taskNum = i;
+               MultiButton buttons = new MultiButton("Task " + taskNum);
+               buttons.setTextLine2("details");
+               FontImage.setMaterialIcon(buttons,
+                       FontImage.MATERIAL_ALARM_ON);
+               buttons.addActionListener(ee ->
+                       ToastBar.showMessage("Clicked: " + taskNum,
+                               FontImage.MATERIAL_ALARM_ON));
+               allTasks[i] = buttons;
             }
-        };
 
-        Tabs tabs = new Tabs();
-        hi.add(BorderLayout.CENTER, tabs);
-        tabs.addTab("Tasks", taskOn, taskList);
-        tabs.addTab("Summary", new SummaryContainer());
-        hi.show();
-    }
+            return allTasks;
+         }
+      };
 
-    private void showNewTaskForm() {
-        log("New Task Form.");
-    }
+      Tabs tabs = new Tabs();
+      hi.add(BorderLayout.CENTER, tabs);
+      tabs.addTab("Tasks", taskOn, taskList);
+      tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary " +
+              "and/or options will show up here.")));
+      hi.show();
+   }
 
-    public void stop() {
-        current = getCurrentForm();
-        if (current instanceof Dialog) {
-            ((Dialog) current).dispose();
-            current = getCurrentForm();
-        }
-    }
+   private void showNewTaskForm() {
+      log("New Task Form.");
+   }
 
-    public void destroy() {
-    }
+   public void stop() {
+      current = getCurrentForm();
+      if (current instanceof Dialog) {
+         ((Dialog) current).dispose();
+         current = getCurrentForm();
+      }
+   }
+
+   public void destroy() {
+   }
 
 }
