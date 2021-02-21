@@ -6,7 +6,7 @@ out/
 override/
 codenameone_kotlin.properties
 CodeNameOneBuildClient.jar
-Final\ Project.iml
+*.iml
 JavaSE.jar
 Versions.properties
 
