@@ -1,7 +1,11 @@
-# artifacts
-build/
-dist/
-
-# some build stuff
-build.xml
+.idea
+.DS_Store
+lib/
+native/
+out/
+override/
 codenameone_kotlin.properties
+CodeNameOneBuildClient.jar
+*.iml
+JavaSE.jar
+Versions.properties

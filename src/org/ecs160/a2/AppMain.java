@@ -49,6 +49,9 @@ public class AppMain {
                             err.getConnectionRequest().getUrl(), "OK",
                     null);
         });
+
+        Database.init();
+//        Database.test();
     }
 
     public void start() {
@@ -57,10 +60,13 @@ public class AppMain {
             return;
         }
 
+<<<<<<< HEAD
         // TODO: Test, take out when done
         Database.init();
         // Database.test();
 
+=======
+>>>>>>> main
         Form hi = new Form("Task Management App", new BorderLayout());
 
         Toolbar toolbar = new Toolbar();
