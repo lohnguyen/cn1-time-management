@@ -49,9 +49,24 @@ public class AppMain {
                             err.getConnectionRequest().getUrl(), "OK",
                     null);
         });
+<<<<<<< HEAD
 
         Database.init();
     }
+=======
+
+        Database.init();
+//        Database.test();
+    }
+
+    public void start() {
+        if (current != null) {
+            current.show();
+            return;
+        }
+
+        Form hi = new Form("Task Management App", new BorderLayout());
+>>>>>>> main
 
     private void setToolbar() {
         Toolbar toolbar = new Toolbar();
