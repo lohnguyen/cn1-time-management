@@ -59,7 +59,7 @@ public class AppMain {
 
         // TODO: Test, take out when done
         Database.init();
-        Database.test();
+        // Database.test();
 
         Form hi = new Form("Task Management App", new BorderLayout());
 
@@ -103,11 +103,14 @@ public class AppMain {
             }
         };
 
+        // NOTE: may want to move this to its own class later on
+        Container summaryContainer = new Container () {
+        };
+
         Tabs tabs = new Tabs();
         hi.add(BorderLayout.CENTER, tabs);
         tabs.addTab("Tasks", taskOn, taskList);
-        tabs.addTab("Summary", BoxLayout.encloseXCenter(new Label("Summary " +
-                "and/or options will show up here.")));
+        tabs.addTab("Summary", summaryContainer);
         hi.show();
     }
 
