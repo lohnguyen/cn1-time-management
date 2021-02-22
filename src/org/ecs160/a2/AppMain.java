@@ -1,11 +1,9 @@
 package org.ecs160.a2;
 
-
 import static com.codename1.ui.CN.*;
 
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
-import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
@@ -59,7 +57,7 @@ public class AppMain {
    private void setToolbar() {
       Toolbar toolbar = new Toolbar();
       current.setToolbar(toolbar);
-//      toolbar.setTitle("Tasks");
+      toolbar.setTitle("Tasks");
 
       Button addTaskButton = new Button();
       addTaskButton.addActionListener(e->showNewTaskForm());
@@ -79,7 +77,7 @@ public class AppMain {
 
       Tabs tabs = new Tabs();
       current.add(BorderLayout.CENTER, tabs);
-      //tabs.addTab("Tasks", taskIcon, new TaskList().get());
+      tabs.addTab("Tasks", taskIcon, new TaskList().get());
       tabs.addTab("Summary", new Summary().get());
 
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
@@ -95,23 +93,16 @@ public class AppMain {
 
       Database database = new Database();
 
-      ArrayList<Task> tasks = new ArrayList<Task>();
       for (int i = 0; i < 20; i++) {
          Task task = new Task("Task Number " + i);
-//         if (i % 2 == 0) {
-//            task.start();
-//         }
-         tasks.add(task);
+         if (i % 2 == 0) {
+            task.start();
+         }
+         Database.write(Task.OBJECT_ID, task);
       }
 
-      TaskList taskList = new TaskList(database);
-      current.add(BorderLayout.CENTER, taskList.getContainer(tasks));
-      current.addPullToRefresh(() -> {
-         taskList.refreshContainer();
-      });
-
-      //setToolbar();
-      //setBottomTabs();
+      setToolbar();
+      setBottomTabs();
 
       current.show();
    }
