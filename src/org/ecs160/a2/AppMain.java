@@ -60,7 +60,7 @@ public class AppMain {
       toolbar.setTitle("Tasks");
 
       Button addTaskButton = new Button();
-      addTaskButton.addActionListener(e->new AddNewTask().get());
+      addTaskButton.addActionListener(e->new AddNewTask().getTaskDialog());
 
       try {
          addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
