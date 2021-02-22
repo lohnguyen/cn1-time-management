@@ -19,7 +19,7 @@ import java.util.List;
 public class AddNewTask {
 
     public void getTaskDialog() {
-        Database.deleteAll(Task.OBJECT_ID);
+
         Dialog addNewTaskDialog = new Dialog("New Task");
         addNewTaskDialog.setLayout(new BorderLayout());
         int displayHeight = Display.getInstance().getDisplayHeight();
@@ -56,28 +56,8 @@ public class AddNewTask {
         newTask.setTags(taskTagsList);
 
         String key = Task.OBJECT_ID;
-        deleteAll(key);
         Database.write(key, newTask);
         addNewTaskDialog.dispose();
-
-//        Task t1 = new Task("test 1", "yee");
-//        Task t2 = new Task("test 2", "yoo");
-//        Task t3 = new Task("test 3", "yaa");
-//        String key = Task.OBJECT_ID;
-//
-//        List<Task> tests = new ArrayList<>();
-//        tests.add(t1);
-//        tests.add(t2);
-//
-//        deleteAll(key);
-//        Database.writeAll(key, (List) tests);
-//        Database.write(key, t3);
-//        List<Task> vec = (List) readAll(key);
-//
-//        if (vec != null) {
-//            for (Task t : vec) Log.p(t.getTitle());
-//        }
-
     }
 
     private List<String> extractTagStrings(String taskTags) {
