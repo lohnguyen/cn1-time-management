@@ -1,37 +1,87 @@
 package org.ecs160.a2.ui;
 
-import com.codename1.components.MultiButton;
 import com.codename1.components.ToastBar;
+import com.codename1.ui.*;
+import com.codename1.ui.Button;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
-import com.codename1.ui.FontImage;
-import com.codename1.ui.InfiniteContainer;
+import com.codename1.ui.Label;
+import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
+import org.ecs160.a2.models.Task;
+import org.ecs160.a2.utils.Database;
+
+import java.util.ArrayList;
 
 public class TaskList extends Container {
-    public TaskList() {
+    private Database database;
+    private Container listContainer;
+    private ArrayList<Task> activeList;
+    private ArrayList<Task> inactiveList;
 
+    public TaskList(Database db) {
+        Database database = db;
+        this.listContainer = new Container(BoxLayout.y());
+        this.listContainer.setScrollableY(true);
+        this.activeList = new ArrayList<Task>();
+        this.inactiveList = new ArrayList<Task>();
     }
 
-    public Container get() {
-        return new InfiniteContainer() {
-            @Override
-            public Component[] fetchComponents(int index, int amount) {
-                Component[] allTasks = new Component[20];
+    public Container getContainer(ArrayList<Task> allTasks) {
+        this.inputTasks(allTasks);
+        this.refreshContainer();
+        return this.listContainer;
+    }
 
-                for (int i = 0; i < allTasks.length; i++) {
-                    final int taskNum = i;
-                    MultiButton buttons = new MultiButton("Task " + taskNum);
-                    buttons.setTextLine2("details");
-                    FontImage.setMaterialIcon(buttons,
-                            FontImage.MATERIAL_ALARM_ON);
-                    buttons.addActionListener(ee ->
-                            ToastBar.showMessage("Clicked: " + taskNum,
-                                    FontImage.MATERIAL_ALARM_ON));
-                    allTasks[i] = buttons;
-                }
+    public Container refreshContainer() {
+//        ArrayList<Task> allTasks = this.database.readAll(Task.OBJECT_ID);
+//        this.inputTasks(allTasks);
 
-                return allTasks;
+        this.listContainer.removeAll();
+        this.listTasks("Active Tasks", this.activeList);
+        this.listTasks("Inactive Tasks", this.inactiveList);
+        return this.listContainer;
+    }
+
+    public void inputTasks(ArrayList<Task> allTasks) {
+        ArrayList<Task> activeTasks = new ArrayList<>();
+        ArrayList<Task> inactiveTasks = new ArrayList<>();
+
+        for (Task task : allTasks) {
+            if (task.isInProgress()) {
+                this.activeList.add(task);
+            } else {
+                this.inactiveList.add(task);
             }
-        };
+        }
+    }
+
+    private void listTasks(String label,
+                                   ArrayList<Task> tasks) {
+        Container lab = new Container(new FlowLayout(Component.CENTER));
+        Label l = new Label(label);
+        lab.addComponent(l);
+        this.listContainer.add(lab);
+
+        if (tasks.size() == 0) {
+            Container empty = new Container(new FlowLayout(Component.CENTER));
+            Label e = new Label("no tasks");
+            empty.addComponent(e);
+            this.listContainer.addComponent(empty);
+        }
+
+        for (Task task : tasks) {
+            Container listItem = new Container(new BorderLayout());
+            listItem.add(BorderLayout.WEST, new Label(task.getTitle()));
+
+            Button b = new Button("BUTTON");
+            b.addActionListener(i ->
+                            ToastBar.showMessage("Clicked: " + task.getTitle(),
+                                    FontImage.MATERIAL_ALARM_ON));
+
+            listItem.add(BorderLayout.EAST, b);
+            this.listContainer.addComponent(listItem);
+        }
     }
 }
