@@ -1,18 +1,20 @@
 package org.ecs160.a2.ui;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.codename1.ui.Button;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Font;
 import com.codename1.ui.Label;
+import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.GridLayout;
 
 import org.ecs160.a2.models.Task;
 
@@ -30,8 +32,9 @@ public class Summary extends Container {
     // some conversion factors
     private static long MILIS_TO_HOURS = 3600000L;
 
-    // containers that house their labels
-    private Container taskContainer, sizeContainer, statsContainer;
+    
+    private Container page1, page2;
+    private Container taskContainer, sizeContainer, statsContainer; // labels
 
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
@@ -50,26 +53,66 @@ public class Summary extends Container {
         // title
         this.add(createLabel("Summary", nativeBold, 0x000000, 8.0f));
 
-        // TODO add other pages (by size and all task summary)
+        // Selection
+        Container buttonContainer = new Container(new GridLayout(1, 2));
+        Button page1Button = new Button ("Everything");
+        page1Button.addActionListener((e) -> selectPageButtonAction(e));
+        buttonContainer.add(page1Button);
+        Button page2Button = new Button ("Tasks");
+        page2Button.addActionListener((e) -> selectPageButtonAction(e));
+        buttonContainer.add(page2Button);
+        this.add(buttonContainer);
 
-        // Tasks
-        this.add(createLabel("Tasks", nativeBold, 0x000000, 5.5f));
-        this.taskContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        this.add(this.taskContainer);  
-
-        // Sizes
-        this.add(createLabel("Sizes", nativeBold, 0x000000, 5.5f));
-        this.sizeContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        this.add(this.sizeContainer);  
-
-        // Stats
-        this.add(createLabel("Statistics", nativeBold, 0x000000, 5.5f));
-        this.statsContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        this.add(this.statsContainer);  
+        // setup the different summary pages
+        this.setupPage1();
+        this.setupPage2();
 
         // call function on refresh (temporary, can have a better solution)
         this.addPullToRefresh(() -> updateVisibleContainers());
         this.updateVisibleContainers();
+
+    }
+
+    private void selectPageButtonAction (ActionEvent e) {
+        Button button = (Button) e.getComponent();
+        switch (button.getText()) {
+            case "Everything":
+                this.page1.setVisible(true);
+                this.page2.setVisible(false);
+                break;
+            case "Tasks":
+                this.page1.setVisible(false);
+                this.page2.setVisible(true);
+        }
+    }
+
+    private void setupPage1 () {
+        this.page1 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+
+        // Tasks
+        page1.add(createLabel("Tasks", nativeBold, 0x000000, 5.5f));
+        this.taskContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        page1.add(this.taskContainer);  
+
+        // Sizes
+        page1.add(createLabel("Sizes", nativeBold, 0x000000, 5.5f));
+        this.sizeContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        page1.add(this.sizeContainer);  
+
+        // Stats
+        page1.add(createLabel("Statistics", nativeBold, 0x000000, 5.5f));
+        this.statsContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        page1.add(this.statsContainer);  
+
+        this.page1.setVisible(true);
+        this.add(page1);
+    }
+
+    private void setupPage2 () {
+        this.page2 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+
+        this.page2.setVisible(false);
+        this.add(page2);
     }
 
     // create a label based on the specified parameters
