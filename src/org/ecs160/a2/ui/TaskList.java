@@ -60,10 +60,23 @@ public class TaskList extends Container {
 
     private void listTasks(String label,
                                    ArrayList<Task> tasks) {
-        Container lab = new Container(new FlowLayout(Component.CENTER));
-        Label l = new Label(label);
-        lab.addComponent(l);
-        this.listContainer.add(lab);
+
+        Container taskTypeLabel = new Container(new FlowLayout());
+        MultiButton taskTypeButton = new MultiButton(label);
+        if (label.equals("Active Tasks")) {
+            FontImage.setMaterialIcon(taskTypeButton,
+                    FontImage.MATERIAL_ALARM_ON);
+        } else {
+            FontImage.setMaterialIcon(taskTypeButton,
+                    FontImage.MATERIAL_ALARM_OFF);
+        }
+        taskTypeLabel.add(taskTypeButton);
+        this.listContainer.add(taskTypeLabel);
+
+//        Container lab = new Container(new FlowLayout(Component.CENTER));
+//        Label l = new Label(label);
+//        lab.addComponent(l);
+//        this.listContainer.add(lab);
 
         if (tasks.size() == 0) {
             Container empty = new Container(new FlowLayout(Component.CENTER));
@@ -76,8 +89,6 @@ public class TaskList extends Container {
 
             MultiButton listItem = new MultiButton("Task " + task.getTitle());
             listItem.setTextLine2("details");
-            FontImage.setMaterialIcon(listItem,
-                    FontImage.MATERIAL_ALARM_ON);
             listItem.addActionListener(ee ->
                     ToastBar.showMessage("Clicked: " + task.getTitle(),
                             FontImage.MATERIAL_ALARM_ON));
