@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Font;
@@ -58,8 +59,10 @@ public class Summary extends Container {
 
         // call function on refresh (temporary, can have a better solution)
         this.addPullToRefresh(() -> updateVisibleContainers());
+        this.updateVisibleContainers();
     }
 
+    // create a label based on the specified parameters
     private Label createLabel (String labelText, Font style, int color, 
                                                              float fontSize) {
         Label label = new Label(labelText);
@@ -73,7 +76,27 @@ public class Summary extends Container {
     }
 
     private void updateTaskLabels () {
+        int i;
 
+        for (i = 0; i < taskList.size(); i++) {
+            Task task = taskList.get(i);
+            Label label;
+
+            if (i < this.taskContainer.getComponentCount()) {
+                label = (Label) this.taskContainer.getComponentAt(i);
+            } else {
+                label = createLabel("", nativeLight, 0x000000, 3.0f);
+                this.taskContainer.add(label);
+            }
+
+            label.setText(" - " + (task.getTotalTime() / 3600000) +
+                          " hours total for " + task.getTitle());
+        }
+
+        while (i < this.taskContainer.getComponentCount()) {
+            Component extraLabel = this.taskContainer.getComponentAt(i);
+            this.taskContainer.removeComponent(extraLabel);
+        }
     }
 
     private void updateSizeLabels () {
@@ -85,11 +108,7 @@ public class Summary extends Container {
     }
 
     public void updateVisibleContainers () {
-        for (Task task : taskList) {
-            this.addLabel(" - " + (task.getTotalTime() / 3600000) +
-                          " hours total for " + task.getTitle(), 
-                          nativeLight, 0x000000, 3.0f));
-        }
+        this.updateTaskLabels();
     }
 
     // definitely gonna change this, unneeded since this class is a container
