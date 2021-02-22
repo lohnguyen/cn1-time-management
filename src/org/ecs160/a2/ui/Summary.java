@@ -37,6 +37,7 @@ public class Summary extends Container {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.setScrollableY(true);
 
+        // temporary Tasks for the summary
         taskList.add(new Task("Task 1"));
         taskList.add(new Task("Task 2"));
         taskList.get(0).start(LocalDateTime.of(2021, 2, 21, 5, 0));
@@ -49,14 +50,18 @@ public class Summary extends Container {
         this.addLabel("Tasks", nativeBold, 0x000000, 5.5f);
 
         for (Task task : taskList) {
-            this.addLabel("" + task.getTotalTime(), nativeRegular, 0x000000, 3.0f);
+            this.addLabel(" - " + (task.getTotalTime() / 3600000) + 
+                          " hours total for " + task.getTitle(), 
+                          nativeLight, 0x000000, 3.0f);
         }
 
 
         this.addLabel("Sizes", nativeBold, 0x000000, 5.5f);
+        // TODO sizes list
 
 
         this.addLabel("Statistics", nativeBold, 0x000000, 5.5f);
+        // TODO stats list
 
 
     }
