@@ -9,6 +9,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
+import org.ecs160.a2.ui.AddNewTask;
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
 import org.ecs160.a2.utils.Database;
@@ -56,10 +57,10 @@ public class AppMain {
    private void setToolbar() {
       Toolbar toolbar = new Toolbar();
       current.setToolbar(toolbar);
-//      toolbar.setTitle("Tasks");
+      toolbar.setTitle("Tasks");
 
       Button addTaskButton = new Button();
-      addTaskButton.addActionListener(e->showNewTaskForm());
+      addTaskButton.addActionListener(e->new AddNewTask().get());
 
       try {
          addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
