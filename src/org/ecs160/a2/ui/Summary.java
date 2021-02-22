@@ -1,8 +1,11 @@
 package org.ecs160.a2.ui;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
@@ -34,8 +37,12 @@ public class Summary extends Container {
         // temporary Tasks for the summary
         taskList.add(new Task("Task 1"));
         taskList.add(new Task("Task 2"));
+        taskList.get(0).setSize("M");
         taskList.get(0).start(LocalDateTime.of(2021, 2, 21, 5, 0));
         taskList.get(0).stop(LocalDateTime.of(2021, 2, 21, 7, 0));
+        taskList.get(1).setSize("L");
+        taskList.get(1).start(LocalDateTime.of(2021, 2, 22, 6, 0));
+        taskList.get(1).stop(LocalDateTime.of(2021, 2, 23, 7, 0));
 
         // title
         this.add(createLabel("Summary", nativeBold, 0x000000, 8.0f));
@@ -75,40 +82,82 @@ public class Summary extends Container {
         return label;
     }
 
-    private void updateTaskLabels () {
-        int i;
 
-        for (i = 0; i < taskList.size(); i++) {
-            Task task = taskList.get(i);
+    // get a list of labels that correspond to amount given
+    private List<Label> getLabelsToUpdate (Container container, 
+                                           int labelCount) {
+        int i;
+        List<Label> returnLabels = new ArrayList<Label>();
+
+        // loop through the task list, adding new labels if necessary
+        for (i = 0; i < labelCount; i++) {
             Label label;
 
-            if (i < this.taskContainer.getComponentCount()) {
-                label = (Label) this.taskContainer.getComponentAt(i);
+            if (i < container.getComponentCount()) {
+                label = (Label) container.getComponentAt(i);
             } else {
                 label = createLabel("", nativeLight, 0x000000, 3.0f);
-                this.taskContainer.add(label);
+                container.add(label);
             }
 
-            label.setText(" - " + (task.getTotalTime() / 3600000) +
-                          " hours total for " + task.getTitle());
+            returnLabels.add(label);
         }
 
-        while (i < this.taskContainer.getComponentCount()) {
-            Component extraLabel = this.taskContainer.getComponentAt(i);
-            this.taskContainer.removeComponent(extraLabel);
+        // remove the extra labels from the component
+        while (i < container.getComponentCount()) {
+            Component extraLabel = container.getComponentAt(i);
+            container.removeComponent(extraLabel);
+        }
+
+        return returnLabels;
+    }
+
+    // Updates task labels in the Tasks section
+    // NOTE: could be more effecient with callbacks
+    private void updateTaskLabels () {
+        List<Label> labels = getLabelsToUpdate(this.taskContainer, 
+                                               taskList.size());
+        for (int i = 0; i < taskList.size(); i++) {
+            Task task = taskList.get(i); // update the label w/ its
+            Label label = labels.get(i); // corresponding task
+            label.setText(" - " + (task.getTotalTime() / 3600000L) +
+                          " hours total for " + task.getTitle());
         }
     }
 
+    // Updates size labels in the Size section
     private void updateSizeLabels () {
+        // use a map to keep track of the current totals for the sizes
+        Map<String, Long> sizeStatsMap = new HashMap<String, Long>();
 
+        // add up totals for the different sizes
+        for (Task task : taskList) {
+            if (task.getSize().length() == 0) continue; // no empty
+            long sizeTime = task.getTotalTime();
+            if (sizeStatsMap.containsKey(task.getSize())) {
+                sizeTime += sizeStatsMap.get(task.getSize());
+            }
+            sizeStatsMap.put(task.getSize(), sizeTime);
+        }
+
+        Object[] availableSizes = sizeStatsMap.keySet().toArray();
+        List<Label> labels = getLabelsToUpdate(this.sizeContainer, 
+                                               sizeStatsMap.keySet().size());
+        for (int i = 0; i < availableSizes.length; i++) {
+            String size = (String) availableSizes[i];
+            Label label = labels.get(i);
+            label.setText(" - " + (sizeStatsMap.get(size) / 3600000L) +
+                          " hours total for " + size);
+        }
     }
 
     private void updateStatsLabels () {
-
+        
     }
 
     public void updateVisibleContainers () {
         this.updateTaskLabels();
+        this.updateSizeLabels();
     }
 
     // definitely gonna change this, unneeded since this class is a container
