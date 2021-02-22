@@ -61,47 +61,44 @@ public class TaskList extends Container {
     private void listTasks(String label,
                                    ArrayList<Task> tasks) {
 
-        Container taskTypeLabel = new Container(new FlowLayout());
-        MultiButton taskTypeButton = new MultiButton(label);
-        if (label.equals("Active Tasks")) {
-            FontImage.setMaterialIcon(taskTypeButton,
-                    FontImage.MATERIAL_ALARM_ON);
-        } else {
-            FontImage.setMaterialIcon(taskTypeButton,
-                    FontImage.MATERIAL_ALARM_OFF);
-        }
-        taskTypeLabel.add(taskTypeButton);
-        this.listContainer.add(taskTypeLabel);
+//        Container taskTypeLabel = new Container(new FlowLayout());
+//        MultiButton taskTypeButton = new MultiButton(label);
+//        if (label.equals("Active Tasks")) {
+//            FontImage.setMaterialIcon(taskTypeButton,
+//                    FontImage.MATERIAL_ALARM_ON);
+//        } else {
+//            FontImage.setMaterialIcon(taskTypeButton,
+//                    FontImage.MATERIAL_ALARM_OFF);
+//        }
+//        taskTypeLabel.add(taskTypeButton);
+//        this.listContainer.add(taskTypeLabel);
 
-//        Container lab = new Container(new FlowLayout(Component.CENTER));
-//        Label l = new Label(label);
-//        lab.addComponent(l);
-//        this.listContainer.add(lab);
+        Container taskTypeCont =
+                new Container(new FlowLayout(Component.CENTER));
+        Label taskTypeLabel = new Label(label);
+        if (label.equals("Active Tasks")) {
+            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_ON);
+        } else {
+            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
+        }
+        taskTypeCont.addComponent(taskTypeLabel);
+        this.listContainer.add(taskTypeCont);
 
         if (tasks.size() == 0) {
-            Container empty = new Container(new FlowLayout(Component.CENTER));
-            Label e = new Label("no tasks");
-            empty.addComponent(e);
-            this.listContainer.addComponent(empty);
+            Container emptyCont =
+                    new Container(new FlowLayout(Component.CENTER));
+            Label emptyLabel = new Label("no tasks");
+            emptyCont.addComponent(emptyLabel);
+            this.listContainer.addComponent(emptyCont);
         }
 
         for (Task task : tasks) {
 
-            MultiButton listItem = new MultiButton("Task " + task.getTitle());
+            MultiButton listItem = new MultiButton(task.getTitle());
             listItem.setTextLine2("details");
             listItem.addActionListener(ee ->
                     ToastBar.showMessage("Clicked: " + task.getTitle(),
                             FontImage.MATERIAL_ALARM_ON));
-
-//            Container listItem = new Container(new BorderLayout());
-//            listItem.add(BorderLayout.WEST, new Label(task.getTitle()));
-//
-//            Button b = new Button("BUTTON");
-//            b.addActionListener(i ->
-//                            ToastBar.showMessage("Clicked: " + task.getTitle(),
-//                                    FontImage.MATERIAL_ALARM_ON));
-//
-//            listItem.add(BorderLayout.EAST, b);
             this.listContainer.addComponent(listItem);
         }
     }
