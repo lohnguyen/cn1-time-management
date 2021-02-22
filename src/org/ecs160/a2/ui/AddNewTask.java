@@ -2,10 +2,15 @@ package org.ecs160.a2.ui;
 
 import com.codename1.components.MultiButton;
 import com.codename1.ui.*;
+import static com.codename1.ui.CN.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.TextModeLayout;
 import org.ecs160.a2.models.Task;
+import com.codename1.io.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddNewTask {
 
@@ -15,7 +20,7 @@ public class AddNewTask {
         int displayHeight = Display.getInstance().getDisplayHeight();
         addNewTaskDialog.setDisposeWhenPointerOutOfBounds(true);
         displayTaskForm(addNewTaskDialog);
-        addNewTaskDialog.show(displayHeight/4, 0, 0, 0);
+        addNewTaskDialog.show(displayHeight/8, 0, 0, 0);
     }
 
     private void displayTaskForm(Dialog addNewTaskDialog) {
@@ -32,10 +37,29 @@ public class AddNewTask {
         newTaskForm.addAll(taskName, sizeButton, taskTags, taskDescription);
 
         Button addTaskButton = new Button("Add Task");
-        //addTaskButton.addActionListener(e->addTaskIntoDatabase(addNewTaskDialog, taskName.getText(), sizeButton.getText(), taskTags.getText(), taskDescription.getText()));
+        addTaskButton.addActionListener(e->addTaskIntoDatabase(addNewTaskDialog, taskName.getText(), sizeButton.getText(), taskTags.getText(), taskDescription.getText()));
 
         addNewTaskDialog.add(BorderLayout.SOUTH, addTaskButton);
         addNewTaskDialog.add(BorderLayout.NORTH, newTaskForm);
+    }
+
+    private void addTaskIntoDatabase(Dialog addNewTaskDialog, String taskName, String taskSize, String taskTags, String taskDescription) {
+
+//        log(taskName + " " + taskSize + " " + taskTags + " " + taskDescription);
+
+        java.util.List<String> taskTagsList = extractTagStrings(taskTags);
+        for (int i = 0 ; i < taskTagsList.size(); i++) {
+            log(taskTagsList.get(i));
+        }
+    }
+
+    private List<String> extractTagStrings(String taskTags) {
+        java.util.List<String> separatedTaskTags = new ArrayList<>();
+        String[] separatedTaskTagsSplit = taskTags.split(" ");
+        for (String tag : separatedTaskTagsSplit) {
+            separatedTaskTags.add(tag);
+        }
+        return separatedTaskTags;
     }
 
     private void showSizePopup(MultiButton sizeButton) {
