@@ -14,6 +14,9 @@ import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
 import java.util.ArrayList;
+import com.codename1.ui.FontImage;
+import com.codename1.ui.InfiniteContainer;
+import org.ecs160.a2.models.Task;
 
 public class TaskList extends Container {
     private Database database;

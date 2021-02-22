@@ -81,6 +81,8 @@ public class AppMain {
       current.add(BorderLayout.CENTER, tabs);
       //tabs.addTab("Tasks", taskIcon, new TaskList().get());
       tabs.addTab("Summary", new Summary().get());
+
+      tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }
 
    public void start() {
