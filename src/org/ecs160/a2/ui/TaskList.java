@@ -1,5 +1,6 @@
 package org.ecs160.a2.ui;
 
+import com.codename1.components.MultiButton;
 import com.codename1.components.ToastBar;
 import com.codename1.ui.*;
 import com.codename1.ui.Button;
@@ -72,15 +73,24 @@ public class TaskList extends Container {
         }
 
         for (Task task : tasks) {
-            Container listItem = new Container(new BorderLayout());
-            listItem.add(BorderLayout.WEST, new Label(task.getTitle()));
 
-            Button b = new Button("BUTTON");
-            b.addActionListener(i ->
-                            ToastBar.showMessage("Clicked: " + task.getTitle(),
-                                    FontImage.MATERIAL_ALARM_ON));
+            MultiButton listItem = new MultiButton("Task " + task.getTitle());
+            listItem.setTextLine2("details");
+            FontImage.setMaterialIcon(listItem,
+                    FontImage.MATERIAL_ALARM_ON);
+            listItem.addActionListener(ee ->
+                    ToastBar.showMessage("Clicked: " + task.getTitle(),
+                            FontImage.MATERIAL_ALARM_ON));
 
-            listItem.add(BorderLayout.EAST, b);
+//            Container listItem = new Container(new BorderLayout());
+//            listItem.add(BorderLayout.WEST, new Label(task.getTitle()));
+//
+//            Button b = new Button("BUTTON");
+//            b.addActionListener(i ->
+//                            ToastBar.showMessage("Clicked: " + task.getTitle(),
+//                                    FontImage.MATERIAL_ALARM_ON));
+//
+//            listItem.add(BorderLayout.EAST, b);
             this.listContainer.addComponent(listItem);
         }
     }
