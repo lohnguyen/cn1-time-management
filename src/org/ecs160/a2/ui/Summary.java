@@ -23,15 +23,8 @@ public class Summary extends Container {
     // database later on!
     private static List<Task> taskList = new ArrayList<Task>();
 
-    private void addLabel (String labelText, Font style, int color, 
-                                                         float fontSize) {
-        Label label = new Label(labelText);
-        int pixelSize = Display.getInstance().convertToPixels(fontSize);
-        label.getAllStyles().setFont(style.derive(pixelSize, 
-                                                  Font.STYLE_PLAIN));
-        label.getAllStyles().setFgColor(color);
-        this.add(label);
-    }
+    // containers that house their labels
+    private Container taskContainer, sizeContainer, statsContainer;
 
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
@@ -43,27 +36,60 @@ public class Summary extends Container {
         taskList.get(0).start(LocalDateTime.of(2021, 2, 21, 5, 0));
         taskList.get(0).stop(LocalDateTime.of(2021, 2, 21, 7, 0));
 
-        this.addLabel("Summary", nativeBold, 0x000000, 8.0f);
+        // title
+        this.add(createLabel("Summary", nativeBold, 0x000000, 8.0f));
 
         // TODO add other pages (by size and all task summary)
 
-        this.addLabel("Tasks", nativeBold, 0x000000, 5.5f);
+        // Tasks
+        this.add(createLabel("Tasks", nativeBold, 0x000000, 5.5f));
+        this.taskContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        this.add(this.taskContainer);  
 
+        // Sizes
+        this.add(createLabel("Sizes", nativeBold, 0x000000, 5.5f));
+        this.sizeContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        this.add(this.sizeContainer);  
+
+        // Stats
+        this.add(createLabel("Statistics", nativeBold, 0x000000, 5.5f));
+        this.statsContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        this.add(this.statsContainer);  
+
+        // call function on refresh (temporary, can have a better solution)
+        this.addPullToRefresh(() -> updateVisibleContainers());
+    }
+
+    private Label createLabel (String labelText, Font style, int color, 
+                                                             float fontSize) {
+        Label label = new Label(labelText);
+
+        int pixelSize = Display.getInstance().convertToPixels(fontSize);
+        label.getAllStyles().setFont(style.derive(pixelSize, 
+                                                  Font.STYLE_PLAIN));
+        label.getAllStyles().setFgColor(color);
+
+        return label;
+    }
+
+    private void updateTaskLabels () {
+
+    }
+
+    private void updateSizeLabels () {
+
+    }
+
+    private void updateStatsLabels () {
+
+    }
+
+    public void updateVisibleContainers () {
         for (Task task : taskList) {
-            this.addLabel(" - " + (task.getTotalTime() / 3600000) + 
+            this.addLabel(" - " + (task.getTotalTime() / 3600000) +
                           " hours total for " + task.getTitle(), 
-                          nativeLight, 0x000000, 3.0f);
+                          nativeLight, 0x000000, 3.0f));
         }
-
-
-        this.addLabel("Sizes", nativeBold, 0x000000, 5.5f);
-        // TODO sizes list
-
-
-        this.addLabel("Statistics", nativeBold, 0x000000, 5.5f);
-        // TODO stats list
-
-
     }
 
     // definitely gonna change this, unneeded since this class is a container
