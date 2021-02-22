@@ -27,6 +27,9 @@ public class Summary extends Container {
     // database later on!
     private static List<Task> taskList = new ArrayList<Task>();
 
+    // some conversion factors
+    private static long MILIS_TO_HOURS = 3600000L;
+
     // containers that house their labels
     private Container taskContainer, sizeContainer, statsContainer;
 
@@ -120,7 +123,7 @@ public class Summary extends Container {
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i); // update the label w/ its
             Label label = labels.get(i); // corresponding task
-            label.setText(" - " + (task.getTotalTime() / 3600000L) +
+            label.setText(" - " + (task.getTotalTime() / MILIS_TO_HOURS) +
                           " hours total for " + task.getTitle());
         }
     }
@@ -146,18 +149,43 @@ public class Summary extends Container {
         for (int i = 0; i < availableSizes.length; i++) {
             String size = (String) availableSizes[i];
             Label label = labels.get(i);
-            label.setText(" - " + (sizeStatsMap.get(size) / 3600000L) +
+            label.setText(" - " + (sizeStatsMap.get(size) / MILIS_TO_HOURS) +
                           " hours total for " + size);
         }
     }
 
+    // Update labels in the Statistics section
+    // NOTE: can lessen calls by making the amount of labels constant
     private void updateStatsLabels () {
-        
+        List<Label> labels = getLabelsToUpdate(this.statsContainer, 3);
+        long min = -1L, average = -1L, max = -1L;
+
+        // calculate the stats
+        for (Task task : taskList) {
+            long taskTime = task.getTotalTime();
+            if (min < 0 || min > taskTime) min = taskTime;
+            if (max < 0 || max < taskTime) max = taskTime;
+            average += taskTime;
+        }
+        average /= taskList.size();
+
+        // update the constant labels
+        labels.get(0).setText(" - " + (min / MILIS_TO_HOURS) + 
+                              " hours minimum");
+        labels.get(1).setText(" - " + (max / MILIS_TO_HOURS) + 
+                              " hours maximum");
+        labels.get(2).setText(" - " + (average / MILIS_TO_HOURS) + 
+                              " hours average");
     }
 
+    // called whenever the labels need updating
+    // TODO: onload? on refresh?
     public void updateVisibleContainers () {
-        this.updateTaskLabels();
-        this.updateSizeLabels();
+        if (taskList.size() > 0) {
+            this.updateTaskLabels();
+            this.updateSizeLabels();
+            this.updateStatsLabels();
+        }
     }
 
     // definitely gonna change this, unneeded since this class is a container
