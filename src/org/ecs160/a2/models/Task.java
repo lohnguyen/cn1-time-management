@@ -71,7 +71,7 @@ public class Task implements Externalizable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
-    } 
+    }
 
     // for the time internals
     public long getTotalTime() {
@@ -104,7 +104,7 @@ public class Task implements Externalizable {
      */
     public boolean isInProgress() {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-        return currentTimeSpan.isRunning();
+        return currentTimeSpan != null && currentTimeSpan.isRunning();
     }
 
     /**
@@ -114,7 +114,9 @@ public class Task implements Externalizable {
      */
     public void start(LocalDateTime startTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-        if (!currentTimeSpan.isRunning()) { // task not running
+        // task not running
+        if (currentTimeSpan == null || (currentTimeSpan != null &&
+                !currentTimeSpan.isRunning())) {
             this.timeSpans.add(new TimeSpan(startTime, null));
         } else {
             // TODO throw a custom exception if something is running
@@ -135,8 +137,9 @@ public class Task implements Externalizable {
      */
     public void stop(LocalDateTime stopTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-        if (currentTimeSpan.isRunning()) {
+        if (currentTimeSpan != null && currentTimeSpan.isRunning()) {
             currentTimeSpan.stopSpan(stopTime);
+            this.totalTime = this.calculateTotalTime().toMillis();
         } else {
             // TODO throw a custom exception if nothing is running
         }
