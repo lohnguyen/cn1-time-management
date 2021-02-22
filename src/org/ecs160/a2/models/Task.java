@@ -102,7 +102,7 @@ public class Task implements Externalizable {
      */
     public boolean isInProgress() {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-        return currentTimeSpan.isRunning();
+        return currentTimeSpan != null && currentTimeSpan.isRunning();
     }
 
     /**
@@ -112,7 +112,8 @@ public class Task implements Externalizable {
      */
     public void start(LocalDateTime startTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-        if (!currentTimeSpan.isRunning()) { // task not running
+        if (currentTimeSpan != null &&
+            !currentTimeSpan.isRunning()) { // task not running
             this.timeSpans.add(new TimeSpan(startTime, null));
         } else {
             // TODO throw a custom exception if something is running
@@ -133,7 +134,8 @@ public class Task implements Externalizable {
      */
     public void stop(LocalDateTime stopTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
-        if (currentTimeSpan.isRunning()) {
+        if (currentTimeSpan != null &&
+            currentTimeSpan.isRunning()) {
             currentTimeSpan.stopSpan(stopTime);
         } else {
             // TODO throw a custom exception if nothing is running
