@@ -19,6 +19,7 @@ import java.util.List;
 public class AddNewTask {
 
     public void getTaskDialog() {
+        Database.deleteAll(Task.OBJECT_ID);
         Dialog addNewTaskDialog = new Dialog("New Task");
         addNewTaskDialog.setLayout(new BorderLayout());
         int displayHeight = Display.getInstance().getDisplayHeight();
