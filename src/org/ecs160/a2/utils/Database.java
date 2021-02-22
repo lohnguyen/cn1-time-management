@@ -18,33 +18,33 @@ public class Database {
         Util.register(Task.OBJECT_ID, Task.class);
     }
 
-    static void write(String key, Object val) {
+    public static void write(String key, Object val) {
         List<Object> vec = readAll(key);
         vec.add(val);
         writeAll(key, vec);
     }
 
-    static void writeAll(String key, List<Object> vals) {
+    public static void writeAll(String key, List<Object> vals) {
         Vector<Object> vec = new Vector<>(vals);
         db.writeObject(key, vec);
     }
 
-    static Vector<Object> readAll(String key) {
+    public static Vector<Object> readAll(String key) {
         return (Vector<Object>) db.readObject(key);
     }
 
-    static void deleteTask(String title) {
+    public static void deleteTask(String title) {
         List<Task> tasks = (List) readAll(Task.OBJECT_ID);
         Predicate<Task> byTitle = task -> !task.getTitle().equals(title);
         tasks = tasks.stream().filter(byTitle).collect(Collectors.toList());
         writeAll(Task.OBJECT_ID, (List) tasks);
     }
 
-    static void deleteAll(String key) {
+    public static void deleteAll(String key) {
         db.deleteStorageFile(key);
     }
 
-    static void test() {
+    public static void test() {
         Task t1 = new Task("test 1", "yee");
         Task t2 = new Task("test 2", "yoo");
         Task t3 = new Task("test 3", "yaa");
@@ -55,7 +55,6 @@ public class Database {
         tests.add(t2);
 
 //        deleteAll(key);
-        deleteTask("test 3");
 //        Database.writeAll(key, (List) tests);
 //        Database.write(key, t3);
         List<Task> vec = (List) readAll(key);

@@ -8,6 +8,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.TextModeLayout;
 import org.ecs160.a2.models.Task;
 import com.codename1.io.Log;
+import org.ecs160.a2.utils.Database;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,16 @@ public class AddNewTask {
 
     private void addTaskIntoDatabase(Dialog addNewTaskDialog, String taskName, String taskSize, String taskTags, String taskDescription) {
 
-//        log(taskName + " " + taskSize + " " + taskTags + " " + taskDescription);
-
         java.util.List<String> taskTagsList = extractTagStrings(taskTags);
-        for (int i = 0 ; i < taskTagsList.size(); i++) {
-            log(taskTagsList.get(i));
-        }
+        Task newTask = new Task(taskName, taskDescription);
+        newTask.setSize(taskSize);
+        newTask.setTags(taskTagsList);
+
+        String key = Task.OBJECT_ID;
+
+        Database.write(key, newTask);
+        addNewTaskDialog.dispose();
+
     }
 
     private List<String> extractTagStrings(String taskTags) {
