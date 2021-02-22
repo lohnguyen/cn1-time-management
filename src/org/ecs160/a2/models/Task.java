@@ -115,8 +115,10 @@ public class Task implements Externalizable {
     public void start(LocalDateTime startTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
         // task not running
-        if (currentTimeSpan == null || (currentTimeSpan != null &&
-                !currentTimeSpan.isRunning())) {
+
+        if (currentTimeSpan == null || (currentTimeSpan != null && 
+                                        !currentTimeSpan.isRunning())) {
+
             this.timeSpans.add(new TimeSpan(startTime, null));
         } else {
             // TODO throw a custom exception if something is running

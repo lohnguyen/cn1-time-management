@@ -30,7 +30,9 @@ public class Database {
     }
 
     public static Vector<Object> readAll(String key) {
-        return (Vector<Object>) db.readObject(key);
+        Vector<Object> vec = (Vector<Object>) db.readObject(key);
+        if (vec == null) return new Vector<>();
+        return vec;
     }
 
     public static void deleteTask(String title) {
@@ -54,9 +56,9 @@ public class Database {
         tests.add(t1);
         tests.add(t2);
 
-//        deleteAll(key);
+        deleteAll(key);
 //        Database.writeAll(key, (List) tests);
-//        Database.write(key, t3);
+        Database.write(key, t3);
         List<Task> vec = (List) readAll(key);
 
         if (vec != null) {
