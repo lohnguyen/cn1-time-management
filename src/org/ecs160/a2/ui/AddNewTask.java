@@ -3,6 +3,9 @@ package org.ecs160.a2.ui;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.*;
 import static com.codename1.ui.CN.*;
+import static org.ecs160.a2.utils.Database.deleteAll;
+import static org.ecs160.a2.utils.Database.readAll;
+
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.TextModeLayout;
@@ -52,9 +55,27 @@ public class AddNewTask {
         newTask.setTags(taskTagsList);
 
         String key = Task.OBJECT_ID;
-
+        deleteAll(key);
         Database.write(key, newTask);
         addNewTaskDialog.dispose();
+
+//        Task t1 = new Task("test 1", "yee");
+//        Task t2 = new Task("test 2", "yoo");
+//        Task t3 = new Task("test 3", "yaa");
+//        String key = Task.OBJECT_ID;
+//
+//        List<Task> tests = new ArrayList<>();
+//        tests.add(t1);
+//        tests.add(t2);
+//
+//        deleteAll(key);
+//        Database.writeAll(key, (List) tests);
+//        Database.write(key, t3);
+//        List<Task> vec = (List) readAll(key);
+//
+//        if (vec != null) {
+//            for (Task t : vec) Log.p(t.getTitle());
+//        }
 
     }
 
