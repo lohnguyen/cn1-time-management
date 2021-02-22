@@ -39,8 +39,8 @@ public class AddNewTask {
     }
 
     private void showSizePopup(MultiButton sizeButton) {
-        Dialog sizeDialog = new Dialog(BoxLayout.y());
-//        sizeDialog.setLayout(BoxLayout.y());
+        Dialog sizeDialog = new Dialog();
+        sizeDialog.setLayout(BoxLayout.y());
         sizeDialog.getContentPane().setScrollableY(true);
 
         java.util.List<String> taskSizes =  Task.sizes;
@@ -50,7 +50,7 @@ public class AddNewTask {
             sizeDialog.add(oneSizeButton);
             oneSizeButton.addActionListener(e->displaySelectedSize(sizeDialog, oneSizeButton, sizeButton));
         }
-
+        sizeDialog.showPopupDialog(sizeButton);
     }
 
     private void displaySelectedSize(Dialog sizeDialog, MultiButton oneSizeButton, MultiButton sizeButton) {

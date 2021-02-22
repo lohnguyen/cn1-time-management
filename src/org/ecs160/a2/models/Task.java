@@ -15,7 +15,7 @@ import java.util.List;
 public class Task implements Externalizable {
 
     public static final String OBJECT_ID = "Task";
-    public static final List<String> sizes = Arrays.asList("None", "S", "M", "L");
+    public static final List<String> sizes = Arrays.asList("None", "S", "M", "L", "XL");
 
     private String title, description, size;
     private long totalTime; // total time spent (excluding in progress)
