@@ -48,6 +48,7 @@ public class Database {
 
     public static void test() {
         Task t1 = new Task("test 1", "yee");
+        t1.start();
         Task t2 = new Task("test 2", "yoo");
         Task t3 = new Task("test 3", "yaa");
         String key = Task.OBJECT_ID;
@@ -56,8 +57,9 @@ public class Database {
         tests.add(t1);
         tests.add(t2);
 
-        deleteAll(key);
-//        Database.writeAll(key, (List) tests);
+        t1.stop();
+//        deleteAll(key);
+        Database.writeAll(key, (List) tests);
         Database.write(key, t3);
         List<Task> vec = (List) readAll(key);
 
