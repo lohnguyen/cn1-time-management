@@ -67,6 +67,7 @@ public class AppMain {
       current = new Form("Task Management App", new BorderLayout());
 
       for (int i = 0; i < 4; i++) {
+         log("Adding initial tasks: Task " + i);
          Task task = new Task("Task Number " + i);
          if (i % 2 == 0) {
             task.start();
@@ -117,20 +118,21 @@ public class AppMain {
 
       Tabs tabs = new Tabs();
       TaskList taskList = new TaskList();
-      taskList.addPullToRefresh(() -> {
-         for (int i = 0; i < 4; i++) {
-            Task task = new Task("Task Number " + (i + x));
-            if (i % 2 == 0) {
-               task.start();
-            }
-            Database.write(Task.OBJECT_ID, task);
-         }
-         taskList.get();
-         x += 4;
-      });
+//      taskList.getListContainer().addPullToRefresh(() -> {
+//         for (int i = 0; i < 4; i++) {
+//            log("Adding tasks: Task " + (x + i));
+//            Task task = new Task("Task Number " + (i + x));
+//            if (i % 2 == 0) {
+//               task.start();
+//            }
+//            Database.write(Task.OBJECT_ID, task);
+//         }
+//         taskList.get();
+//         x += 4;
+//      });
 
       current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, taskList);
+      tabs.addTab("Tasks", taskIcon, taskList.get());
       tabs.addTab("Summary", summaryIcon, new Summary().get());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }

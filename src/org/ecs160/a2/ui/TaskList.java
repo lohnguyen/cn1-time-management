@@ -13,9 +13,6 @@ import org.ecs160.a2.utils.Database;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codename1.ui.CN.getCurrentForm;
-import static com.codename1.ui.CN.log;
-
 
 public class TaskList extends Container {
     private Container listContainer;
@@ -30,14 +27,17 @@ public class TaskList extends Container {
     }
 
     public Container get() {
+        this.activeList.clear();
+        this.inactiveList.clear();
         List<Task> allTasks =
                 (List) Database.readAll(Task.OBJECT_ID);
         this.inputTasks(allTasks);
         this.refreshContainer();
+        this.configContainer();
         return this.listContainer;
     }
 
-    public void inputTasks(List<Task> allTasks) {
+    private void inputTasks(List<Task> allTasks) {
         ArrayList<Task> activeTasks = new ArrayList<>();
         ArrayList<Task> inactiveTasks = new ArrayList<>();
 
@@ -48,6 +48,12 @@ public class TaskList extends Container {
                 this.inactiveList.add(task);
             }
         }
+    }
+
+    private void configContainer() {
+        this.listContainer.addPullToRefresh(() -> {
+            this.get();
+        });
     }
 
     private void refreshContainer() {
