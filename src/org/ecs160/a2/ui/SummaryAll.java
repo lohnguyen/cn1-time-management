@@ -14,7 +14,7 @@ import org.ecs160.a2.utils.UIUtils;
 
 public class SummaryAll extends UpdateableContainer implements AppConstants {
 
-    // label cotainers
+    // label containers
     private Container taskContainer, sizeContainer, statsContainer;
     
     public SummaryAll () {
@@ -56,7 +56,7 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
 
         // add up totals for the different sizes
         for (Task task : taskList) {
-            if (task.getSize().length() == 0) continue; // no empty
+            if (task.getSize().equals("None")) continue; // no empty
             long sizeTime = task.getTotalTime();
             if (sizeStatsMap.containsKey(task.getSize())) {
                 sizeTime += sizeStatsMap.get(task.getSize());
