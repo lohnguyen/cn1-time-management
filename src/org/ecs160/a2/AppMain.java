@@ -10,7 +10,11 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
+
+import org.ecs160.a2.ui.AddNewTask;
+
 import org.ecs160.a2.models.Task;
+
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
 import org.ecs160.a2.utils.Database;
@@ -63,7 +67,7 @@ public class AppMain {
       toolbar.setTitle("Tasks");
 
       Button addTaskButton = new Button();
-      addTaskButton.addActionListener(e->showNewTaskForm());
+      addTaskButton.addActionListener(e->new AddNewTask().getTaskDialog());
 
       try {
          addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
@@ -82,6 +86,8 @@ public class AppMain {
       current.add(BorderLayout.CENTER, tabs);
       tabs.addTab("Tasks", taskIcon, new TaskList().get());
       tabs.addTab("Summary", new Summary().get());
+
+      tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }
 
    public void start() {

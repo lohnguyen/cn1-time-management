@@ -9,8 +9,3 @@ CodeNameOneBuildClient.jar
 *.iml
 JavaSE.jar
 Versions.properties
-
-# local ant
-.vscode/
-build/
-dist/
