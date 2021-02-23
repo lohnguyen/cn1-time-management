@@ -5,26 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.codename1.ui.Button;
-import com.codename1.ui.Component;
 import com.codename1.ui.Container;
-import com.codename1.ui.Display;
-import com.codename1.ui.Font;
-import com.codename1.ui.Label;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.UIUtils;
 
 public class Summary extends UpdateableContainer implements AppConstants {
 
     // NOTE: this is temporary and will be changed to work with the
     // database later on!
     protected static List<Task> taskList = new ArrayList<Task>();
-
-    // some conversion factors
-    protected static long MILIS_TO_HOURS = 3600000L;
     
     private UpdateableContainer page1, page2;
 
@@ -43,7 +37,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
         taskList.get(1).stop(LocalDateTime.of(2021, 2, 23, 7, 0));
 
         // title
-        this.add(createLabel("Summary", NATIVE_BOLD, 0x000000, 8.0f));
+        this.add(UIUtils.createLabel("Summary", NATIVE_BOLD, 0x000000, 8.0f));
 
         // Selection
         Container buttonContainer = new Container(new GridLayout(1, 2));
@@ -79,50 +73,6 @@ public class Summary extends UpdateableContainer implements AppConstants {
                 this.page1.setVisible(false);
                 this.page2.setVisible(true);
         }
-    }
-
-    // create a label based on the specified parameters
-    protected static Label createLabel (String labelText, Font style, 
-                                                          int color, 
-                                                          float fontSize) {
-        Label label = new Label(labelText);
-
-        int pixelSize = Display.getInstance().convertToPixels(fontSize);
-        label.getAllStyles().setFont(style.derive(pixelSize, 
-                                                  Font.STYLE_PLAIN));
-        label.getAllStyles().setFgColor(color);
-
-        return label;
-    }
-
-
-    // get a list of labels that correspond to amount given
-    protected static List<Label> getLabelsToUpdate (Container container, 
-                                                    int labelCount) {
-        int i;
-        List<Label> returnLabels = new ArrayList<Label>();
-
-        // loop through the task list, adding new labels if necessary
-        for (i = 0; i < labelCount; i++) {
-            Label label;
-
-            if (i < container.getComponentCount()) {
-                label = (Label) container.getComponentAt(i);
-            } else {
-                label = createLabel("", NATIVE_LIGHT, 0x000000, 3.0f);
-                container.add(label);
-            }
-
-            returnLabels.add(label);
-        }
-
-        // remove the extra labels from the component
-        while (i < container.getComponentCount()) {
-            Component extraLabel = container.getComponentAt(i);
-            container.removeComponent(extraLabel);
-        }
-
-        return returnLabels;
     }
 
     // called whenever the labels need updating

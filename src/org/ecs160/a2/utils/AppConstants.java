@@ -8,4 +8,6 @@ public interface AppConstants {
     Font NATIVE_REGULAR = Font.createTrueTypeFont("native:MainRegular");
     Font NATIVE_BOLD = Font.createTrueTypeFont("native:MainBold");
 
+    long MILIS_TO_HOURS = 3600000L;
+
 }

@@ -9,8 +9,10 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.UIUtils;
 
-public class SummaryAll extends UpdateableContainer {
+public class SummaryAll extends UpdateableContainer implements AppConstants {
 
     // label cotainers
     private Container taskContainer, sizeContainer, statsContainer;
@@ -19,17 +21,17 @@ public class SummaryAll extends UpdateableContainer {
         super(new BoxLayout(BoxLayout.Y_AXIS));
 
         // Tasks
-        this.add(createLabel("Tasks", nativeBold, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, 0x000000, 5.5f));
         this.taskContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         this.add(this.taskContainer);  
 
         // Sizes
-        this.add(createLabel("Sizes", nativeBold, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Sizes", NATIVE_BOLD, 0x000000, 5.5f));
         this.sizeContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         this.add(this.sizeContainer);  
 
         // Stats
-        this.add(createLabel("Statistics", nativeBold, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, 0x000000, 5.5f));
         this.statsContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         this.add(this.statsContainer);
     }
@@ -37,7 +39,7 @@ public class SummaryAll extends UpdateableContainer {
     // Updates task labels in the Tasks section
     // NOTE: could be more effecient with callbacks
     private void updateTaskLabels (List<Task> taskList) {
-        List<Label> labels = getLabelsToUpdate(this.taskContainer, 
+        List<Label> labels = UIUtils.getLabelsToUpdate(this.taskContainer, 
                                                taskList.size());
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i); // update the label w/ its
@@ -63,7 +65,7 @@ public class SummaryAll extends UpdateableContainer {
         }
 
         Object[] availableSizes = sizeStatsMap.keySet().toArray();
-        List<Label> labels = getLabelsToUpdate(this.sizeContainer, 
+        List<Label> labels = UIUtils.getLabelsToUpdate(this.sizeContainer, 
                                                sizeStatsMap.keySet().size());
         for (int i = 0; i < availableSizes.length; i++) {
             String size = (String) availableSizes[i];
@@ -76,7 +78,7 @@ public class SummaryAll extends UpdateableContainer {
     // Update labels in the Statistics section
     // NOTE: can lessen calls by making the amount of labels constant
     private void updateStatsLabels (List<Task> taskList) {
-        List<Label> labels = Summary.getLabelsToUpdate(this.statsContainer, 3);
+        List<Label> labels = UIUtils.getLabelsToUpdate(this.statsContainer, 3);
         long min = -1L, average = -1L, max = -1L;
 
         // calculate the stats
@@ -99,8 +101,8 @@ public class SummaryAll extends UpdateableContainer {
 
     @Override
     public void updateContainer() {
-        this.updateTaskLabels();
-        this.updateSizeLabels();
-        this.updateStatsLabels();
+        this.updateTaskLabels(Summary.taskList);
+        this.updateSizeLabels(Summary.taskList);
+        this.updateStatsLabels(Summary.taskList);
     }
 }
