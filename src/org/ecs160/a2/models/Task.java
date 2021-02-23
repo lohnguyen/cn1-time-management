@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Task implements Externalizable {
 
     public static final String OBJECT_ID = "Task";
+    public static final List<String> sizes = Arrays.asList("None", "S", "M", "L", "XL");
 
     private String title, description, size;
     private long totalTime; // total time spent (excluding in progress)
@@ -69,7 +71,7 @@ public class Task implements Externalizable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
-    } 
+    }
 
     // for the time internals
     public long getTotalTime() {
@@ -113,8 +115,10 @@ public class Task implements Externalizable {
     public void start(LocalDateTime startTime) {
         TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
         // task not running
+
         if (currentTimeSpan == null || (currentTimeSpan != null && 
                                         !currentTimeSpan.isRunning())) {
+
             this.timeSpans.add(new TimeSpan(startTime, null));
         } else {
             // TODO throw a custom exception if something is running
