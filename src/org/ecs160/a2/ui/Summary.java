@@ -11,17 +11,15 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.utils.AppConstants;
 
-public class Summary extends Container {
+public class Summary extends Container implements AppConstants {
 
     // might move these to some other class if they need to be shared
-    private static final Font nativeLight = Font.createTrueTypeFont("native:MainLight");
-    private static final Font nativeRegular = Font.createTrueTypeFont("native:MainRegular");
-    private static final Font nativeBold = Font.createTrueTypeFont("native:MainBold");
 
     // NOTE: this is temporary and will be changed to work with the
     // database later on!
-    private static List<Task> taskList = new ArrayList<Task>();
+    private static List<Task> taskList = new ArrayList<>();
 
     private void addLabel (String labelText, Font style, int color, 
                                                          float fontSize) {
@@ -43,31 +41,25 @@ public class Summary extends Container {
         taskList.get(0).start(LocalDateTime.of(2021, 2, 21, 5, 0));
         taskList.get(0).stop(LocalDateTime.of(2021, 2, 21, 7, 0));
 
-        this.addLabel("Summary", nativeBold, 0x000000, 8.0f);
+        this.addLabel("Summary", NATIVE_BOLD, 0x000000, 8.0f);
 
         // TODO add other pages (by size and all task summary)
 
-        this.addLabel("Tasks", nativeBold, 0x000000, 5.5f);
+        this.addLabel("Tasks", NATIVE_BOLD, 0x000000, 5.5f);
 
         for (Task task : taskList) {
             this.addLabel(" - " + (task.getTotalTime() / 3600000) + 
-                          " hours total for " + task.getTitle(), 
-                          nativeLight, 0x000000, 3.0f);
+                          " hours total for " + task.getTitle(),
+                    NATIVE_LIGHT, 0x000000, 3.0f);
         }
 
 
-        this.addLabel("Sizes", nativeBold, 0x000000, 5.5f);
+        this.addLabel("Sizes", NATIVE_BOLD, 0x000000, 5.5f);
         // TODO sizes list
 
 
-        this.addLabel("Statistics", nativeBold, 0x000000, 5.5f);
+        this.addLabel("Statistics", NATIVE_BOLD, 0x000000, 5.5f);
         // TODO stats list
-
-
     }
 
-    // definitely gonna change this, unneeded since this class is a container
-    public Container get () {
-        return this;
-    }
 }

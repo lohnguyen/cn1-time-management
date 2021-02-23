@@ -67,4 +67,5 @@ public class Database {
             for (Task t : vec) Log.p(t.getTitle());
         }
     }
+
 }
