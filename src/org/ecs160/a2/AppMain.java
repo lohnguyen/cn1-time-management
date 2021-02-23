@@ -55,6 +55,7 @@ public class AppMain {
       });
 
       Database.init();
+      Database.test();
    }
 
    private void setToolbar() {

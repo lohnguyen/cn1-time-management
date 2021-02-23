@@ -1,10 +1,22 @@
 package org.ecs160.a2.models;
 
+import com.codename1.io.Externalizable;
+import com.codename1.io.Util;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class TimeSpan {
+public class TimeSpan implements Externalizable {
+
+    public static final String OBJECT_ID = "TimeSpan";
+
+    static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
     /**
      * The start time of a span. Non-null.
      */
@@ -102,5 +114,27 @@ public class TimeSpan {
             }
         }
         return duration;
+    }
+
+    @Override
+    public int getVersion() {
+        return 1;
+    }
+
+    @Override
+    public void externalize(DataOutputStream out) throws IOException {
+        Util.writeUTF(start.format(formatter), out);
+        Util.writeUTF(end.format(formatter), out);
+    }
+
+    @Override
+    public void internalize(int version, DataInputStream in) throws IOException {
+        start = LocalDateTime.parse(Util.readUTF(in), formatter);
+        end = LocalDateTime.parse(Util.readUTF(in), formatter);
+    }
+
+    @Override
+    public String getObjectId() {
+        return OBJECT_ID;
     }
 }
