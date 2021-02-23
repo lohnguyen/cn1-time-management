@@ -15,15 +15,18 @@ import java.util.List;
 
 
 public class TaskList extends Container {
-    private Container listContainer;
-    private ArrayList<Task> activeList;
-    private ArrayList<Task> inactiveList;
+
+    private final ArrayList<Task> activeList;
+    private final ArrayList<Task> inactiveList;
 
     public TaskList() {
-        this.listContainer = new Container(BoxLayout.y());
-        this.listContainer.setScrollableY(true);
-        this.activeList = new ArrayList<Task>();
-        this.inactiveList = new ArrayList<Task>();
+        super(BoxLayout.y());
+        this.setScrollableY(true);
+
+        this.activeList = new ArrayList<>();
+        this.inactiveList = new ArrayList<>();
+
+        loadData();
     }
 
     /**
@@ -31,7 +34,7 @@ public class TaskList extends Container {
      *
      * @return Container of the task list
      */
-    public Container get() {
+    public void loadData() {
         this.activeList.clear();
         this.inactiveList.clear();
         List<Task> allTasks =
@@ -39,7 +42,6 @@ public class TaskList extends Container {
         this.inputTasks(allTasks);
         this.refreshContainer();
         this.configContainer();
-        return this.listContainer;
     }
 
     /**
@@ -64,8 +66,8 @@ public class TaskList extends Container {
      * Configures anything to do with the Container holding the task list
      */
     private void configContainer() {
-        this.listContainer.addPullToRefresh(() -> {
-            this.get();
+        this.addPullToRefresh(() -> {
+            loadData();
         });
     }
 
@@ -73,10 +75,10 @@ public class TaskList extends Container {
      * Refreshes the content of the taskList Container
      */
     private void refreshContainer() {
-        this.listContainer.removeAll();
+        this.removeAll();
         this.listTasks("Active Tasks", this.activeList);
         this.listTasks("Inactive Tasks", this.inactiveList);
-        this.listContainer.revalidate();
+        this.revalidate();
     }
 
     /**
@@ -98,18 +100,18 @@ public class TaskList extends Container {
             taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
         }
         taskTypeCont.addComponent(taskTypeLabel);
-        this.listContainer.add(taskTypeCont);
+        this.add(taskTypeCont);
 
         if (tasks.size() == 0) {
             Container emptyCont =
                     new Container(new FlowLayout(Component.CENTER));
             Label emptyLabel = new Label("no tasks");
             emptyCont.addComponent(emptyLabel);
-            this.listContainer.addComponent(emptyCont);
+            this.addComponent(emptyCont);
         }
 
         for (Task task : tasks) {
-            this.listContainer.addComponent(new TaskCard(task));
+            this.addComponent(new TaskCard(task));
         }
     }
 }
