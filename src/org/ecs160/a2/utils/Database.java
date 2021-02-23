@@ -29,17 +29,44 @@ public class Database {
         db.writeObject(key, vec);
     }
 
+    public static void updateTask(String key, Task task) {
+        List<Task> vec = (List) readAll(key);
+        for (int i = 0; i < vec.size(); i++) {
+            if (vec.get(i).hasSameTitle(task)) {
+                vec.set(i, task);
+                break;
+            }
+        }
+        writeAll(key, (List) vec);
+    }
+
+    public static void update(String key, Object val) {
+        switch (key) {
+            case Task.OBJECT_ID:
+                updateTask(key, (Task) val);
+                break;
+        }
+    }
+
     public static Vector<Object> readAll(String key) {
         Vector<Object> vec = (Vector<Object>) db.readObject(key);
         if (vec == null) return new Vector<>();
         return vec;
     }
 
-    public static void deleteTask(String title) {
-        List<Task> tasks = (List) readAll(Task.OBJECT_ID);
+    public static void delete(String key, String id) {
+        switch (key) {
+            case Task.OBJECT_ID:
+                deleteTask(key, id);
+                break;
+        }
+    }
+
+    public static void deleteTask(String key, String title) {
+        List<Task> tasks = (List) readAll(key);
         Predicate<Task> byTitle = task -> !task.getTitle().equals(title);
         tasks = tasks.stream().filter(byTitle).collect(Collectors.toList());
-        writeAll(Task.OBJECT_ID, (List) tasks);
+        writeAll(key, (List) tasks);
     }
 
     public static void deleteAll(String key) {

@@ -159,6 +159,10 @@ public class Task implements Externalizable {
         return TimeSpan.getTotalDuration(this.timeSpans);
     }
 
+    public boolean hasSameTitle(Task that) {
+        return title.equals(that.getTitle());
+    }
+
     @Override
     public int getVersion() {
         return 1;
