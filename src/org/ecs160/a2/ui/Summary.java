@@ -15,13 +15,9 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
 
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.utils.AppConstants;
 
-public class Summary extends UpdateableContainer {
-
-    // might move these to some other class if they need to be shared
-    protected static final Font nativeLight = Font.createTrueTypeFont("native:MainLight");
-    protected static final Font nativeRegular = Font.createTrueTypeFont("native:MainRegular");
-    protected static final Font nativeBold = Font.createTrueTypeFont("native:MainBold");
+public class Summary extends UpdateableContainer implements AppConstants {
 
     // NOTE: this is temporary and will be changed to work with the
     // database later on!
@@ -47,7 +43,7 @@ public class Summary extends UpdateableContainer {
         taskList.get(1).stop(LocalDateTime.of(2021, 2, 23, 7, 0));
 
         // title
-        this.add(createLabel("Summary", nativeBold, 0x000000, 8.0f));
+        this.add(createLabel("Summary", NATIVE_BOLD, 0x000000, 8.0f));
 
         // Selection
         Container buttonContainer = new Container(new GridLayout(1, 2));
@@ -70,7 +66,6 @@ public class Summary extends UpdateableContainer {
         // call function on refresh (temporary, can have a better solution)
         this.addPullToRefresh(() -> updateContainer());
         this.updateContainer();
-
     }
 
     private void selectPageButtonAction (ActionEvent e) {
@@ -114,7 +109,7 @@ public class Summary extends UpdateableContainer {
             if (i < container.getComponentCount()) {
                 label = (Label) container.getComponentAt(i);
             } else {
-                label = createLabel("", nativeLight, 0x000000, 3.0f);
+                label = createLabel("", NATIVE_LIGHT, 0x000000, 3.0f);
                 container.add(label);
             }
 
@@ -137,10 +132,5 @@ public class Summary extends UpdateableContainer {
         if (taskList.size() > 0) {
             this.page1.updateContainer();
         }
-    }
-
-    // definitely gonna change this, unneeded since this class is a container
-    public Container get () {
-        return this;
     }
 }
