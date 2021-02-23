@@ -11,7 +11,7 @@ public class UIUtils implements AppConstants {
     }
 
     public static Font getTitleFont() {
-        return NATIVE_BOLD.derive(getPixelSize(FONT_SIZE_TITLE),
+        return NATIVE_REGULAR.derive(getPixelSize(FONT_SIZE_TITLE),
                 Font.STYLE_PLAIN);
     }
 

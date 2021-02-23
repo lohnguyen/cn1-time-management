@@ -2,6 +2,7 @@ package org.ecs160.a2.ui;
 
 import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
@@ -24,6 +25,11 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private void setDetails() {
+       showTaskTitle();
+       showDescription();
+    }
+
+    private void showTaskTitle() {
         Label title = new Label(task.getTitle());
         Style style = title.getAllStyles();
         style.setFont(UIUtils.getTitleFont());
@@ -31,10 +37,22 @@ public class TaskDetail extends Form implements AppConstants {
         add(title);
     }
 
+    private void showDescription() {
+        Label description = new Label(task.getDescription());
+        Style style = description.getAllStyles();
+        style.setFont(UIUtils.getTitleFont());
+        style.setFgColor(COLOR_TITLE);
+        add(description);
+    }
+
     private void setToolbar() {
         Toolbar tb = new Toolbar();
         setToolbar(tb);
-        setTitle("Task Details");
+        tb.setTitle("Task Details");
+
+//        Label label = new Label("Task Details");
+//        label.getAllStyles().setFont(UIUtils.getTitleFont());
+//        tb.add(BorderLayout.CENTER, label);
 
         setBackCommand();
     }
