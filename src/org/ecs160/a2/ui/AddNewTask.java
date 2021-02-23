@@ -19,7 +19,6 @@ import java.util.List;
 public class AddNewTask {
 
     public void getTaskDialog() {
-
         Dialog addNewTaskDialog = new Dialog("New Task");
         addNewTaskDialog.setLayout(new BorderLayout());
         int displayHeight = Display.getInstance().getDisplayHeight();
@@ -49,8 +48,7 @@ public class AddNewTask {
     }
 
     private void addTaskIntoDatabase(Dialog addNewTaskDialog, String taskName, String taskSize, String taskTags, String taskDescription) {
-
-        java.util.List<String> taskTagsList = extractTagStrings(taskTags);
+        List<String> taskTagsList = extractTagStrings(taskTags);
         Task newTask = new Task(taskName, taskDescription);
         newTask.setSize(taskSize);
         newTask.setTags(taskTagsList);
@@ -61,7 +59,7 @@ public class AddNewTask {
     }
 
     private List<String> extractTagStrings(String taskTags) {
-        java.util.List<String> separatedTaskTags = new ArrayList<>();
+        List<String> separatedTaskTags = new ArrayList<>();
         String[] separatedTaskTagsSplit = taskTags.split(" ");
         for (String tag : separatedTaskTagsSplit) {
             separatedTaskTags.add(tag);
@@ -74,7 +72,7 @@ public class AddNewTask {
         sizeDialog.setLayout(BoxLayout.y());
         sizeDialog.getContentPane().setScrollableY(true);
 
-        java.util.List<String> taskSizes =  Task.sizes;
+        List<String> taskSizes =  Task.sizes;
 
         for (int i = 0; i < taskSizes.size(); i++) {
             MultiButton oneSizeButton = new MultiButton(taskSizes.get(i));
@@ -89,4 +87,5 @@ public class AddNewTask {
         sizeDialog.dispose();
         sizeButton.revalidate();
     }
+
 }

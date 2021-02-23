@@ -107,12 +107,10 @@ public class AppMain {
               "Label", 6);
 
       Tabs tabs = new Tabs();
-      TaskList taskList = new TaskList();
-      Summary summary = new Summary();
 
       current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, taskList.get());
-      tabs.addTab("Summary", summaryIcon, summary.get());
+      tabs.addTab("Tasks", taskIcon, new TaskList());
+      tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }
 
