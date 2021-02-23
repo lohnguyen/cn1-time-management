@@ -51,32 +51,28 @@ public class Summary extends UpdateableContainer implements AppConstants {
 
         // setup the different summary pages
         this.page1 = new SummaryAll();
+        this.page1.setHidden(false); // default visible
+        this.add(this.page1);
         this.page2 = new SummarySize();
-        this.add(page1); // default visible
+        this.page2.setHidden(true); // default hidden
+        this.add(this.page2);
 
         // call function on refresh (temporary, can have a better solution)
         this.addPullToRefresh(() -> updateContainer());
-        this.updateContainer();
+        this.page1.updateContainer();
+        this.page2.updateContainer();
     }
 
     private void selectPageButtonAction (ActionEvent e) {
         Button button = (Button) e.getComponent();
         switch (button.getText()) {
             case "Everything":
-                if (this.contains(this.page2)) {
-                    this.removeComponent(this.page2);
-                }
-                if (!this.contains(this.page1)) {
-                    this.add(this.page1);
-                }
+                this.page2.setHidden(true);
+                this.page1.setHidden(false);
                 break;
             case "Tasks":
-                if (this.contains(this.page1)) {
-                    this.removeComponent(this.page1);
-                }
-                if (!this.contains(this.page2)) {
-                    this.add(this.page2);
-                }
+                this.page1.setHidden(true);
+                this.page2.setHidden(false);
         }
     }
 

@@ -37,6 +37,7 @@ public class UIUtils implements AppConstants {
 
             if (i < container.getComponentCount()) {
                 label = (Label) container.getComponentAt(i);
+                if (label.isHidden()) label.setHidden(false);
             } else {
                 label = createLabel("", NATIVE_LIGHT, 0x000000, 3.0f);
                 container.add(label);
@@ -45,10 +46,10 @@ public class UIUtils implements AppConstants {
             returnLabels.add(label);
         }
 
-        // remove the extra labels from the component
-        while (i < container.getComponentCount()) {
+        // hide the extra labels from the component
+        for (int j = i; j < container.getComponentCount(); j++) {
             Component extraLabel = container.getComponentAt(i);
-            container.removeComponent(extraLabel);
+            extraLabel.setHidden(true);
         }
 
         return returnLabels;

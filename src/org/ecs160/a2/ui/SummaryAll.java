@@ -88,7 +88,7 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
             if (max < 0 || max < taskTime) max = taskTime;
             average += taskTime;
         }
-        average /= taskList.size();
+        if(taskList.size() > 0) average /= taskList.size();
 
         // update the constant labels
         labels.get(0).setText(" - " + (min / MILIS_TO_HOURS) + 

@@ -1,10 +1,12 @@
 package org.ecs160.a2.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Label;
+import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.spinner.Picker;
 
@@ -17,14 +19,17 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
     // label containers
     private Container taskContainer, statsContainer;
 
+    private Picker sizePicker;
+
     public SummarySize () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
 
-        Picker sizePicker = new Picker();
-        sizePicker.setType(Display.PICKER_TYPE_STRINGS);
-        sizePicker.setStrings(Task.sizes.toArray(new String[Task.sizes.size()]));
-        sizePicker.setSelectedStringIndex(1);
-        this.add(sizePicker);
+        this.sizePicker = new Picker();
+        this.sizePicker.setType(Display.PICKER_TYPE_STRINGS);
+        this.sizePicker.setStrings(Task.sizes.toArray(new String[Task.sizes.size()]));
+        this.sizePicker.setSelectedStringIndex(1);
+        this.sizePicker.addActionListener((e) -> updateContainer());
+        this.add(this.sizePicker);
 
         // Tasks
         this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, 0x000000, 5.5f));
@@ -63,7 +68,7 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
             if (max < 0 || max < taskTime) max = taskTime;
             average += taskTime;
         }
-        average /= taskList.size();
+        if(taskList.size() > 0) average /= taskList.size();
 
         // update the constant labels
         labels.get(0).setText(" - " + (min / MILIS_TO_HOURS) + 
@@ -74,7 +79,18 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
                               " hours average");
     }
 
+    private List<Task> filterTaskList(List<Task> taskList, String size) {
+        List<Task> returnList = new ArrayList<Task>();
+        for (Task task : taskList) {
+            if (task.getSize().equals(size)) returnList.add(task);
+        }
+        return returnList;
+    }
+
     @Override
     public void updateContainer() {   
+        List<Task> taskList = filterTaskList(Summary.taskList, sizePicker.getSelectedString());
+        this.updateTaskLabels(taskList);
+        this.updateStatsLabels(taskList);
     }
 }
