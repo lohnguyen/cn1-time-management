@@ -15,18 +15,16 @@ import org.ecs160.a2.utils.AppConstants;
 
 public class Summary extends Container implements AppConstants {
 
-    // might move these to some other class if they need to be shared
-
     // NOTE: this is temporary and will be changed to work with the
     // database later on!
     private static List<Task> taskList = new ArrayList<>();
 
-    private void addLabel (String labelText, Font style, int color, 
-                                                         float fontSize) {
+    private void addLabel (String labelText, Font style, int color,
+                           float fontSize) {
         Label label = new Label(labelText);
         int pixelSize = Display.getInstance().convertToPixels(fontSize);
-        label.getAllStyles().setFont(style.derive(pixelSize, 
-                                                  Font.STYLE_PLAIN));
+        label.getAllStyles().setFont(style.derive(pixelSize,
+                Font.STYLE_PLAIN));
         label.getAllStyles().setFgColor(color);
         this.add(label);
     }
@@ -48,8 +46,8 @@ public class Summary extends Container implements AppConstants {
         this.addLabel("Tasks", NATIVE_BOLD, 0x000000, 5.5f);
 
         for (Task task : taskList) {
-            this.addLabel(" - " + (task.getTotalTime() / 3600000) + 
-                          " hours total for " + task.getTitle(),
+            this.addLabel(" - " + (task.getTotalTime() / 3600000) +
+                            " hours total for " + task.getTitle(),
                     NATIVE_LIGHT, 0x000000, 3.0f);
         }
 
@@ -60,6 +58,7 @@ public class Summary extends Container implements AppConstants {
 
         this.addLabel("Statistics", NATIVE_BOLD, 0x000000, 5.5f);
         // TODO stats list
-    }
 
+
+    }
 }

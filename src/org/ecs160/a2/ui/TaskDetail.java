@@ -9,8 +9,8 @@ import org.ecs160.a2.models.Task;
 
 public class TaskDetail extends Form {
 
-    private Form prev;
-    private Task task;
+    private final Form prev;
+    private final Task task;
 
     TaskDetail(Task task) {
         super(new BoxLayout(BoxLayout.Y_AXIS));

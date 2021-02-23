@@ -32,7 +32,7 @@ public class TaskCard extends Container implements AppConstants {
     private Container getButtons() {
         Container buttons = new Container(new FlowLayout());
         Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
-                        .convertToPixels(5, true), Font.STYLE_PLAIN);
+                .convertToPixels(5, true), Font.STYLE_PLAIN);
 
         Style s = new Style(0, 0, fnt, (byte) 0);
         Style s2 = new Style(0xF44336, 0, fnt, (byte) 0);
