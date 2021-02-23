@@ -59,8 +59,8 @@ public class Database {
 
         t1.stop();
 //        deleteAll(key);
-        Database.writeAll(key, (List) tests);
-        Database.write(key, t3);
+//        Database.writeAll(key, (List) tests);
+//        Database.write(key, t3);
         List<Task> vec = (List) readAll(key);
 
         if (vec != null) {
