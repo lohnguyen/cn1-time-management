@@ -13,4 +13,7 @@ public interface AppConstants {
     int COLOR_TITLE = 0x000000;
 
     float ICON_SIZE_TOOLBAR = 4.7f;
+
+    long MILIS_TO_HOURS = 3600000L;
+
 }

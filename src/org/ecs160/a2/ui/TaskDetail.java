@@ -2,7 +2,6 @@ package org.ecs160.a2.ui;
 
 import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
-import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
