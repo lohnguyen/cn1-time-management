@@ -27,7 +27,7 @@ public class Task implements Externalizable {
         // basic task internals
         this.title = title;
         this.description = description;
-        this.size = "";
+        this.size = "None";
 
         // task time internals
         this.totalTime = 0L;
@@ -37,7 +37,7 @@ public class Task implements Externalizable {
 
     // allow for the construction of a Task based on a title
     public Task(String title) {
-        this(title, "");
+        this(title, "None");
     }
 
     public Task() {
