@@ -8,6 +8,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.DurationUtils;
+import org.ecs160.a2.utils.Database;
 
 public class TaskCard extends Container {
 
@@ -64,10 +65,15 @@ public class TaskCard extends Container {
                         s2
                 )
         );
+        deleteButton.addActionListener(e->deleteButton());
         buttons.add(deleteButton);
         final Container content = new SwipeableContainer(null, buttons, card);
 
         this.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
         this.add(content);
+    }
+
+    private void deleteButton() {
+        Database.deleteTask(task.getTitle());
     }
 }
