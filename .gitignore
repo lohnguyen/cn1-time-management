@@ -11,6 +11,6 @@ JavaSE.jar
 Versions.properties
 
 # local ant	
-.vscode/	
-build/	
+.vscode/
+build/
 dist/
