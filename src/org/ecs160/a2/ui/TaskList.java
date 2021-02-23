@@ -1,25 +1,20 @@
 package org.ecs160.a2.ui;
 
-import com.codename1.components.MultiButton;
-import com.codename1.components.ToastBar;
-import com.codename1.io.Log;
-import com.codename1.ui.*;
-import com.codename1.ui.Button;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Label;
-import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.FontImage;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
-import org.ecs160.a2.ui.TaskCard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
+
+import static com.codename1.ui.CN.getCurrentForm;
+import static com.codename1.ui.CN.log;
 
 
 public class TaskList extends Container {
@@ -59,11 +54,11 @@ public class TaskList extends Container {
         this.listContainer.removeAll();
         this.listTasks("Active Tasks", this.activeList);
         this.listTasks("Inactive Tasks", this.inactiveList);
+        this.listContainer.revalidate();
     }
 
     private void listTasks(String label,
                                    ArrayList<Task> tasks) {
-
         Container taskTypeCont =
                 new Container(new FlowLayout(Component.CENTER));
         Label taskTypeLabel = new Label(label);
