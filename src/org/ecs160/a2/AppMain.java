@@ -28,7 +28,6 @@ public class AppMain {
 
    private Form current;
    private Resources theme;
-   private int x = 4;
 
    public void init(Object context) {
       // use two network threads instead of one
