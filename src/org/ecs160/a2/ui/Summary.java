@@ -12,29 +12,19 @@ import com.codename1.ui.layouts.GridLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
 
 public class Summary extends UpdateableContainer implements AppConstants {
 
-    // NOTE: this is temporary and will be changed to work with the
-    // database later on!
-    protected static List<Task> taskList = new ArrayList<Task>();
+    // NOTE: can think of a better way of sharing data
+    protected static List<Task> taskList;
     
     private UpdateableContainer page1, page2;
 
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.setScrollableY(true);
-
-        // temporary Tasks for the summary
-        taskList.add(new Task("Task 1"));
-        taskList.add(new Task("Task 2"));
-        taskList.get(0).setSize("M");
-        taskList.get(0).start(LocalDateTime.of(2021, 2, 21, 5, 0));
-        taskList.get(0).stop(LocalDateTime.of(2021, 2, 21, 7, 0));
-        taskList.get(1).setSize("L");
-        taskList.get(1).start(LocalDateTime.of(2021, 2, 22, 6, 0));
-        taskList.get(1).stop(LocalDateTime.of(2021, 2, 23, 7, 0));
 
         // title
         this.add(UIUtils.createLabel("Summary", NATIVE_BOLD, 0x000000, 8.0f));
@@ -59,10 +49,11 @@ public class Summary extends UpdateableContainer implements AppConstants {
 
         // call function on refresh (temporary, can have a better solution)
         this.addPullToRefresh(() -> updateContainer());
-        this.page1.updateContainer();
+        this.updateContainer();
         this.page2.updateContainer();
     }
 
+    // fired when page button is tapped
     private void selectPageButtonAction (ActionEvent e) {
         Button button = (Button) e.getComponent();
         switch (button.getText()) {
@@ -76,14 +67,20 @@ public class Summary extends UpdateableContainer implements AppConstants {
         }
     }
 
+    // read in from the database
+    private void reloadTaskList () {
+        taskList = (List) Database.readAll(Task.OBJECT_ID);
+    }
+
     // called whenever the labels need updating
     // TODO: onload? on refresh?
     @Override
     public void updateContainer () {
+        this.reloadTaskList(); // refresh the tasks first
         if (taskList.size() > 0) {
-            if (this.contains(this.page1)) {
+            if (!this.page1.isHidden()) { //
                 this.page1.updateContainer();
-            } else if (this.contains(this.page2)) {
+            } else if (!this.page2.isHidden()) {
                 this.page2.updateContainer();
             }
         }
