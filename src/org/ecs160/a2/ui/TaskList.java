@@ -26,6 +26,11 @@ public class TaskList extends Container {
         this.inactiveList = new ArrayList<Task>();
     }
 
+    /**
+     * Creates/refreshes the task list
+     *
+     * @return Container of the task list
+     */
     public Container get() {
         this.activeList.clear();
         this.inactiveList.clear();
@@ -37,6 +42,11 @@ public class TaskList extends Container {
         return this.listContainer;
     }
 
+    /**
+     * Splits the list of tasks into active and inactive tasks
+     *
+     * @param allTasks A list of every task in our database
+     */
     private void inputTasks(List<Task> allTasks) {
         ArrayList<Task> activeTasks = new ArrayList<>();
         ArrayList<Task> inactiveTasks = new ArrayList<>();
@@ -50,12 +60,18 @@ public class TaskList extends Container {
         }
     }
 
+    /**
+     * Configures anything to do with the Container holding the task list
+     */
     private void configContainer() {
         this.listContainer.addPullToRefresh(() -> {
             this.get();
         });
     }
 
+    /**
+     * Refreshes the content of the taskList Container
+     */
     private void refreshContainer() {
         this.listContainer.removeAll();
         this.listTasks("Active Tasks", this.activeList);
@@ -63,8 +79,16 @@ public class TaskList extends Container {
         this.listContainer.revalidate();
     }
 
+    /**
+     * Creates and adds the content to the Container for each list type given
+     * by label
+     *
+     * @param label The label of the task, expects "active" or "inactive"
+     * @param tasks The list of tasks that are of type <label>
+     */
     private void listTasks(String label,
                                    ArrayList<Task> tasks) {
+
         Container taskTypeCont =
                 new Container(new FlowLayout(Component.CENTER));
         Label taskTypeLabel = new Label(label);
