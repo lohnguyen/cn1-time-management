@@ -3,6 +3,9 @@ package org.ecs160.a2.ui;
 import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.layouts.Layout;
+import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
@@ -64,9 +67,30 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addTags() {
         addHeader("Tags");
+
+        Container container = new Container(new FlowLayout());
         for (String t : task.getTags()) {
-            add(new Label(t));
+            FlowLayout layout = new FlowLayout();
+            Container tag = new Container(layout);
+
+            Style style = tag.getAllStyles();
+            style.setBgTransparency(225);
+            style.setBorder(RoundBorder.create().rectangle(true).color(0xff884b));
+
+            Style s = new Style();
+            s.setBgColor(0xff884b);
+            s.setFgColor(0xffffff);
+            FontImage icon = FontImage.createMaterial(
+                    FontImage.MATERIAL_LOCAL_OFFER, s, 3);
+            tag.add(icon);
+
+            Label label = new Label(t);
+            label.getAllStyles().setFgColor(0xffffff);
+            tag.add(label);
+
+            container.add(tag);
         }
+        add(container);
     }
 
     private void addTotalTime() {
