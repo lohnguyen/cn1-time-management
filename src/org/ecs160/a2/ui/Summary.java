@@ -19,7 +19,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
 
     // NOTE: can think of a better way of sharing data
     protected static List<Task> taskList;
-    
+
     private UpdateableContainer page1, page2;
 
     public Summary () {

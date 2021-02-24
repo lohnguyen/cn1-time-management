@@ -8,10 +8,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
-
 import org.ecs160.a2.ui.AddNewTask;
-
-import org.ecs160.a2.models.Task;
 
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
@@ -87,16 +84,16 @@ public class AppMain {
       current.setToolbar(toolbar);
       toolbar.setTitle("Tasks");
 
-      Button addTaskButton = new Button();
-      addTaskButton.addActionListener(e->new AddNewTask().getTaskDialog());
+      Button addButton = new Button();
+      addButton.addActionListener(e-> new AddNewTask().getTaskDialog());
 
       try {
-         addTaskButton.setIcon(Image.createImage("/addbutton.png").scaled(80,80));
+         addButton.setIcon(Image.createImage("/addbutton.png").scaled(80, 80));
       } catch (IOException e) {
          e.printStackTrace();
       }
 
-      toolbar.addComponent(BorderLayout.EAST, addTaskButton);
+      toolbar.addComponent(BorderLayout.EAST, addButton);
    }
 
    private void setBottomTabs() {
@@ -104,7 +101,7 @@ public class AppMain {
               "Label", 6);
       FontImage summaryIcon =
               FontImage.createMaterial(FontImage.MATERIAL_ASSESSMENT,
-              "Label", 6);
+                      "Label", 6);
 
       Tabs tabs = new Tabs();
 

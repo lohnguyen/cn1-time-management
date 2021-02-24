@@ -31,8 +31,6 @@ public class TaskList extends Container {
 
     /**
      * Creates/refreshes the task list
-     *
-     * @return Container of the task list
      */
     public void loadData() {
         this.activeList.clear();
@@ -89,7 +87,7 @@ public class TaskList extends Container {
      * @param tasks The list of tasks that are of type <label>
      */
     private void listTasks(String label,
-                                   ArrayList<Task> tasks) {
+                           ArrayList<Task> tasks) {
 
         Container taskTypeCont =
                 new Container(new FlowLayout(Component.CENTER));
