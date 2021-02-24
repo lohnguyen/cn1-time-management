@@ -11,6 +11,8 @@ import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.DurationUtils;
 import org.ecs160.a2.utils.AppConstants;
 
+import java.util.function.Consumer;
+
 public class TaskCard extends Container implements AppConstants {
 
     Task task;
@@ -18,6 +20,9 @@ public class TaskCard extends Container implements AppConstants {
     public TaskCard(Task task) {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.task = task;
+        this.onStarted = onStarted;
+        this.onStopped = onStopped;
+        this.onDeleted = onDeleted;
 
         this.multiButton = new MultiButton(task.getTitle());
         multiButton.setTextLine2(DurationUtils.durationStr(task.getTotalTime()));
@@ -44,12 +49,16 @@ public class TaskCard extends Container implements AppConstants {
         buttons.add(editButton);
 
         Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
-                styleWarn, this::onDelete);
+                styleWarn, this::onDeleteButtonClicked);
 
 
         buttons.add(deleteButton);
 
         return buttons;
+    }
+
+    public TaskCard(Task task) {
+        this(task, null, null, null);
     }
 
     private Button createPlayButton(Style style) {
