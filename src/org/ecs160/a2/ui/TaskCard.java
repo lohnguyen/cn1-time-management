@@ -19,12 +19,12 @@ public class TaskCard extends Container implements AppConstants {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.task = task;
 
-        MultiButton card = new MultiButton(task.getTitle());
-        card.setTextLine2(DurationUtils.durationStr(task.getTotalTime()));
+        this.multiButton = new MultiButton(task.getTitle());
+        multiButton.setTextLine2(DurationUtils.durationStr(task.getTotalTime()));
 
-        card.addActionListener(e -> {
-            goToDetail(task);
-        });
+        multiButton.addActionListener(e ->
+                goToDetail(task)
+        );
 
         Container content = new SwipeableContainer(null, getButtons(), card);
         this.add(content);
@@ -43,10 +43,10 @@ public class TaskCard extends Container implements AppConstants {
         Button editButton = createButton(FontImage.MATERIAL_SETTINGS, s);
         buttons.add(editButton);
 
-        Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE, s2);
-        deleteButton.addActionListener(e -> {
-            Database.delete(Task.OBJECT_ID, task.getTitle());
-        });
+        Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
+                styleWarn, this::onDelete);
+
+
         buttons.add(deleteButton);
 
         return buttons;

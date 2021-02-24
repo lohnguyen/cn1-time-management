@@ -9,6 +9,6 @@ public class DurationUtils {
     }
 
     public static String durationStr(long duration) {
-        return durationStr(Duration.ofSeconds(duration));
+        return durationStr(Duration.ofMillis(duration));
     }
 }
