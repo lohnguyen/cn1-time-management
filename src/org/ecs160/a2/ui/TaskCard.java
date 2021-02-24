@@ -7,6 +7,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.DurationUtils;
 import org.ecs160.a2.utils.AppConstants;
 
@@ -43,6 +44,9 @@ public class TaskCard extends Container implements AppConstants {
         buttons.add(editButton);
 
         Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE, s2);
+        deleteButton.addActionListener(e -> {
+            Database.delete(Task.OBJECT_ID, task.getTitle());
+        });
         buttons.add(deleteButton);
 
         return buttons;
