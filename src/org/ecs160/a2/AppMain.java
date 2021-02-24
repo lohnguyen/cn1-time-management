@@ -8,6 +8,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
+import org.ecs160.a2.models.Task;
 import org.ecs160.a2.ui.AddNewTask;
 
 import org.ecs160.a2.ui.Summary;
@@ -59,7 +60,7 @@ public class AppMain {
          current.show();
          return;
       }
-
+      Database.deleteAll(Task.OBJECT_ID);
       current = new Form("Task Management App", new BorderLayout());
 
       setToolbar();
