@@ -4,7 +4,6 @@ import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
@@ -65,30 +64,35 @@ public class TaskDetail extends Form implements AppConstants {
 //        add(b);
     }
 
+    private FontImage getTagIcon() {
+        Style s = new Style();
+        s.setBgColor(0xff884b);
+        s.setFgColor(0xffffff);
+        return FontImage.createMaterial(FontImage.MATERIAL_LOCAL_OFFER, s, 3);
+    }
+
+    private Container getTagBlob(String t) {
+        Container tag = new Container(new FlowLayout());
+
+        Style style = tag.getAllStyles();
+        style.setBgTransparency(225);
+        style.setBorder(RoundBorder.create().rectangle(true).color(0xff884b));
+
+        tag.add(getTagIcon());
+
+        Label label = new Label(t);
+        label.getAllStyles().setFgColor(0xffffff);
+        tag.add(label);
+
+        return tag;
+    }
+
     private void addTags() {
         addHeader("Tags");
 
         Container container = new Container(new FlowLayout());
         for (String t : task.getTags()) {
-            FlowLayout layout = new FlowLayout();
-            Container tag = new Container(layout);
-
-            Style style = tag.getAllStyles();
-            style.setBgTransparency(225);
-            style.setBorder(RoundBorder.create().rectangle(true).color(0xff884b));
-
-            Style s = new Style();
-            s.setBgColor(0xff884b);
-            s.setFgColor(0xffffff);
-            FontImage icon = FontImage.createMaterial(
-                    FontImage.MATERIAL_LOCAL_OFFER, s, 3);
-            tag.add(icon);
-
-            Label label = new Label(t);
-            label.getAllStyles().setFgColor(0xffffff);
-            tag.add(label);
-
-            container.add(tag);
+            container.add(getTagBlob(t));
         }
         add(container);
     }
