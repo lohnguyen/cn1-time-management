@@ -159,8 +159,26 @@ public class Task implements Externalizable {
         return TimeSpan.getTotalDuration(this.timeSpans);
     }
 
+    /**
+     * Checks if task has the same title with another task
+     * To be changed to id later
+     */
     public boolean hasSameTitle(Task that) {
         return title.equals(that.getTitle());
+    }
+
+
+    /*
+     * Reference: calculate time difference from milliseconds
+     * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
+     * milliseconds-to-string-formatted-time-in-java/16520928#16520928
+     */
+    public String getTotalTimeStr() {
+        long second = totalTime / 1000 % 60;
+        long minute = totalTime / (1000 * 60) % 60;
+        long hour = totalTime / (1000 * 60 * 60);
+
+        return String.format("%02d:%02d:%02d", hour, minute, second);
     }
 
     @Override

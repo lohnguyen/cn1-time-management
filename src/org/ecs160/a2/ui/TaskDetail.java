@@ -19,16 +19,19 @@ public class TaskDetail extends Form implements AppConstants {
         prev = Display.getInstance().getCurrent();
         task = t;
 
+        constructView();
+    }
+
+    private void constructView() {
         setToolbar();
-        setDetails();
+        addTitle();
+        addSize();
+        addDescription();
+        addTags();
+        addTotalTime();
     }
 
-    private void setDetails() {
-       showTaskTitle();
-       showDescription();
-    }
-
-    private void showTaskTitle() {
+    private void addTitle() {
         Label title = new Label(task.getTitle());
         Style style = title.getAllStyles();
         style.setFont(UIUtils.getTitleFont());
@@ -36,12 +39,44 @@ public class TaskDetail extends Form implements AppConstants {
         add(title);
     }
 
-    private void showDescription() {
-        Label description = new Label(task.getDescription());
-        Style style = description.getAllStyles();
+    private void addSize() {
+        Label size = new Label(task.getSize());
+        add(size);
+    }
+
+    private void addHeader(String content) {
+        add(UIUtils.createLabel(content, NATIVE_REGULAR, COLOR_TITLE,
+                FONT_SIZE_SUB_TITLE));
+    }
+
+    private void addDescription() {
+        addHeader("Description");
+
+        add(new Label(task.getDescription()));
+
+//        Button b = new Button("edit");
+//        b.addActionListener(e -> {
+//            task.setDescription("edited description");
+//            Database.update(Task.OBJECT_ID, task);
+//        });
+//        add(b);
+    }
+
+    private void addTags() {
+        addHeader("Tags");
+        for (String t : task.getTags()) {
+            add(new Label(t));
+        }
+    }
+
+    private void addTotalTime() {
+        addHeader("Total Time");
+        Label totalTime = new Label(task.getTotalTimeStr());
+        Style style = totalTime.getAllStyles();
         style.setFont(UIUtils.getTitleFont());
-        style.setFgColor(COLOR_TITLE);
-        add(description);
+//        style.setFgColor(COLOR_TITLE);
+        style.setAlignment(Component.CENTER);
+        add(totalTime);
     }
 
     private void setToolbar() {
