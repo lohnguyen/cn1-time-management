@@ -20,9 +20,13 @@ public class Database {
         Database.test();
     }
 
+    public static void reset() {
+        deleteAll(Task.OBJECT_ID);
+        deleteAll(Task.COUNTER_ID);
+    }
+
     public static int generateID(String key) {
         int id = readID(key);
-        Log.p(String.valueOf(id));
         db.writeObject(key, id + 1);
         return id;
     }
@@ -47,7 +51,7 @@ public class Database {
     public static void updateTask(String key, Task task) {
         List<Task> vec = (List) readAll(key);
         for (int i = 0; i < vec.size(); i++) {
-            if (vec.get(i).hasSameTitle(task)) {
+            if (vec.get(i).getID() == task.getID()) {
                 vec.set(i, task);
                 break;
             }

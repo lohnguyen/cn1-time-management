@@ -177,15 +177,6 @@ public class Task implements Externalizable {
         return TimeSpan.getTotalDuration(this.timeSpans);
     }
 
-    /**
-     * Checks if task has the same title with another task
-     * To be changed to id later
-     */
-    public boolean hasSameTitle(Task that) {
-        return title.equals(that.getTitle());
-    }
-
-
     /*
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-

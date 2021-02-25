@@ -17,13 +17,13 @@ public class AddNewTask extends Dialog {
     public AddNewTask() {
         super("New Task", new BorderLayout());
         setDisposeWhenPointerOutOfBounds(true);
-        init();
+        constructView();
 
         int displayHeight = Display.getInstance().getDisplayHeight();
         show(displayHeight/8, 0, 0, 0);
     }
 
-    private void init() {
+    private void constructView() {
         TextModeLayout textLayout = new TextModeLayout(3, 2);
         Form newTaskForm = new Form("Enter Task Details", textLayout);
 

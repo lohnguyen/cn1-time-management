@@ -111,7 +111,4 @@ public class AppMain {
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }
 
-   private void showNewTaskForm() {
-      log("New Task Form.");
-   }
 }
