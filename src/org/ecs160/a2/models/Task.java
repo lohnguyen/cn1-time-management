@@ -2,6 +2,7 @@ package org.ecs160.a2.models;
 
 import com.codename1.io.Externalizable;
 import com.codename1.io.Util;
+import org.ecs160.a2.utils.Database;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,8 +16,10 @@ import java.util.List;
 public class Task implements Externalizable {
 
     public static final String OBJECT_ID = "Task";
+    public static final String COUNTER_ID = "TaskCounter";
     public static final List<String> sizes = Arrays.asList("None", "S", "M", "L", "XL");
 
+    private int id;
     private String title, description, size;
     private long totalTime; // total time spent (excluding in progress)
     private List<TimeSpan> timeSpans;
@@ -40,11 +43,26 @@ public class Task implements Externalizable {
         this(title, "None");
     }
 
+    // used by AddNewTask, generate id
+    public Task(String title, String desc, String size, List<String> tags) {
+        this.id = Database.generateID(COUNTER_ID);
+        this.title = title;
+        this.description = desc;
+        this.size = size;
+        this.totalTime = 0L;
+        this.timeSpans = new ArrayList<>();
+        this.tags = tags;
+    }
+
     public Task() {
         this("Task");
     }
 
     // for the basic task internals
+    public int getID() {
+        return this.id;
+    }
+
     public String getTitle() {
         return this.title;
     }
@@ -188,6 +206,7 @@ public class Task implements Externalizable {
 
     @Override
     public void externalize(DataOutputStream out) throws IOException {
+        out.writeInt(id);
         Util.writeUTF(title, out);
         Util.writeUTF(description, out);
         Util.writeUTF(size, out);
@@ -198,6 +217,7 @@ public class Task implements Externalizable {
 
     @Override
     public void internalize(int version, DataInputStream in) throws IOException {
+        id = in.readInt();
         title = Util.readUTF(in);
         description = Util.readUTF(in);
         size = Util.readUTF(in);
