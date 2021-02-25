@@ -12,10 +12,29 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Database {
+
     static Storage db = Storage.getInstance();
 
     public static void init() {
         Util.register(Task.OBJECT_ID, Task.class);
+        Database.test();
+    }
+
+    public static void reset() {
+        deleteAll(Task.OBJECT_ID);
+        deleteAll(Task.COUNTER_ID);
+    }
+
+    public static int generateID(String key) {
+        int id = readID(key);
+        db.writeObject(key, id + 1);
+        return id;
+    }
+
+    public static int readID(String key) {
+        Integer id = (Integer) db.readObject(key);
+        if (id == null) return 0;
+        return id;
     }
 
     public static void write(String key, Object val) {
@@ -32,7 +51,7 @@ public class Database {
     public static void updateTask(String key, Task task) {
         List<Task> vec = (List) readAll(key);
         for (int i = 0; i < vec.size(); i++) {
-            if (vec.get(i).hasSameTitle(task)) {
+            if (vec.get(i).getID() == task.getID()) {
                 vec.set(i, task);
                 break;
             }
@@ -41,11 +60,7 @@ public class Database {
     }
 
     public static void update(String key, Object val) {
-        switch (key) {
-            case Task.OBJECT_ID:
-                updateTask(key, (Task) val);
-                break;
-        }
+        if (Task.OBJECT_ID.equals(key)) updateTask(key, (Task) val);
     }
 
     public static Vector<Object> readAll(String key) {
@@ -55,11 +70,7 @@ public class Database {
     }
 
     public static void delete(String key, String id) {
-        switch (key) {
-            case Task.OBJECT_ID:
-                deleteTask(key, id);
-                break;
-        }
+        if (Task.OBJECT_ID.equals(key)) deleteTask(key, id);
     }
 
     public static void deleteTask(String key, String title) {
@@ -74,24 +85,29 @@ public class Database {
     }
 
     public static void test() {
-        Task t1 = new Task("test 1", "yee");
-        t1.start();
-        Task t2 = new Task("test 2", "yoo");
-        Task t3 = new Task("test 3", "yaa");
+//        Task t1 = new Task("test 1", "yee");
+//        t1.start();
+//        Task t2 = new Task("test 2", "yoo");
+//        Task t3 = new Task("test 3", "yaa");
         String key = Task.OBJECT_ID;
 
         List<Task> tests = new ArrayList<>();
-        tests.add(t1);
-        tests.add(t2);
+//        tests.add(t1);
+//        tests.add(t2);
 
-        t1.stop();
+//        if (tests != null) {
+//            for (Task t : tests) Log.p(t.getTitle() + t.getID());
+//        }
+
+//        t1.stop();
 //        deleteAll(key);
 //        Database.writeAll(key, (List) tests);
 //        Database.write(key, t3);
         List<Task> vec = (List) readAll(key);
 
         if (vec != null) {
-            for (Task t : vec) Log.p(t.getTitle());
+            for (Task t : vec)
+                Log.p(t.getTitle() + " " + t.getID());
         }
     }
 

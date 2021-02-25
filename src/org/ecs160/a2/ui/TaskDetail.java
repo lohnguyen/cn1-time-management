@@ -8,6 +8,7 @@ import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
 
 public class TaskDetail extends Form implements AppConstants {
@@ -53,7 +54,6 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addDescription() {
         addHeader("Description");
-
         add(new Label(task.getDescription()));
 
 //        Button b = new Button("edit");
@@ -71,13 +71,17 @@ public class TaskDetail extends Form implements AppConstants {
         return FontImage.createMaterial(FontImage.MATERIAL_LOCAL_OFFER, s, 3);
     }
 
-    private Container getTagBlob(String t) {
-        Container tag = new Container(new FlowLayout());
-
-        Style style = tag.getAllStyles();
+    private Container getTagContainer() {
+        Container container = new Container(new FlowLayout());
+        Style style = container.getAllStyles();
         style.setBgTransparency(225);
         style.setBorder(RoundBorder.create().rectangle(true).color(0xff884b));
+        style.setMargin(Component.RIGHT, 10);
+        return container;
+    }
 
+    private Container getTag(String t) {
+        Container tag = getTagContainer();
         tag.add(getTagIcon());
 
         Label label = new Label(t);
@@ -92,7 +96,7 @@ public class TaskDetail extends Form implements AppConstants {
 
         Container container = new Container(new FlowLayout());
         for (String t : task.getTags()) {
-            container.add(getTagBlob(t));
+            container.add(getTag(t));
         }
         add(container);
     }
