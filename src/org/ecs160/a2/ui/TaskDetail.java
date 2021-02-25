@@ -8,6 +8,7 @@ import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
 
 public class TaskDetail extends Form implements AppConstants {
@@ -53,7 +54,6 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addDescription() {
         addHeader("Description");
-
         add(new Label(task.getDescription()));
 
 //        Button b = new Button("edit");
