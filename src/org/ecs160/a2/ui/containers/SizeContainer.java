@@ -1,4 +1,4 @@
-package org.ecs160.a2.ui;
+package org.ecs160.a2.ui.containers;
 
 import java.util.HashMap;
 import java.util.List;

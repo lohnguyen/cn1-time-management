@@ -11,6 +11,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
 
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.ui.containers.UpdateableContainer;
 import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
