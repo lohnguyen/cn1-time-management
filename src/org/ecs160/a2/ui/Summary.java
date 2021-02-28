@@ -15,10 +15,9 @@ import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
 
-public class Summary extends UpdateableContainer implements AppConstants {
+public class Summary extends Container implements AppConstants {
 
-    // NOTE: can think of a better way of sharing data
-    protected static List<Task> taskList;
+    private static List<Task> taskList;
 
     private UpdateableContainer page1, page2;
 
@@ -50,7 +49,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
         // call function on refresh (temporary, can have a better solution)
         this.addPullToRefresh(() -> updateContainer());
         this.updateContainer();
-        this.page2.updateContainer();
+        this.page2.updateContainer(taskList);
     }
 
     // fired when page button is tapped
@@ -74,14 +73,13 @@ public class Summary extends UpdateableContainer implements AppConstants {
 
     // called whenever the labels need updating
     // TODO: onload? on refresh?
-    @Override
     public void updateContainer () {
         this.reloadTaskList(); // refresh the tasks first
         if (taskList.size() > 0) {
             if (!this.page1.isHidden()) { //
-                this.page1.updateContainer();
+                this.page1.updateContainer(taskList);
             } else if (!this.page2.isHidden()) {
-                this.page2.updateContainer();
+                this.page2.updateContainer(taskList);
             }
         }
     }

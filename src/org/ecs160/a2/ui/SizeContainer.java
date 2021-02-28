@@ -1,6 +1,8 @@
 package org.ecs160.a2.ui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
@@ -16,7 +18,7 @@ public class SizeContainer extends UpdateableContainer implements AppConstants {
     }
 
     @Override
-    public void updateContainer() {
+    public void updateContainer(List<Task> taskList) {
         // use a map to keep track of the current totals for the sizes
         Map<String, Long> sizeStatsMap = new HashMap<String, Long>();
 
@@ -31,8 +33,8 @@ public class SizeContainer extends UpdateableContainer implements AppConstants {
         }
 
         Object[] availableSizes = sizeStatsMap.keySet().toArray();
-        List<Label> labels = UIUtils.getLabelsToUpdate(this.sizeContainer, 
-                                               sizeStatsMap.keySet().size());
+        List<Label> labels = UIUtils.getLabelsToUpdate(this, 
+                                                       sizeStatsMap.keySet().size());
         for (int i = 0; i < availableSizes.length; i++) {
             String size = (String) availableSizes[i];
             Label label = labels.get(i);

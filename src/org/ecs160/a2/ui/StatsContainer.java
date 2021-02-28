@@ -16,8 +16,8 @@ public class StatsContainer extends UpdateableContainer implements AppConstants 
     }
 
     @Override
-    public void updateContainer() {
-        List<Label> labels = UIUtils.getLabelsToUpdate(this.statsContainer, 3);
+    public void updateContainer(List<Task> taskList) {
+        List<Label> labels = UIUtils.getLabelsToUpdate(this, 3);
         long min = -1L, average = -1L, max = -1L;
 
         // calculate the stats

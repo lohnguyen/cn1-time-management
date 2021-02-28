@@ -3,10 +3,7 @@ package org.ecs160.a2.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.codename1.ui.Container;
 import com.codename1.ui.Display;
-import com.codename1.ui.Label;
-import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.spinner.Picker;
 
@@ -29,7 +26,7 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
         this.sizePicker.setType(Display.PICKER_TYPE_STRINGS);
         this.sizePicker.setStrings(Task.sizes.toArray(new String[Task.sizes.size()]));
         this.sizePicker.setSelectedStringIndex(1);
-        this.sizePicker.addActionListener((e) -> updateContainer());
+        // this.sizePicker.addActionListener((e) -> updateContainer());
         this.add(this.sizePicker);
 
         // Tasks
@@ -52,9 +49,10 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
     }
 
     @Override
-    public void updateContainer() {   
-        List<Task> taskList = filterTaskList(Summary.taskList, sizePicker.getSelectedString());
-        this.tasks.updateContainer(taskList);
-        this.stats.updateContainer(taskList);
+    public void updateContainer(List<Task> taskList) {   
+        List<Task> filteredList;
+        filteredList = filterTaskList(taskList, sizePicker.getSelectedString());
+        this.tasks.updateContainer(filteredList);
+        this.stats.updateContainer(filteredList);
     }
 }

@@ -16,7 +16,7 @@ public class TaskContainer extends UpdateableContainer implements AppConstants {
     }
 
     @Override
-    public void updateContainer() {
+    public void updateContainer(List<Task> taskList) {
         List<Label> labels = UIUtils.getLabelsToUpdate(this, 
                                                        taskList.size());
         for (int i = 0; i < taskList.size(); i++) {

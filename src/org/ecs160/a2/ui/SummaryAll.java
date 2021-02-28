@@ -1,11 +1,7 @@
 package org.ecs160.a2.ui;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.codename1.ui.Container;
-import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
@@ -37,9 +33,9 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
     }
 
     @Override
-    public void updateContainer() {
-        this.tasks.updateContainer(Summary.taskList);
-        this.sizes.updateContainer(Summary.taskList);
-        this.stats.updateContainer(Summary.taskList);
+    public void updateContainer(List<Task> taskList) {
+        this.tasks.updateContainer(taskList);
+        this.sizes.updateContainer(taskList);
+        this.stats.updateContainer(taskList);
     }
 }

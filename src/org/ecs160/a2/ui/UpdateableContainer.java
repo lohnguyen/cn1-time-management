@@ -1,7 +1,11 @@
 package org.ecs160.a2.ui;
 
+import java.util.List;
+
 import com.codename1.ui.Container;
 import com.codename1.ui.layouts.Layout;
+
+import org.ecs160.a2.models.Task;
 
 public abstract class UpdateableContainer extends Container {
 
@@ -13,5 +17,5 @@ public abstract class UpdateableContainer extends Container {
         super(layout);
     }
 
-    public abstract void updateContainer ();
+    public abstract void updateContainer (List<Task> taskList);
 }
