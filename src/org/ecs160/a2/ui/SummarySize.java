@@ -29,7 +29,7 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
         this.sizePicker.setType(Display.PICKER_TYPE_STRINGS);
         this.sizePicker.setStrings(Task.sizes.toArray(new String[Task.sizes.size()]));
         this.sizePicker.setSelectedStringIndex(1);
-        // this.sizePicker.addActionListener((e) -> updateContainer());
+        this.sizePicker.addActionListener((e) -> askParentForUpdate());
         this.add(this.sizePicker);
 
         // Tasks

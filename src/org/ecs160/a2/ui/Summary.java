@@ -1,7 +1,5 @@
 package org.ecs160.a2.ui;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.codename1.ui.Button;
@@ -16,7 +14,7 @@ import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
 
-public class Summary extends Container implements AppConstants {
+public class Summary extends UpdateableContainer implements AppConstants {
 
     private static List<Task> taskList;
 
@@ -48,8 +46,8 @@ public class Summary extends Container implements AppConstants {
         this.add(this.page2);
 
         // call function on refresh (temporary, can have a better solution)
-        this.addPullToRefresh(() -> updateContainer());
-        this.updateContainer();
+        this.addPullToRefresh(() -> updateSubContainers());
+        this.updateSubContainers();
         this.page2.updateContainer(taskList);
     }
 
@@ -74,7 +72,7 @@ public class Summary extends Container implements AppConstants {
 
     // called whenever the labels need updating
     // TODO: onload? on refresh?
-    public void updateContainer () {
+    public void updateSubContainers () {
         this.reloadTaskList(); // refresh the tasks first
         if (taskList.size() > 0) {
             if (!this.page1.isHidden()) { //
@@ -83,5 +81,15 @@ public class Summary extends Container implements AppConstants {
                 this.page2.updateContainer(taskList);
             }
         }
+    }
+
+    @Override
+    protected void childAsksForUpdate (UpdateableContainer source) {
+        source.updateContainer(taskList);
+    }
+
+    @Override
+    public void updateContainer(List<Task> taskList) {
+        this.updateSubContainers();
     }
 }

@@ -17,5 +17,16 @@ public abstract class UpdateableContainer extends Container {
         super(layout);
     }
 
+    protected void childAsksForUpdate (UpdateableContainer source) {
+    }
+
+    protected void askParentForUpdate () {
+        Container parent = this.getParent();
+        if (parent instanceof UpdateableContainer) {
+            UpdateableContainer parentCast = (UpdateableContainer) parent;
+            parentCast.childAsksForUpdate(this);
+        }
+    }
+
     public abstract void updateContainer (List<Task> taskList);
 }
