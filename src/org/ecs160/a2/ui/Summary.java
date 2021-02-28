@@ -34,7 +34,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
         Button page1Button = new Button ("Everything");
         page1Button.addActionListener((e) -> selectPageButtonAction(e));
         buttonContainer.add(page1Button);
-        Button page2Button = new Button ("Tasks");
+        Button page2Button = new Button ("By Size");
         page2Button.addActionListener((e) -> selectPageButtonAction(e));
         buttonContainer.add(page2Button);
         this.add(buttonContainer);
@@ -61,7 +61,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
                 this.page2.setHidden(true);
                 this.page1.setHidden(false);
                 break;
-            case "Tasks":
+            case "By Size":
                 this.page1.setHidden(true);
                 this.page2.setHidden(false);
         }
