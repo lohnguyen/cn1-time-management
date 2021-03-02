@@ -2,33 +2,29 @@ package org.ecs160.a2.ui;
 
 import com.codename1.components.MultiButton;
 import com.codename1.ui.*;
-import static com.codename1.ui.CN.*;
-import static org.ecs160.a2.utils.Database.deleteAll;
-import static org.ecs160.a2.utils.Database.readAll;
 
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.TextModeLayout;
 import org.ecs160.a2.models.Task;
-import com.codename1.io.Log;
 import org.ecs160.a2.utils.Database;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddNewTask {
+public class AddNewTask extends Dialog {
 
-    public void getTaskDialog() {
-        Dialog addNewTaskDialog = new Dialog("New Task");
-        addNewTaskDialog.setLayout(new BorderLayout());
+    public AddNewTask() {
+        super("New Task", new BorderLayout());
+        setDisposeWhenPointerOutOfBounds(true);
+        constructView();
+
         int displayHeight = Display.getInstance().getDisplayHeight();
-        addNewTaskDialog.setDisposeWhenPointerOutOfBounds(true);
-        displayTaskForm(addNewTaskDialog);
-        addNewTaskDialog.show(displayHeight/8, 0, 0, 0);
+        show(displayHeight/8, 0, 0, 0);
     }
 
-    private void displayTaskForm(Dialog addNewTaskDialog) {
-        TextModeLayout textLayout = new TextModeLayout(3,2);
+    private void constructView() {
+        TextModeLayout textLayout = new TextModeLayout(3, 2);
         Form newTaskForm = new Form("Enter Task Details", textLayout);
 
         TextComponent taskName = new TextComponent().label("Task Name");
@@ -36,35 +32,34 @@ public class AddNewTask {
         TextComponent taskDescription = new TextComponent().label("Description").multiline(true);
 
         MultiButton sizeButton = new MultiButton("Size");
-        sizeButton.addActionListener(e->showSizePopup(sizeButton));
+        sizeButton.addActionListener(e -> showSizePopup(sizeButton));
 
         newTaskForm.addAll(taskName, sizeButton, taskTags, taskDescription);
+        add(BorderLayout.NORTH, newTaskForm);
 
         Button addTaskButton = new Button("Add Task");
-        addTaskButton.addActionListener(e->addTaskIntoDatabase(addNewTaskDialog, taskName.getText(), sizeButton.getText(), taskTags.getText(), taskDescription.getText()));
+        addTaskButton.addActionListener(e ->
+                addTaskToDatabase(taskName.getText(), sizeButton.getText(),
+                        taskTags.getText(), taskDescription.getText())
+        );
 
-        addNewTaskDialog.add(BorderLayout.SOUTH, addTaskButton);
-        addNewTaskDialog.add(BorderLayout.NORTH, newTaskForm);
+        add(BorderLayout.SOUTH, addTaskButton);
     }
 
-    private void addTaskIntoDatabase(Dialog addNewTaskDialog, String taskName, String taskSize, String taskTags, String taskDescription) {
-        List<String> taskTagsList = extractTagStrings(taskTags);
-        Task newTask = new Task(taskName, taskDescription);
-        newTask.setSize(taskSize);
-        newTask.setTags(taskTagsList);
-
-        String key = Task.OBJECT_ID;
-        Database.write(key, newTask);
-        addNewTaskDialog.dispose();
+    private void addTaskToDatabase(String name, String size, String tags,
+                                   String description) {
+        Task newTask = new Task(name, description, size, extractTags(tags));
+        Database.write(Task.OBJECT_ID, newTask);
+        dispose();
     }
 
-    private List<String> extractTagStrings(String taskTags) {
-        List<String> separatedTaskTags = new ArrayList<>();
-        String[] separatedTaskTagsSplit = taskTags.split(" ");
-        for (String tag : separatedTaskTagsSplit) {
-            separatedTaskTags.add(tag);
+    private List<String> extractTags(String taskTags) {
+        List<String> tags = new ArrayList<>();
+        String[] splits = taskTags.split(" ");
+        for (String split : splits) {
+            if (!split.equals("")) tags.add(split);
         }
-        return separatedTaskTags;
+        return tags;
     }
 
     private void showSizePopup(MultiButton sizeButton) {
@@ -77,7 +72,9 @@ public class AddNewTask {
         for (int i = 0; i < taskSizes.size(); i++) {
             MultiButton oneSizeButton = new MultiButton(taskSizes.get(i));
             sizeDialog.add(oneSizeButton);
-            oneSizeButton.addActionListener(e->displaySelectedSize(sizeDialog, oneSizeButton, sizeButton));
+            oneSizeButton.addActionListener(e ->
+                    displaySelectedSize(sizeDialog, oneSizeButton, sizeButton)
+            );
         }
         sizeDialog.showPopupDialog(sizeButton);
     }

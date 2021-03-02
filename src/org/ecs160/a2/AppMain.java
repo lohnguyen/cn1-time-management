@@ -86,7 +86,7 @@ public class AppMain {
       toolbar.setTitle("Tasks");
 
       Button addButton = new Button();
-      addButton.addActionListener(e-> new AddNewTask().getTaskDialog());
+      addButton.addActionListener(e -> new AddNewTask());
 
       try {
          addButton.setIcon(Image.createImage("/addbutton.png").scaled(80, 80));
@@ -112,7 +112,4 @@ public class AppMain {
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }
 
-   private void showNewTaskForm() {
-      log("New Task Form.");
-   }
 }
