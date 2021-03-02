@@ -1,5 +1,6 @@
 package org.ecs160.a2.ui;
 
+import com.codename1.io.Log;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Label;
@@ -12,12 +13,16 @@ import org.ecs160.a2.utils.Database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
+
+    public static Boolean taskChanges = false;
 
     public TaskList() {
         super(BoxLayout.y());
@@ -26,13 +31,28 @@ public class TaskList extends Container {
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
 
-        loadData();
+        Timer timer = new Timer();
+
+        TimerTask refreshTaskList = new TimerTask() {
+            @Override
+            public void run() {
+                if (taskChanges) {
+                    loadData();
+                    taskChanges = false;
+                }
+            }
+        };
+
+        timer.schedule(refreshTaskList, 1000, 1000);
     }
 
     /**
      * Creates/refreshes the task list
      */
     public void loadData() {
+
+
+
         this.activeList.clear();
         this.inactiveList.clear();
         List<Task> allTasks =
