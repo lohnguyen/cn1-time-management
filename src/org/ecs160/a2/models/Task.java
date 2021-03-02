@@ -3,6 +3,7 @@ package org.ecs160.a2.models;
 import com.codename1.io.Externalizable;
 import com.codename1.io.Util;
 import org.ecs160.a2.utils.Database;
+import org.ecs160.a2.utils.DurationUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -215,7 +216,7 @@ public class Task implements Externalizable {
     }
 
     /**
-     * Retrieve the current total time of the stopped time spans as a properly
+     * Retrieve the current total time of the stopped time spans as a
      * formatted String
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
@@ -224,11 +225,20 @@ public class Task implements Externalizable {
      * @return The formatted total time as "HR:MIN:SEC"
      */
     public String getTotalTimeStr() {
-        long second = totalTime / 1000 % 60;
-        long minute = totalTime / (1000 * 60) % 60;
-        long hour = totalTime / (1000 * 60 * 60);
+        return DurationUtils.timeAsString(this.totalTime);
+    }
 
-        return String.format("%02d:%02d:%02d", hour, minute, second);
+    /**
+     * Retrieve the current total time of the stopped time spans as a properly
+     * formatted String for labels
+     * Reference: calculate time difference from milliseconds
+     * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
+     * milliseconds-to-string-formatted-time-in-java/16520928#16520928
+     * 
+     * @return The formatted total time as "HR hrs M min S s"
+     */
+    public String getTotalTimeFormattedString() {
+        return DurationUtils.timeAsLabelStr(this.totalTime);
     }
 
     @Override

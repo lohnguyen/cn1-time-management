@@ -7,6 +7,7 @@ import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.DurationUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 /**
@@ -38,11 +39,14 @@ public class StatsContainer extends UpdateableContainer
         if(taskList.size() > 0) average /= taskList.size();
 
         // update the constant labels
-        labels.get(0).setText(" - " + (min / MILIS_TO_HOURS) + 
-                              " hours minimum");
-        labels.get(1).setText(" - " + (max / MILIS_TO_HOURS) + 
-                              " hours maximum");
-        labels.get(2).setText(" - " + (average / MILIS_TO_HOURS) + 
-                              " hours average");
+        labels.get(0).setText(" - " + 
+                              DurationUtils.timeAsLabelStr(min) +
+                              " minimum");
+        labels.get(1).setText(" - " + 
+                              DurationUtils.timeAsLabelStr(max) +
+                              " maximum");
+        labels.get(2).setText(" - " + 
+                              DurationUtils.timeAsLabelStr(average) +
+                              " average");
     }
 }

@@ -9,6 +9,7 @@ import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.DurationUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 /**
@@ -41,13 +42,19 @@ public class SizeContainer extends UpdateableContainer
 
         // make sure label count is proper, then update the text
         Object[] availableSizes = sizeStatsMap.keySet().toArray();
+
+        int numSizes = sizeStatsMap.keySet().size();
         List<Label> labels = UIUtils.getLabelsToUpdate(this, 
-                                                       sizeStatsMap.keySet().size());
-        for (int i = 0; i < availableSizes.length; i++) {
+                                                       numSizes);
+        for (int i = 0; i < numSizes; i++) {
             String size = (String) availableSizes[i];
             Label label = labels.get(i);
-            label.setText(" - " + (sizeStatsMap.get(size) / MILIS_TO_HOURS) +
-                          " hours total for " + size);
+            long sizeTime = sizeStatsMap.get(size);
+
+            // update label text
+            label.setText(" - " +
+                          DurationUtils.timeAsLabelStr(sizeTime) +
+                          " total for " + size);
         }
     }
 }
