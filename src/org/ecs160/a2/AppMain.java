@@ -106,7 +106,7 @@ public class AppMain {
       Tabs tabs = new Tabs();
 
       current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, new TaskList());
+      tabs.addTab("Tasks", taskIcon, new TaskList(this.current.getToolbar()));
       tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }
