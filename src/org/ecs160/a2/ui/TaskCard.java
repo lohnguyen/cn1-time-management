@@ -145,9 +145,11 @@ public class TaskCard extends Container implements AppConstants {
 
     private void onDeleteButtonClicked() {
         Database.delete(Task.OBJECT_ID, task.getTitle());
+        TaskList.taskChanges = true;
         if (this.onDeleted != null) {
             this.onDeleted.accept(this.task);
         }
+
     }
 
 }
