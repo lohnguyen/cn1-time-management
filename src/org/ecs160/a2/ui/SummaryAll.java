@@ -27,17 +27,20 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
         super(new BoxLayout(BoxLayout.Y_AXIS));
 
         // Tasks
-        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
+                                     FONT_SIZE_SUB_TITLE));
         this.tasks = new TaskContainer();
         this.add(this.tasks);  
 
         // Sizes
-        this.add(UIUtils.createLabel("Sizes", NATIVE_BOLD, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Sizes", NATIVE_BOLD, COLOR_TITLE,
+                                     FONT_SIZE_SUB_TITLE));
         this.sizes = new SizeContainer();
         this.add(this.sizes);  
 
         // Stats
-        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
+                                     FONT_SIZE_SUB_TITLE));
         this.stats = new StatsContainer();
         this.add(this.stats);
     }

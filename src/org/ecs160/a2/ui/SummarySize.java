@@ -41,12 +41,14 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
         this.add(this.sizePicker);
 
         // Tasks
-        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
+                                     FONT_SIZE_SUB_TITLE));
         this.tasks = new TaskContainer();
         this.add(this.tasks);
 
         // Stats
-        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, 0x000000, 5.5f));
+        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
+                                     FONT_SIZE_SUB_TITLE));
         this.stats = new StatsContainer();
         this.add(this.stats);
     }

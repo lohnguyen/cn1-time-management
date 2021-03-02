@@ -56,7 +56,8 @@ public class UIUtils implements AppConstants {
                 label = (Label) container.getComponentAt(i);
                 if (label.isHidden()) label.setHidden(false);
             } else {
-                label = createLabel("", NATIVE_LIGHT, 0x000000, 3.0f);
+                label = createLabel("", NATIVE_LIGHT, COLOR_REGULAR, 
+                                    FONT_SIZE_REGULAR);
                 container.add(label);
             }
 
