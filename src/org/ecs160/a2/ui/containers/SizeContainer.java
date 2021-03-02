@@ -11,12 +11,19 @@ import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.UIUtils;
 
-public class SizeContainer extends UpdateableContainer implements AppConstants {
+/**
+ * Container that houses labels for Size statistics
+ */
+public class SizeContainer extends UpdateableContainer 
+                           implements AppConstants {
 
     public SizeContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
     }
 
+    /**
+     * Update the labels to reflect the statistics for each sizes
+     */
     @Override
     public void updateContainer(List<Task> taskList) {
         // use a map to keep track of the current totals for the sizes
@@ -32,6 +39,7 @@ public class SizeContainer extends UpdateableContainer implements AppConstants {
             sizeStatsMap.put(task.getSize(), sizeTime);
         }
 
+        // make sure label count is proper, then update the text
         Object[] availableSizes = sizeStatsMap.keySet().toArray();
         List<Label> labels = UIUtils.getLabelsToUpdate(this, 
                                                        sizeStatsMap.keySet().size());

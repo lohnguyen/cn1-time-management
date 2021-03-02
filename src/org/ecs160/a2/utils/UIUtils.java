@@ -12,7 +12,16 @@ import java.util.List;
 
 public class UIUtils implements AppConstants {
     
-    // create a label based on the specified parameters
+    /**
+     * Generate a label for the specified parameters
+     * 
+     * @param labelText The label's text
+     * @param style     The label's font
+     * @param color     The label's color
+     * @param fontSize  The label's size in CN1 "dips"
+     * 
+     * @return The newly generated label
+     */
     public static Label createLabel (String labelText, Font style, 
                                                        int color, 
                                                        float fontSize) {
@@ -26,7 +35,14 @@ public class UIUtils implements AppConstants {
         return label;
     }
 
-    // get a list of labels that correspond to amount given
+    /**
+     * Get a list of labels to update in a container for the specified number
+     * 
+     * @param container  The container that houses the labels
+     * @param labelCount The number of labels that must be visible
+     * 
+     * @return List of visible labels from the specified container
+     */
     public static List<Label> getLabelsToUpdate (Container container, 
                                                  int labelCount) {
         int i;
@@ -56,6 +72,9 @@ public class UIUtils implements AppConstants {
         return returnLabels;
     }
 
+    /**
+     * @param size The CN1 "dips" to convert to pixels
+     */
     public static int getPixelSize(float size) {
         return Display.getInstance().convertToPixels(size);
     }

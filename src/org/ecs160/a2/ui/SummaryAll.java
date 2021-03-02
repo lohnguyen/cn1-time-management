@@ -12,11 +12,17 @@ import org.ecs160.a2.ui.containers.StatsContainer;
 import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.UIUtils;
 
+/**
+ * The container/page that houses the statistics for all Tasks
+ */
 public class SummaryAll extends UpdateableContainer implements AppConstants {
 
     // label containers
     private UpdateableContainer tasks, sizes, stats;
     
+    /**
+     * Assemble the children of this container
+     */
     public SummaryAll () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
 
@@ -36,6 +42,9 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
         this.add(this.stats);
     }
 
+    /**
+     * Update the sub containers with the provided Task List
+     */
     @Override
     public void updateContainer(List<Task> taskList) {
         this.tasks.updateContainer(taskList);

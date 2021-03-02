@@ -9,14 +9,22 @@ import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.UIUtils;
 
-public class StatsContainer extends UpdateableContainer implements AppConstants {
+/**
+ * Container that houses labels for calculated statistics
+ */
+public class StatsContainer extends UpdateableContainer 
+                            implements AppConstants {
 
     public StatsContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
     }
 
+    /**
+     * Update the internal labels to reflect the calculated statistics
+     */
     @Override
     public void updateContainer(List<Task> taskList) {
+        // make sure label count is correct
         List<Label> labels = UIUtils.getLabelsToUpdate(this, 3);
         long min = -1L, average = -1L, max = -1L;
 

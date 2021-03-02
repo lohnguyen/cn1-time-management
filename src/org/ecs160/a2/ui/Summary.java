@@ -14,15 +14,22 @@ import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
 
+/**
+ * The container that houses the Summary containers for all Tasks
+ */
 public class Summary extends UpdateableContainer implements AppConstants {
 
+    // the current state of TaskList for this page
     private static List<Task> taskList;
 
     private UpdateableContainer page1, page2;
 
+    /**
+     * Default constructor that assembles the children of this container
+     */
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
-        this.setScrollableY(true);
+        this.setScrollableY(true); // can scroll vertically
 
         // title
         this.add(UIUtils.createLabel("Summary", NATIVE_BOLD, 0x000000, 8.0f));
@@ -45,13 +52,13 @@ public class Summary extends UpdateableContainer implements AppConstants {
         this.page2.setHidden(true); // default hidden
         this.add(this.page2);
 
-        // call function on refresh (temporary, can have a better solution)
+        // Setup pull to refresh for this container
         this.addPullToRefresh(() -> updateSubContainers());
         this.updateSubContainers();
         this.page2.updateContainer(taskList);
     }
 
-    // fired when page button is tapped
+    // action listener that allows for the selection of a page
     private void selectPageButtonAction (ActionEvent e) {
         Button button = (Button) e.getComponent();
         switch (button.getText()) {
@@ -65,17 +72,18 @@ public class Summary extends UpdateableContainer implements AppConstants {
         }
     }
 
-    // read in from the database
+    // reload the internal task list by reading in from the static Database
     private void reloadTaskList () {
         taskList = (List) Database.readAll(Task.OBJECT_ID);
     }
 
-    // called whenever the labels need updating
-    // TODO: onload? on refresh?
+    /**
+     * Update the visible subpages of this Container
+     */
     public void updateSubContainers () {
         this.reloadTaskList(); // refresh the tasks first
         if (taskList.size() > 0) {
-            if (!this.page1.isHidden()) { //
+            if (!this.page1.isHidden()) { // which page is visible
                 this.page1.updateContainer(taskList);
             } else if (!this.page2.isHidden()) {
                 this.page2.updateContainer(taskList);
@@ -83,11 +91,18 @@ public class Summary extends UpdateableContainer implements AppConstants {
         }
     }
 
+
+    /**
+     * Update the source child with the internal Task List
+     */
     @Override
     protected void childAsksForUpdate (UpdateableContainer source) {
         source.updateContainer(taskList);
     }
 
+    /**
+     * Update the sub containers when this containers need updating
+     */
     @Override
     public void updateContainer(List<Task> taskList) {
         this.updateSubContainers();
