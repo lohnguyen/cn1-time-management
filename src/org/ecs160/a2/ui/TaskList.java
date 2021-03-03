@@ -22,8 +22,6 @@ public class TaskList extends Container {
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
 
-    public static Boolean taskChanges = false;
-
     public TaskList() {
         super(BoxLayout.y());
         this.setScrollableY(true);
@@ -31,19 +29,7 @@ public class TaskList extends Container {
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
 
-        Timer timer = new Timer();
-
-        TimerTask refreshTaskList = new TimerTask() {
-            @Override
-            public void run() {
-                if (taskChanges) {
-                    loadData();
-                    taskChanges = false;
-                }
-            }
-        };
-
-        timer.schedule(refreshTaskList, 1000, 1000);
+        loadData();
     }
 
     /**

@@ -6,6 +6,7 @@ import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.TextModeLayout;
+import org.ecs160.a2.AppMain;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class AddNewTask extends Dialog {
 
     public AddNewTask() {
+
         super("New Task", new BorderLayout());
         setDisposeWhenPointerOutOfBounds(true);
         constructView();
@@ -51,7 +53,7 @@ public class AddNewTask extends Dialog {
         Task newTask = new Task(name, description, size, extractTags(tags));
         Database.write(Task.OBJECT_ID, newTask);
         dispose();
-        TaskList.taskChanges = true;
+        AppMain.refreshTaskList();
     }
 
     private List<String> extractTags(String taskTags) {

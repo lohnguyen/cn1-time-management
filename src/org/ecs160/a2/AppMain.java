@@ -25,6 +25,7 @@ public class AppMain {
 
    private Form current;
    private Resources theme;
+   public static TaskList taskList;
 
    public void init(Object context) {
       // use two network threads instead of one
@@ -60,7 +61,6 @@ public class AppMain {
          return;
       }
 
-      Database.deleteAll(Task.OBJECT_ID);
       current = new Form("Task Management App", new BorderLayout());
 
       setToolbar();
@@ -78,6 +78,12 @@ public class AppMain {
    }
 
    public void destroy() {
+   }
+
+   public static void refreshTaskList() {
+      if (taskList != null) {
+         taskList.loadData();
+      }
    }
 
    private void setToolbar() {
@@ -107,7 +113,10 @@ public class AppMain {
       Tabs tabs = new Tabs();
 
       current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, new TaskList());
+
+      taskList = new TaskList();
+
+      tabs.addTab("Tasks", taskIcon, taskList);
       tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }

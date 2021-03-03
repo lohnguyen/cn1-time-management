@@ -7,6 +7,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.UITimer;
+import org.ecs160.a2.AppMain;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.DurationUtils;
@@ -137,6 +138,7 @@ public class TaskCard extends Container implements AppConstants {
             }
         }
         this.updateState();
+        AppMain.refreshTaskList();
     }
 
     private void onEditButtonClicked() {
@@ -145,7 +147,7 @@ public class TaskCard extends Container implements AppConstants {
 
     private void onDeleteButtonClicked() {
         Database.delete(Task.OBJECT_ID, task.getTitle());
-        TaskList.taskChanges = true;
+        AppMain.refreshTaskList();
         if (this.onDeleted != null) {
             this.onDeleted.accept(this.task);
         }
