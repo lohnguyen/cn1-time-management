@@ -1,9 +1,12 @@
 package org.ecs160.a2.ui;
 
 import com.codename1.components.Accordion;
-import com.codename1.ui.*;
+import com.codename1.ui.Component;
+import com.codename1.ui.Container;
+import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.FontImage;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
@@ -87,30 +90,42 @@ public class TaskList extends Container {
     private void listTasks(String label,
                            ArrayList<Task> tasks) {
 
-        Accordion taskTypeAccordion = new Accordion();
+//        Container taskTypeCont =
+//                new Container(new FlowLayout(Component.CENTER));
+//        Label taskTypeLabel = new Label(label);
+//        if (label.equals("Active Tasks")) {
+//            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_ON);
+//        } else {
+//            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
+//        }
+//        taskTypeCont.addComponent(taskTypeLabel);
+//        this.add(taskTypeCont);
+//
+//        if (tasks.size() == 0) {
+//            Container emptyCont =
+//                    new Container(new FlowLayout(Component.CENTER));
+//            Label emptyLabel = new Label("no tasks");
+//            emptyCont.addComponent(emptyLabel);
+//            this.addComponent(emptyCont);
+//        }
+//
+//        for (Task task : tasks) {
+//            this.addComponent(new TaskCard(task));
+//        }
+//
+        Accordion tasksAccordion = new Accordion();
+        tasksAccordion.setScrollableY(false);
 
-        Container taskTypeCont =
-                new Container(new FlowLayout(Component.CENTER));
-        Label taskTypeLabel = new Label(label);
-        if (label.equals("Active Tasks")) {
-            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_ON);
-        } else {
-            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
-        }
-        taskTypeCont.addComponent(taskTypeLabel);
-        this.add(taskTypeCont);
-
-        if (tasks.size() == 0) {
-            Container emptyCont =
-                    new Container(new FlowLayout(Component.CENTER));
-            Label emptyLabel = new Label("no tasks");
-            emptyCont.addComponent(emptyLabel);
-            this.addComponent(emptyCont);
-        }
-
+        Container tasksContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         for (Task task : tasks) {
-            taskTypeAccordion.addContent("Hi", new TaskCard(task));
+            tasksContainer.addComponent(new TaskCard(task));
         }
-        this.addComponent(taskTypeAccordion);
+
+        tasksContainer.setScrollableY(true);
+
+        tasksAccordion.addContent(label, tasksContainer);
+        this.addComponent(tasksAccordion);
     }
+
+
 }
