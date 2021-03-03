@@ -19,6 +19,8 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
+    Accordion tasksAccordion;
+    Boolean collapse;
 
     public TaskList() {
         super(BoxLayout.y());
@@ -41,6 +43,7 @@ public class TaskList extends Container {
         this.inputTasks(allTasks);
         this.refreshContainer();
         this.configContainer();
+
     }
 
     /**
@@ -113,7 +116,7 @@ public class TaskList extends Container {
 //            this.addComponent(new TaskCard(task));
 //        }
 //
-        Accordion tasksAccordion = new Accordion();
+        tasksAccordion = new Accordion();
 
         Container tasksContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         for (Task task : tasks) {
@@ -123,6 +126,7 @@ public class TaskList extends Container {
         tasksContainer.setScrollableY(false);
 
         tasksAccordion.addContent(label, tasksContainer);
+        tasksAccordion.expand(tasksContainer);
         this.addComponent(tasksAccordion);
     }
 
