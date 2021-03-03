@@ -1,20 +1,15 @@
 package org.ecs160.a2.ui;
 
-import com.codename1.io.Log;
-import com.codename1.ui.Component;
-import com.codename1.ui.Container;
-import com.codename1.ui.Label;
+import com.codename1.components.Accordion;
+import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.FontImage;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class TaskList extends Container {
@@ -36,9 +31,6 @@ public class TaskList extends Container {
      * Creates/refreshes the task list
      */
     public void loadData() {
-
-
-
         this.activeList.clear();
         this.inactiveList.clear();
         List<Task> allTasks =
@@ -95,6 +87,8 @@ public class TaskList extends Container {
     private void listTasks(String label,
                            ArrayList<Task> tasks) {
 
+        Accordion taskTypeAccordion = new Accordion();
+
         Container taskTypeCont =
                 new Container(new FlowLayout(Component.CENTER));
         Label taskTypeLabel = new Label(label);
@@ -115,7 +109,8 @@ public class TaskList extends Container {
         }
 
         for (Task task : tasks) {
-            this.addComponent(new TaskCard(task));
+            taskTypeAccordion.addContent("Hi", new TaskCard(task));
         }
+        this.addComponent(taskTypeAccordion);
     }
 }

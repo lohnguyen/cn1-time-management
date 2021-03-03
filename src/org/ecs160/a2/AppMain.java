@@ -2,6 +2,7 @@ package org.ecs160.a2;
 
 import static com.codename1.ui.CN.*;
 
+import com.codename1.components.Accordion;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.plaf.UIManager;
