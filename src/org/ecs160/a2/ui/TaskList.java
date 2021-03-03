@@ -22,7 +22,7 @@ public class TaskList extends Container {
 
     public TaskList() {
         super(BoxLayout.y());
-        this.setScrollableY(true);
+        this.setScrollableY(false);
 
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
@@ -114,14 +114,13 @@ public class TaskList extends Container {
 //        }
 //
         Accordion tasksAccordion = new Accordion();
-        tasksAccordion.setScrollableY(false);
 
         Container tasksContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         for (Task task : tasks) {
             tasksContainer.addComponent(new TaskCard(task));
         }
-
-        tasksContainer.setScrollableY(true);
+        tasksAccordion.setScrollableY(true);
+        tasksContainer.setScrollableY(false);
 
         tasksAccordion.addContent(label, tasksContainer);
         this.addComponent(tasksAccordion);
