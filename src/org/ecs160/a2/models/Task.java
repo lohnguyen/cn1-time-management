@@ -3,6 +3,7 @@ package org.ecs160.a2.models;
 import com.codename1.io.Externalizable;
 import com.codename1.io.Util;
 import org.ecs160.a2.utils.Database;
+import org.ecs160.a2.utils.DurationUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,11 +14,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A data model that keeps track of all data relevant for a single Task
+ * that has multiple time windows/spans.
+ */
 public class Task implements Externalizable {
 
+    // Database fields for this object
     public static final String OBJECT_ID = "Task";
     public static final String COUNTER_ID = "TaskCounter";
-    public static final List<String> sizes = Arrays.asList("None", "S", "M", "L", "XL");
+
+    // The possible list of sizes
+    public static final List<String> sizes = Arrays.asList("None", "S", "M", 
+                                                           "L", "XL");
 
     private int id;
     private String title, description, size;
@@ -25,40 +34,61 @@ public class Task implements Externalizable {
     private List<TimeSpan> timeSpans;
     private List<String> tags;
 
-    // allow for the construction of a Task based on a title and description
-    public Task(String title, String description) {
-        // basic task internals
-        this.title = title;
-        this.description = description;
-        this.size = "None";
 
-        // task time internals
-        this.totalTime = 0L;
-        this.timeSpans = new ArrayList<>();
-        this.tags = new ArrayList<>();
-    }
-
-    // allow for the construction of a Task based on a title
-    public Task(String title) {
-        this(title, "None");
-    }
-
-    // used by AddNewTask, generate id
+    /**
+     * Constructor where a title, description, size, and defaults tags need
+     * to be specified
+     * 
+     * @param title The title/name of the new Task
+     * @param desc  A description of the new Task
+     * @param size  The size of the new Task (@see #sizes)
+     * @param tags  The list of tags for the new Task
+     */
     public Task(String title, String desc, String size, List<String> tags) {
+        // generate the id
         this.id = Database.generateID(COUNTER_ID);
+
+        // basic task internals
         this.title = title;
         this.description = desc;
         this.size = size;
+
+        // task time internals
         this.totalTime = 0L;
         this.timeSpans = new ArrayList<>();
         this.tags = tags;
     }
 
+    /**
+     * Constructor where a title and description can be specified
+     * 
+     * @param title       The title/name of the new Task
+     * @param description A description of the new Task
+     */
+    public Task(String title, String description) {
+        // take advantage of previous constructor
+        this(title, description, "None", new ArrayList<>());
+    }
+
+    /**
+     * Constructor where a title can be specified
+     * 
+     * @param title The title/name of the new Task
+     */
+    public Task(String title) {
+        this(title, "None");
+    }
+
+    /**
+     * Default constructor for Tasks
+     */
     public Task() {
         this("Task");
     }
 
-    // for the basic task internals
+    /**
+     * @return The auto-generated Task ID
+     */
     public int getID() {
         return this.id;
     }
@@ -91,18 +121,15 @@ public class Task implements Externalizable {
         this.tags = tags;
     }
 
-    // for the time internals
-    public long getTotalTime() {
-        return this.totalTime;
-    }
-
-    // NOTE: may remove getTimeSpans in favor of wrapper functions for the list
-    public List<TimeSpan> getTimeSpans() {
-        return this.timeSpans;
-    }
-
     public List<String> getTags() {
         return this.tags;
+    }
+
+    /**
+     * @return The list of accumulated time spans so far for this Task
+     */
+    public List<TimeSpan> getTimeSpans() {
+        return this.timeSpans;
     }
 
     /**
@@ -136,7 +163,6 @@ public class Task implements Externalizable {
 
         if (currentTimeSpan == null || (currentTimeSpan != null && 
                                         !currentTimeSpan.isRunning())) {
-
             this.timeSpans.add(new TimeSpan(startTime, null));
         } else {
             // TODO throw a custom exception if something is running
@@ -172,22 +198,47 @@ public class Task implements Externalizable {
         this.stop(LocalDateTime.now());
     }
 
-    // NOTE: could be public, or called every time total time is
+    /**
+     * Calculates the total time as a Duration for the current time spans
+     * NOTE: could be public, or called every time total time is
+     * 
+     * @return The total time of the time spans as a Duration object
+     */
     private Duration calculateTotalTime() {
         return TimeSpan.getTotalDuration(this.timeSpans);
     }
 
-    /*
+    /**
+     * @return The total time of stopped time spans in miliseconds
+     */
+    public long getTotalTime() {
+        return this.totalTime;
+    }
+
+    /**
+     * Retrieve the current total time of the stopped time spans as a
+     * formatted String
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
      * milliseconds-to-string-formatted-time-in-java/16520928#16520928
+     * 
+     * @return The formatted total time as "HR:MIN:SEC"
      */
     public String getTotalTimeStr() {
-        long second = totalTime / 1000 % 60;
-        long minute = totalTime / (1000 * 60) % 60;
-        long hour = totalTime / (1000 * 60 * 60);
+        return DurationUtils.timeAsString(this.totalTime);
+    }
 
-        return String.format("%02d:%02d:%02d", hour, minute, second);
+    /**
+     * Retrieve the current total time of the stopped time spans as a properly
+     * formatted String for labels
+     * Reference: calculate time difference from milliseconds
+     * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
+     * milliseconds-to-string-formatted-time-in-java/16520928#16520928
+     * 
+     * @return The formatted total time as "HR hrs M min S s"
+     */
+    public String getTotalTimeFormattedString() {
+        return DurationUtils.timeAsLabelStr(this.totalTime);
     }
 
     @Override
@@ -195,6 +246,9 @@ public class Task implements Externalizable {
         return 1;
     }
 
+    /**
+     * Write the internal data of a Task object into an output stream
+     */
     @Override
     public void externalize(DataOutputStream out) throws IOException {
         out.writeInt(id);
@@ -206,8 +260,11 @@ public class Task implements Externalizable {
         Util.writeObject(timeSpans, out);
     }
 
+    /**
+     * Set the internal data of a Task object from an input stream
+     */
     @Override
-    public void internalize(int version, DataInputStream in) throws IOException {
+    public void internalize(int ver, DataInputStream in) throws IOException {
         id = in.readInt();
         title = Util.readUTF(in);
         description = Util.readUTF(in);
