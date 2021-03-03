@@ -29,8 +29,17 @@ public class TaskList extends Container {
         this.searchString = "";
 
         this.configContainer();
-        this.loadData();
         this.refreshContainer();
+    }
+
+    /**
+     * Refreshes the content of the taskList Container
+     */
+    public void refreshContainer() {
+        this.removeAll();
+        this.loadData();
+        this.addLists();
+        this.revalidate();
     }
 
     /**
@@ -42,15 +51,6 @@ public class TaskList extends Container {
         List<Task> allTasks =
                 (List) Database.readAll(Task.OBJECT_ID);
         this.inputTasks(allTasks);
-    }
-
-    /**
-     * Refreshes the content of the taskList Container
-     */
-    private void refreshContainer() {
-        this.removeAll();
-        this.addLists();
-        this.revalidate();
     }
 
     /**
@@ -73,12 +73,10 @@ public class TaskList extends Container {
      */
     private void configContainer() {
         this.addPullToRefresh(() -> {
-            this.loadData();
             this.refreshContainer();
         });
         this.toolbar.addSearchCommand(e -> {
             this.searchString = (String)e.getSource();
-            this.loadData();
             this.refreshContainer();
         });
     }
