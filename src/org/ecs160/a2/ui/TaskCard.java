@@ -20,21 +20,17 @@ import java.util.function.Consumer;
 
 public class TaskCard extends Container implements AppConstants {
 
-    private final Task task;
+    static private final Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
+            .convertToPixels(5, true), Font.STYLE_PLAIN);
+    static private final Style style = new Style(0, 0, fnt, (byte) 0);
+    static private final Style styleWarn = new Style(0xF44336, 0, fnt, (byte) 0);
 
-    private final Button startButton;
-    private final MultiButton multiButton;
-    private UITimer timer;
+    private final Task task;
 
     public Consumer<Task> onStarted;
     public Consumer<Task> onStopped;
     public Consumer<Task> onDeleted;
 
-
-    static private final Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
-            .convertToPixels(5, true), Font.STYLE_PLAIN);
-    static private final Style style = new Style(0, 0, fnt, (byte) 0);
-    static private final Style styleWarn = new Style(0xF44336, 0, fnt, (byte) 0);
 
     /**
      * @param task      the task
@@ -57,14 +53,14 @@ public class TaskCard extends Container implements AppConstants {
         this.onStopped = onStopped;
         this.onDeleted = onDeleted;
 
-        this.multiButton = new MultiButton(task.getTitle());
+        MultiButton multiButton = new MultiButton(task.getTitle());
         multiButton.setTextLine2(task.getTotalTimeStr());
 
         multiButton.addActionListener(e -> goToDetail(task));
 
         Container buttons = new Container(new FlowLayout());
 
-        this.startButton = createControlButton(style);
+        Button startButton = createControlButton(style);
         buttons.add(startButton);
 
         Button editButton = createButton(FontImage.MATERIAL_SETTINGS, style,
@@ -108,22 +104,9 @@ public class TaskCard extends Container implements AppConstants {
         detail.show();
     }
 
-    private void updateState() {
-        multiButton.setTextLine2(task.getTotalTimeStr());
-        if (!task.isInProgress()) {
-            startButton.setIcon(FontImage.createMaterial(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style));
-        } else {
-            startButton.setIcon(FontImage.createMaterial(FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE, style));
-        }
-    }
-
     private void onStartButtonClicked() {
-        if (this.timer != null) {
-            this.timer.cancel();
-        }
         if (!task.isInProgress()) {
             task.start();
-//            this.timer = UITimer.timer(1000, true, this::updateState);
             if (this.onStarted != null) {
                 this.onStarted.accept(this.task);
             }
@@ -134,7 +117,6 @@ public class TaskCard extends Container implements AppConstants {
             }
             Database.update(Task.OBJECT_ID, task);
         }
-//        this.updateState();
         TaskList.refresh();
     }
 

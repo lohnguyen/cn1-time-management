@@ -98,7 +98,6 @@ public class TaskDetail extends Form implements AppConstants {
         Label totalTime = new Label(task.getTotalTimeStr());
         Style style = totalTime.getAllStyles();
         style.setFont(UIUtils.getTitleFont());
-//        style.setFgColor(COLOR_TITLE);
         style.setAlignment(Component.CENTER);
         add(totalTime);
     }
@@ -107,11 +106,6 @@ public class TaskDetail extends Form implements AppConstants {
         Toolbar tb = new Toolbar();
         setToolbar(tb);
         tb.setTitle("Task Details");
-
-//        Label label = new Label("Task Details");
-//        label.getAllStyles().setFont(UIUtils.getTitleFont());
-//        tb.add(BorderLayout.CENTER, label);
-
         setBackCommand();
     }
 

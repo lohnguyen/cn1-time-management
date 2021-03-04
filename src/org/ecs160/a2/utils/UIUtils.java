@@ -80,15 +80,24 @@ public class UIUtils implements AppConstants {
         return Display.getInstance().convertToPixels(size);
     }
 
+    /**
+     * Get font for displaying task's title in TaskDetail
+     */
     public static Font getTitleFont() {
         return NATIVE_REGULAR.derive(getPixelSize(FONT_SIZE_TITLE),
                 Font.STYLE_PLAIN);
     }
 
+    /**
+     * Get material icon for TaskDetail
+     */
     public static FontImage getIcon(char icon, float size) {
         return FontImage.createMaterial(icon, "TitleCommand", size);
     }
 
+    /**
+     * Get material chevron left icon for TaskDetail's toolbar
+     */
     public static FontImage getBackIcon() {
         return getIcon(FontImage.MATERIAL_ARROW_BACK_IOS, ICON_SIZE_TOOLBAR);
     }
