@@ -46,7 +46,7 @@ public class Database {
      *
      * @param key The Storage's key of Task class
      */
-    public static int readID(String key) {
+    private static int readID(String key) {
         Integer id = (Integer) db.readObject(key);
         if (id == null) return 0;
         return id;
@@ -80,7 +80,7 @@ public class Database {
      *
      * @param task A Task to replace a current Task with the same id
      */
-    public static void updateTask(Task task) {
+    private static void updateTask(Task task) {
         List<Task> vec = (List) readAll(Task.OBJECT_ID);
         for (int i = 0; i < vec.size(); i++) {
             if (vec.get(i).getID() == task.getID()) {
@@ -129,7 +129,7 @@ public class Database {
      *
      * @param id The id of the Task to be removed
      */
-    public static void deleteTask(int id) {
+    private static void deleteTask(int id) {
         List<Task> tasks = (List) readAll(Task.OBJECT_ID);
         Predicate<Task> byID = task -> task.getID() != id;
         tasks = tasks.stream().filter(byID).collect(Collectors.toList());

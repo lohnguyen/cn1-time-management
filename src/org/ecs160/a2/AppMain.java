@@ -8,7 +8,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
-import org.ecs160.a2.ui.AddNewTask;
+import org.ecs160.a2.ui.TaskEditor;
 
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
@@ -77,16 +77,13 @@ public class AppMain {
       }
    }
 
-   public void destroy() {
-   }
-
    private void setToolbar() {
       Toolbar toolbar = new Toolbar();
       current.setToolbar(toolbar);
       toolbar.setTitle("Tasks");
 
       Button addButton = new Button();
-      addButton.addActionListener(e -> new AddNewTask());
+      addButton.addActionListener(e -> new TaskEditor(TaskEditor.TITLE_CREATE));
 
       try {
          addButton.setIcon(Image.createImage("/addbutton.png").scaled(80, 80));

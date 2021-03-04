@@ -6,14 +6,9 @@ import com.codename1.ui.layouts.BoxLayout;
 
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.util.UITimer;
-import org.ecs160.a2.AppMain;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
-import org.ecs160.a2.utils.DurationUtils;
 import org.ecs160.a2.utils.AppConstants;
-
-import java.util.function.Consumer;
 
 import java.util.function.Consumer;
 
@@ -121,7 +116,7 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void onEditButtonClicked() {
-
+        new TaskEditor(task, TaskEditor.TITLE_EDIT);
     }
 
     private void onDeleteButtonClicked() {
