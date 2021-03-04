@@ -19,8 +19,6 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
-    Accordion tasksAccordion;
-    Boolean collapse;
 
     public TaskList() {
         super(BoxLayout.y());
@@ -93,32 +91,10 @@ public class TaskList extends Container {
     private void listTasks(String label,
                            ArrayList<Task> tasks) {
 
-//        Container taskTypeCont =
-//                new Container(new FlowLayout(Component.CENTER));
-//        Label taskTypeLabel = new Label(label);
-//        if (label.equals("Active Tasks")) {
-//            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_ON);
-//        } else {
-//            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
-//        }
-//        taskTypeCont.addComponent(taskTypeLabel);
-//        this.add(taskTypeCont);
-//
-//        if (tasks.size() == 0) {
-//            Container emptyCont =
-//                    new Container(new FlowLayout(Component.CENTER));
-//            Label emptyLabel = new Label("no tasks");
-//            emptyCont.addComponent(emptyLabel);
-//            this.addComponent(emptyCont);
-//        }
-//
-//        for (Task task : tasks) {
-//            this.addComponent(new TaskCard(task));
-//        }
-//
-        tasksAccordion = new Accordion();
+        Accordion tasksAccordion = new Accordion();
 
-        Container tasksContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        Container tasksContainer =
+                new Container(new BoxLayout(BoxLayout.Y_AXIS));
         for (Task task : tasks) {
             tasksContainer.addComponent(new TaskCard(task));
         }
