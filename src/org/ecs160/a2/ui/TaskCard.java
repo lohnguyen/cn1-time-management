@@ -7,6 +7,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.UITimer;
+import org.ecs160.a2.AppMain;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.DurationUtils;
@@ -19,22 +20,21 @@ import java.util.function.Consumer;
 
 public class TaskCard extends Container implements AppConstants {
 
-    Task task;
+    private final Task task;
 
-    private Button startButton;
-    private MultiButton multiButton;
+    private final Button startButton;
+    private final MultiButton multiButton;
     private UITimer timer;
-    private SwipeableContainer swipeContainer;
 
     public Consumer<Task> onStarted;
     public Consumer<Task> onStopped;
     public Consumer<Task> onDeleted;
 
 
-    static private Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
+    static private final Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
             .convertToPixels(5, true), Font.STYLE_PLAIN);
-    static private Style style = new Style(0, 0, fnt, (byte) 0);
-    static private Style styleWarn = new Style(0xF44336, 0, fnt, (byte) 0);
+    static private final Style style = new Style(0, 0, fnt, (byte) 0);
+    static private final Style styleWarn = new Style(0xF44336, 0, fnt, (byte) 0);
 
     /**
      * @param task      the task
@@ -51,7 +51,7 @@ public class TaskCard extends Container implements AppConstants {
             Consumer<Task> onStopped,
             Consumer<Task> onDeleted
     ) {
-        super(new BoxLayout(BoxLayout.Y_AXIS));
+        super(BoxLayout.y());
         this.task = task;
         this.onStarted = onStarted;
         this.onStopped = onStopped;
@@ -60,9 +60,7 @@ public class TaskCard extends Container implements AppConstants {
         this.multiButton = new MultiButton(task.getTitle());
         multiButton.setTextLine2(DurationUtils.durationStr(task.getTotalTime()));
 
-        multiButton.addActionListener(e ->
-                goToDetail(task)
-        );
+        multiButton.addActionListener(e -> goToDetail(task));
 
         Container buttons = new Container(new FlowLayout());
 
@@ -79,7 +77,7 @@ public class TaskCard extends Container implements AppConstants {
 
         buttons.add(deleteButton);
 
-        this.swipeContainer = new SwipeableContainer(null, buttons,
+        SwipeableContainer swipeContainer = new SwipeableContainer(null, buttons,
                 multiButton);
 
         this.add(swipeContainer);
@@ -92,8 +90,8 @@ public class TaskCard extends Container implements AppConstants {
 
     private Button createControlButton(Style style) {
         if (!task.isInProgress())
-            return createButton(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style
-                    , this::onStartButtonClicked);
+            return createButton(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style,
+                    this::onStartButtonClicked);
         return createButton(FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE, style,
                 this::onStartButtonClicked);
     }
@@ -137,6 +135,7 @@ public class TaskCard extends Container implements AppConstants {
             }
         }
         this.updateState();
+        TaskList.refresh();
     }
 
     private void onEditButtonClicked() {
@@ -144,10 +143,11 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void onDeleteButtonClicked() {
-        Database.delete(Task.OBJECT_ID, task.getID());
         if (this.onDeleted != null) {
             this.onDeleted.accept(this.task);
         }
+        Database.delete(Task.OBJECT_ID, task.getID());
+        TaskList.refresh();
     }
 
 }

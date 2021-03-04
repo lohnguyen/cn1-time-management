@@ -1,5 +1,6 @@
 package org.ecs160.a2.ui;
 
+import com.codename1.components.Accordion;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -13,6 +14,8 @@ import java.util.Locale;
 
 
 public class TaskList extends Container {
+
+    public static TaskList instance;
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
@@ -30,6 +33,14 @@ public class TaskList extends Container {
 
         this.configContainer();
         this.refreshContainer();
+
+        TaskList.instance = this;
+    }
+
+    public static void refresh() {
+        if (instance != null) {
+            instance.refreshContainer();
+        }
     }
 
     /**
@@ -97,17 +108,23 @@ public class TaskList extends Container {
      * @param tasks The list of tasks that are of type <label>
      */
     private void listTasks(String label, ArrayList<Task> tasks) {
-        this.add(this.makeTaskTypeLabel(label));
+
 
         tasks = this.searchTasks(tasks);
 
-        if (tasks.size() == 0) {
-            this.addComponent(this.makeNoTaskLabel());
-        }
+        Accordion tasksAccordion = new Accordion();
 
+        Container tasksContainer =
+                new Container(new BoxLayout(BoxLayout.Y_AXIS));
         for (Task task : tasks) {
-            this.addComponent(new TaskCard(task));
+            tasksContainer.addComponent(new TaskCard(task));
         }
+        tasksAccordion.setScrollableY(true);
+        tasksContainer.setScrollableY(false);
+
+        tasksAccordion.addContent(label, tasksContainer);
+        tasksAccordion.expand(tasksContainer);
+        this.addComponent(tasksAccordion);
     }
 
     /**
