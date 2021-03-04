@@ -83,9 +83,7 @@ public class TaskList extends Container {
      * Configures anything to do with the Container holding the task list
      */
     private void configContainer() {
-        this.addPullToRefresh(() -> {
-            this.refreshContainer();
-        });
+        this.addPullToRefresh(this::refreshContainer);
         this.toolbar.addSearchCommand(e -> {
             this.searchString = (String)e.getSource();
             this.refreshContainer();
