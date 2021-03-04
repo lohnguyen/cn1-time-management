@@ -25,7 +25,7 @@ public class AppMain {
 
    private Form current;
    private Resources theme;
-   public static TaskList taskList;
+//   public static TaskList taskList;
 
    public void init(Object context) {
       // use two network threads instead of one
@@ -80,12 +80,6 @@ public class AppMain {
    public void destroy() {
    }
 
-   public static void refreshTaskList() {
-      if (taskList != null) {
-         taskList.refreshContainer();
-      }
-   }
-
    private void setToolbar() {
       Toolbar toolbar = new Toolbar();
       current.setToolbar(toolbar);
@@ -112,10 +106,8 @@ public class AppMain {
 
       Tabs tabs = new Tabs();
 
-      taskList = new TaskList(this.current.getToolbar());
-
       current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, taskList);
+      tabs.addTab("Tasks", taskIcon, new TaskList(this.current.getToolbar()));
       tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
    }

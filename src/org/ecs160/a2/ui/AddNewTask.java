@@ -53,7 +53,7 @@ public class AddNewTask extends Dialog {
         Task newTask = new Task(name, description, size, extractTags(tags));
         Database.write(Task.OBJECT_ID, newTask);
         dispose();
-        AppMain.refreshTaskList();
+        TaskList.refresh();
     }
 
     private List<String> extractTags(String taskTags) {

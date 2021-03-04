@@ -15,6 +15,8 @@ import java.util.Locale;
 
 public class TaskList extends Container {
 
+    public static TaskList instance;
+
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
     private Toolbar toolbar;
@@ -31,6 +33,14 @@ public class TaskList extends Container {
 
         this.configContainer();
         this.refreshContainer();
+
+        TaskList.instance = this;
+    }
+
+    public static void refresh() {
+        if (instance != null) {
+            instance.refreshContainer();
+        }
     }
 
     /**
