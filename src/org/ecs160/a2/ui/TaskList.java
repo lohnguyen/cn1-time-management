@@ -1,45 +1,56 @@
 package org.ecs160.a2.ui;
 
-import com.codename1.ui.Component;
-import com.codename1.ui.Container;
-import com.codename1.ui.Label;
+import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.FontImage;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
+    private Toolbar toolbar;
+    private String searchString;
 
-    public TaskList() {
+    public TaskList(Toolbar currentToolBar) {
         super(BoxLayout.y());
         this.setScrollableY(true);
 
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
+        this.toolbar = currentToolBar;
+        this.searchString = "";
 
-        loadData();
+        this.configContainer();
+        this.refreshContainer();
+    }
+
+    /**
+     * Refreshes the content of the taskList Container
+     */
+    public void refreshContainer() {
+        this.removeAll();
+        this.loadData();
+        this.addLists();
+        this.revalidate();
     }
 
     /**
      * Creates/refreshes the task list
      */
-    public void loadData() {
+    private void loadData() {
         this.activeList.clear();
         this.inactiveList.clear();
         List<Task> allTasks =
                 (List) Database.readAll(Task.OBJECT_ID);
         this.inputTasks(allTasks);
-        this.refreshContainer();
-        this.configContainer();
     }
 
     /**
@@ -48,9 +59,6 @@ public class TaskList extends Container {
      * @param allTasks A list of every task in our database
      */
     private void inputTasks(List<Task> allTasks) {
-        ArrayList<Task> activeTasks = new ArrayList<>();
-        ArrayList<Task> inactiveTasks = new ArrayList<>();
-
         for (Task task : allTasks) {
             if (task.isInProgress()) {
                 this.activeList.add(task);
@@ -65,18 +73,20 @@ public class TaskList extends Container {
      */
     private void configContainer() {
         this.addPullToRefresh(() -> {
-            loadData();
+            this.refreshContainer();
+        });
+        this.toolbar.addSearchCommand(e -> {
+            this.searchString = (String)e.getSource();
+            this.refreshContainer();
         });
     }
 
     /**
-     * Refreshes the content of the taskList Container
+     * Adds the task lists to the taskList Container
      */
-    private void refreshContainer() {
-        this.removeAll();
+    private void addLists() {
         this.listTasks("Active Tasks", this.activeList);
         this.listTasks("Inactive Tasks", this.inactiveList);
-        this.revalidate();
     }
 
     /**
@@ -86,11 +96,31 @@ public class TaskList extends Container {
      * @param label The label of the task, expects "active" or "inactive"
      * @param tasks The list of tasks that are of type <label>
      */
-    private void listTasks(String label,
-                           ArrayList<Task> tasks) {
+    private void listTasks(String label, ArrayList<Task> tasks) {
+        this.add(this.makeTaskTypeLabel(label));
 
+        tasks = this.searchTasks(tasks);
+
+        if (tasks.size() == 0) {
+            this.addComponent(this.makeNoTaskLabel());
+        }
+
+        for (Task task : tasks) {
+            this.addComponent(new TaskCard(task));
+        }
+    }
+
+    /**
+     * Creates the task type label, either "Active Tasks" or "Inactive Tasks"
+     *
+     * @param label The label of the task, expects "active" or "inactive"
+     *
+     * @return The container holding the task type label
+     */
+    private Container makeTaskTypeLabel(String label) {
         Container taskTypeCont =
                 new Container(new FlowLayout(Component.CENTER));
+
         Label taskTypeLabel = new Label(label);
         if (label.equals("Active Tasks")) {
             taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_ON);
@@ -98,18 +128,74 @@ public class TaskList extends Container {
             taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
         }
         taskTypeCont.addComponent(taskTypeLabel);
-        this.add(taskTypeCont);
 
-        if (tasks.size() == 0) {
-            Container emptyCont =
-                    new Container(new FlowLayout(Component.CENTER));
-            Label emptyLabel = new Label("no tasks");
-            emptyCont.addComponent(emptyLabel);
-            this.addComponent(emptyCont);
+        return taskTypeCont;
+    }
+
+    /**
+     * Creates the no tasks label
+     *
+     * @return The container holding the no tasks label
+     */
+    private Container makeNoTaskLabel() {
+        Container emptyCont =
+                new Container(new FlowLayout(Component.CENTER));
+
+        Label emptyLabel = new Label("no tasks");
+        emptyCont.addComponent(emptyLabel);
+
+        return emptyCont;
+    }
+
+    /**
+     * Searches a list of tasks for specific tag or title
+     *
+     * @param tasks The list of tasks that are going to be searched
+     *
+     * @return The searched list of tasks
+     */
+    private ArrayList<Task> searchTasks(ArrayList<Task> tasks) {
+        if (this.searchString.equals("")) {
+            return tasks;
         }
 
-        for (Task task : tasks) {
-            this.addComponent(new TaskCard(task));
+        tasks.removeIf(task -> !substringInTitle(task, this.searchString) &&
+                !substringInTags(task, this.searchString));
+
+        return tasks;
+    }
+
+    /**
+     * Searches if a substring is in a task's title
+     *
+     * @param task The task to get the title from
+     * @param substring The substring to search for
+     *
+     * @return A boolean that's true if the substring is found in the title
+     */
+    private boolean substringInTitle(Task task, String substring) {
+        return task.getTitle().toLowerCase(Locale.ROOT).contains(
+                substring.toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Searches if a substring is in a task's tags
+     *
+     * @param task The task to get tags from
+     * @param substring The substring to search for
+     *
+     * @return A boolean that's true if the substring is found in the tags
+     */
+    private boolean substringInTags(Task task, String substring) {
+        for (String tag : task.getTags()) {
+            System.out.println(
+                    "tag: '" + tag + "'\n" +
+                            "substring: '" + this.searchString + "'");
+            if (tag.toLowerCase(Locale.ROOT).contains(
+                    substring.toLowerCase(Locale.ROOT))) {
+                return true;
+            }
         }
+        return false;
     }
 }
