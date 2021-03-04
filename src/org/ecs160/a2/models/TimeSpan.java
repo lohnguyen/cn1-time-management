@@ -8,7 +8,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public class TimeSpan implements Externalizable {
@@ -27,17 +30,28 @@ public class TimeSpan implements Externalizable {
      */
     private LocalDateTime end;
 
-    TimeSpan(LocalDateTime start, LocalDateTime end) {
+    public TimeSpan(LocalDateTime start, LocalDateTime end) {
         this.start = start;
         this.end = end;
     }
 
-    LocalDateTime getStart() {
+    public TimeSpan() {
+    }
+
+    public LocalDateTime getStart() {
         return this.start;
     }
 
-    LocalDateTime getEnd() {
+    public LocalDateTime getEnd() {
         return this.end;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
     }
 
     boolean isRunning() {

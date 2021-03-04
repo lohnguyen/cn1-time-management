@@ -58,7 +58,7 @@ public class TaskCard extends Container implements AppConstants {
         this.onDeleted = onDeleted;
 
         this.multiButton = new MultiButton(task.getTitle());
-        multiButton.setTextLine2(DurationUtils.durationStr(task.getTotalTime()));
+        multiButton.setTextLine2(task.getTotalTimeStr());
 
         multiButton.addActionListener(e -> goToDetail(task));
 
@@ -109,13 +109,12 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void updateState() {
-        multiButton.setTextLine2(DurationUtils.durationStr(task.getTotalTime()));
+        multiButton.setTextLine2(task.getTotalTimeStr());
         if (!task.isInProgress()) {
             startButton.setIcon(FontImage.createMaterial(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style));
         } else {
             startButton.setIcon(FontImage.createMaterial(FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE, style));
         }
-        System.out.println("updated");
     }
 
     private void onStartButtonClicked() {
@@ -124,7 +123,7 @@ public class TaskCard extends Container implements AppConstants {
         }
         if (!task.isInProgress()) {
             task.start();
-            this.timer = UITimer.timer(1000, true, this::updateState);
+//            this.timer = UITimer.timer(1000, true, this::updateState);
             if (this.onStarted != null) {
                 this.onStarted.accept(this.task);
             }
@@ -133,8 +132,9 @@ public class TaskCard extends Container implements AppConstants {
             if (this.onStopped != null) {
                 this.onStopped.accept(this.task);
             }
+            Database.update(Task.OBJECT_ID, task);
         }
-        this.updateState();
+//        this.updateState();
         TaskList.refresh();
     }
 
