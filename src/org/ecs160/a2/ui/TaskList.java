@@ -203,9 +203,6 @@ public class TaskList extends Container {
      */
     private boolean substringInTags(Task task, String substring) {
         for (String tag : task.getTags()) {
-            System.out.println(
-                    "tag: '" + tag + "'\n" +
-                            "substring: '" + this.searchString + "'");
             if (tag.toLowerCase(Locale.ROOT).contains(
                     substring.toLowerCase(Locale.ROOT))) {
                 return true;
