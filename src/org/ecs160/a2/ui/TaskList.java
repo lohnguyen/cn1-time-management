@@ -117,15 +117,18 @@ public class TaskList extends Container {
     }
 
     private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
-        int taskCountForLabel = tasks.size();
         Accordion tasksAccordion = new Accordion();
+        tasksAccordion.setScrollableY(true);
+
+
+        int taskCountForLabel = tasks.size();
+
         Container tasksContainer =
                 new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        tasksContainer.setScrollableY(false);
         for (Task task : tasks) {
             tasksContainer.addComponent(new TaskCard(task));
         }
-        tasksAccordion.setScrollableY(true);
-        tasksContainer.setScrollableY(false);
 
         Container labelContainer = new Container(new BorderLayout());
         labelContainer.add(BorderLayout.WEST, new Label(label));
