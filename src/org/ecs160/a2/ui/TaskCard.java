@@ -57,7 +57,7 @@ public class TaskCard extends Container implements AppConstants {
         Button startButton = createControlButton(style);
         buttons.add(startButton);
 
-        Button editButton = createButton(FontImage.MATERIAL_SETTINGS, style,
+        Button editButton = createButton(FontImage.MATERIAL_EDIT, style,
                 this::onEditButtonClicked);
         buttons.add(editButton);
 
@@ -116,10 +116,18 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void onDeleteButtonClicked() {
-        if (this.onDeleted != null)
-            this.onDeleted.accept(this.task);
-        Database.delete(Task.OBJECT_ID, task.getID());
-        TaskList.refresh();
+        Command delete = new Command("Delete");
+        Command cancel = new Command("Cancel");
+        Command[] commands = new Command[]{delete, cancel};
+
+        if (Dialog.show("Delete this task",
+                "Are you sure you want to delete" + task.getTitle(),
+                commands) == delete) {
+            if (this.onDeleted != null)
+                this.onDeleted.accept(this.task);
+            Database.delete(Task.OBJECT_ID, task.getID());
+            TaskList.refresh();
+        }
     }
 
 }
