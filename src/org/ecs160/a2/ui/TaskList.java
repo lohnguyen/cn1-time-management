@@ -2,12 +2,14 @@ package org.ecs160.a2.ui;
 
 import com.codename1.components.Accordion;
 import com.codename1.ui.*;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
+import javax.swing.border.Border;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -107,22 +109,35 @@ public class TaskList extends Container {
      */
     private void listTasks(String label, ArrayList<Task> tasks) {
 
-
         tasks = this.searchTasks(tasks);
 
+        Accordion tasksAccordion = createTasksAccordion(label, tasks);
+
+        this.addComponent(tasksAccordion);
+    }
+
+    private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
         Accordion tasksAccordion = new Accordion();
+        tasksAccordion.setScrollableY(true);
+
+
+        int taskCountForLabel = tasks.size();
 
         Container tasksContainer =
                 new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        tasksContainer.setScrollableY(false);
         for (Task task : tasks) {
             tasksContainer.addComponent(new TaskCard(task));
         }
-        tasksAccordion.setScrollableY(true);
-        tasksContainer.setScrollableY(false);
 
-        tasksAccordion.addContent(label, tasksContainer);
+        Container labelContainer = new Container(new BorderLayout());
+        labelContainer.add(BorderLayout.WEST, new Label(label));
+        labelContainer.add(BorderLayout.EAST, new Label(String.valueOf(taskCountForLabel)));
+
+        tasksAccordion.addContent(labelContainer, tasksContainer);
         tasksAccordion.expand(tasksContainer);
-        this.addComponent(tasksAccordion);
+
+        return tasksAccordion;
     }
 
     /**
