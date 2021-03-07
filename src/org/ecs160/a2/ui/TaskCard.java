@@ -26,7 +26,6 @@ public class TaskCard extends Container implements AppConstants {
     public Consumer<Task> onStopped;
     public Consumer<Task> onDeleted;
 
-
     /**
      * @param task      the task
      * @param onStarted Called after the task is started to inform TaskList
@@ -87,8 +86,7 @@ public class TaskCard extends Container implements AppConstants {
                 this::onStartButtonClicked);
     }
 
-    private Button createButton(char icon, Style style,
-                                Runnable listener) {
+    private Button createButton(char icon, Style style, Runnable listener) {
         final Button button = new Button(FontImage.createMaterial(icon, style));
         button.addActionListener((ev) -> listener.run());
         return button;
@@ -102,16 +100,14 @@ public class TaskCard extends Container implements AppConstants {
     private void onStartButtonClicked() {
         if (!task.isInProgress()) {
             task.start();
-            if (this.onStarted != null) {
+            if (this.onStarted != null)
                 this.onStarted.accept(this.task);
-            }
         } else {
             task.stop();
-            if (this.onStopped != null) {
+            if (this.onStopped != null)
                 this.onStopped.accept(this.task);
-            }
-            Database.update(Task.OBJECT_ID, task);
         }
+        Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }
 
@@ -120,9 +116,8 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void onDeleteButtonClicked() {
-        if (this.onDeleted != null) {
+        if (this.onDeleted != null)
             this.onDeleted.accept(this.task);
-        }
         Database.delete(Task.OBJECT_ID, task.getID());
         TaskList.refresh();
     }

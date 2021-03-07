@@ -138,13 +138,16 @@ public class TimeSpan implements Externalizable {
     @Override
     public void externalize(DataOutputStream out) throws IOException {
         Util.writeUTF(start.format(formatter), out);
-        Util.writeUTF(end.format(formatter), out);
+        if (end == null) Util.writeUTF("", out);
+        else Util.writeUTF(end.format(formatter), out);
     }
 
     @Override
     public void internalize(int version, DataInputStream in) throws IOException {
         start = LocalDateTime.parse(Util.readUTF(in), formatter);
-        end = LocalDateTime.parse(Util.readUTF(in), formatter);
+        String endStr = Util.readUTF(in);
+        if (endStr.equals("")) end = null;
+        else end = LocalDateTime.parse(endStr, formatter);
     }
 
     @Override
