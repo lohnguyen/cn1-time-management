@@ -37,6 +37,10 @@ public class TaskList extends Container {
         TaskList.instance = this;
     }
 
+    /**
+     * Refreshes the content of the taskList Container
+     * This static method is for outside code to use
+     */
     public static void refresh() {
         if (instance != null) {
             instance.refreshContainer();
