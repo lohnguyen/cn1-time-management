@@ -107,6 +107,15 @@ public class AppMain {
       tabs.addTab("Tasks", taskIcon, new TaskList(this.current.getToolbar()));
       tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
+
+      // adds and removes the search bar based on what tab we're on
+      tabs.addSelectionListener((oldTabIndex, newTabIndex) -> {
+         if (newTabIndex == 0) {
+            System.out.println("tab index 0, taskList tab");
+         } else {
+            System.out.println("tab index 1, summary tab");
+         }
+      });
    }
 
 }

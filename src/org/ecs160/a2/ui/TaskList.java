@@ -52,9 +52,9 @@ public class TaskList extends Container {
      */
     public void refreshContainer() {
         this.removeAll();
+        this.configContainer();
         this.loadData();
         this.addLists();
-        this.revalidate();
     }
 
     /**
