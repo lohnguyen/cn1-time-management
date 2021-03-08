@@ -29,7 +29,7 @@ public class SizeContainer extends UpdateableContainer
                                                   COLOR_REGULAR,
                                                   FONT_SIZE_REGULAR);
         this.totalLabel = UIUtils.createLabel("Total Time: 0s",
-                                              NATIVE_ITALIC_LIGHT,
+                                              NATIVE_ITAL_LIGHT,
                                               COLOR_REGULAR,
                                               FONT_SIZE_REGULAR);
         this.add(this.sizesLabel);

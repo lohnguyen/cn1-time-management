@@ -7,9 +7,9 @@ public interface AppConstants {
     Font NATIVE_LIGHT = Font.createTrueTypeFont("native:MainLight");
     Font NATIVE_REGULAR = Font.createTrueTypeFont("native:MainRegular");
     Font NATIVE_BOLD = Font.createTrueTypeFont("native:MainBold");
-    Font NATIVE_ITALIC_LIGHT = Font.createTrueTypeFont("native:ItalicLight");
-    Font NATIVE_ITALIC_REGULAR = Font.createTrueTypeFont("native:ItalicRegular");
-    Font NATIVE_ITALIC_BOLD = Font.createTrueTypeFont("native:ItalicBold");
+    Font NATIVE_ITAL_LIGHT = Font.createTrueTypeFont("native:ItalicLight");
+    Font NATIVE_ITAL_REGULAR = Font.createTrueTypeFont("native:ItalicRegular");
+    Font NATIVE_ITAL_BOLD = Font.createTrueTypeFont("native:ItalicBold");
 
     float FONT_SIZE_TITLE = 8.0f;
     float FONT_SIZE_SUB_TITLE = 5.0f;
