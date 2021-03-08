@@ -118,7 +118,7 @@ public class TaskList extends Container {
 
     private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
         Accordion tasksAccordion = new Accordion();
-        tasksAccordion.setScrollableY(true);
+        tasksAccordion.setScrollableY(false);
 
 
         int taskCountForLabel = tasks.size();
