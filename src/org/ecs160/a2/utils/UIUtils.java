@@ -60,44 +60,6 @@ public class UIUtils implements AppConstants {
     }
 
     /**
-     * Get a list of labels to update in a container for the specified number
-     * 
-     * @param container  The container that houses the labels
-     * @param labelCount The number of labels that must be visible
-     * 
-     * @return List of visible labels from the specified container
-     */
-    public static List<Label> getLabelsToUpdate (Container container, 
-                                                 int labelCount) {
-        int i;
-        List<Label> returnLabels = new ArrayList<Label>();
-
-        // loop through the task list, adding new labels if necessary
-        for (i = 0; i < labelCount; i++) {
-            Label label;
-
-            if (i < container.getComponentCount()) {
-                label = (Label) container.getComponentAt(i);
-                if (label.isHidden()) label.setHidden(false);
-            } else {
-                label = createLabel("", NATIVE_LIGHT, COLOR_REGULAR, 
-                                    FONT_SIZE_REGULAR);
-                container.add(label);
-            }
-
-            returnLabels.add(label);
-        }
-
-        // hide the extra labels from the component
-        for (int j = i; j < container.getComponentCount(); j++) {
-            Component extraLabel = container.getComponentAt(i);
-            extraLabel.setHidden(true);
-        }
-
-        return returnLabels;
-    }
-
-    /**
      * @param size The CN1 "dips" to convert to pixels
      */
     public static int getPixelSize(float size) {

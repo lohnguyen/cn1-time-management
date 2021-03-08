@@ -3,7 +3,6 @@ package org.ecs160.a2.ui.containers;
 import java.util.List;
 
 import com.codename1.components.SpanLabel;
-import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
@@ -34,13 +33,20 @@ public class TaskContainer extends UpdateableContainer
     @Override
     public void updateContainer(List<Task> taskList) {
         String labelText = "";
+
+        // build the text for the internal label
         for (int i = 0; i < taskList.size(); i++) {
             if (i > 0) labelText += "\n";
+
             Task task = taskList.get(i); // update the label w/ its
+
+            // update label text
             labelText += " - " + 
                          DurationUtils.timeAsLabelStr(task.getTotalTime()) +
                          " total for " + task.getTitle();
         }
+
+        // update the text of the internal label
         this.tasksLabel.setText(labelText);
         if (labelText.length() == 0) this.tasksLabel.setHidden(true);
         else this.tasksLabel.setHidden(false);
