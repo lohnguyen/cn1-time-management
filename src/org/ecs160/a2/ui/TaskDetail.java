@@ -1,5 +1,6 @@
 package org.ecs160.a2.ui;
 
+import com.codename1.components.SpanLabel;
 import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
@@ -36,10 +37,9 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private void addTitle() {
-        Label title = new Label(task.getTitle());
-        Style style = title.getAllStyles();
-        style.setFont(UIUtils.getTitleFont());
-        style.setFgColor(COLOR_TITLE);
+        SpanLabel title = UIUtils.createSpanLabel(task.getTitle(),
+                NATIVE_REGULAR, COLOR_TITLE, FONT_SIZE_TITLE);
+        title.getAllStyles().setAlignment(Component.CENTER);
         add(title);
     }
 
@@ -50,7 +50,7 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private void addHeader(String content) {
-        add(UIUtils.createLabel(content, NATIVE_REGULAR, COLOR_TITLE,
+        add(UIUtils.createSpanLabel(content, NATIVE_REGULAR, COLOR_TITLE,
                 FONT_SIZE_SUB_TITLE));
     }
 
@@ -59,7 +59,7 @@ public class TaskDetail extends Form implements AppConstants {
         String description = task.getDescription();
         if (description.equals(""))
             description = task.getTitle() + " has no descriptions yet!.";
-        add(new Label(description));
+        add(new SpanLabel(description));
     }
 
     private FontImage getTagIcon() {
@@ -92,8 +92,8 @@ public class TaskDetail extends Form implements AppConstants {
     private void addTags() {
         addHeader("Tags");
 
-        if (task.getTags().size() == 0) {
-            add(new Label(task.getTitle() + " has no tags yet!"));
+        if (task.getTags().isEmpty()) {
+            add(new SpanLabel(task.getTitle() + " has no tags yet!"));
             return;
         }
 
@@ -103,23 +103,26 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private Container getSpanStr(TimeSpan span) {
-        Label start = new Label(TimeSpan.getTimeStr(span.getStart()));
-        Label end = new Label(TimeSpan.getTimeStr(span.getEnd()));
+        SpanLabel start = new SpanLabel(TimeSpan.getTimeStr(span.getStart()));
+        SpanLabel end = new SpanLabel(TimeSpan.getTimeStr(span.getEnd()));
         Label arrow = new Label("", UIUtils.getNextIcon());
         return FlowLayout.encloseCenter(start, arrow, end);
     }
 
     private void addTimeline() {
         addHeader("Timeline");
+        if (task.getTimeSpans().isEmpty()) {
+            add(new SpanLabel(task.getTitle() + " has no time intervals yet!"));
+            return;
+        }
         for (TimeSpan s : task.getTimeSpans()) add(getSpanStr(s));
     }
 
     private void addTotalTime() {
         addHeader("Total Time");
-        Label totalTime = new Label(task.getTotalTimeStr());
-        Style style = totalTime.getAllStyles();
-        style.setFont(UIUtils.getTitleFont());
-        style.setAlignment(Component.CENTER);
+        Label totalTime = UIUtils.createLabel(task.getTotalTimeStr(),
+                AppConstants.NATIVE_REGULAR, COLOR_REGULAR, FONT_SIZE_TIME);
+        totalTime.getAllStyles().setAlignment(Component.CENTER);
         add(totalTime);
     }
 
