@@ -1,15 +1,16 @@
 package org.ecs160.a2.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.codename1.ui.Button;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
-import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.plaf.RoundRectBorder;
+import com.codename1.ui.plaf.Style;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.ui.containers.UpdateableContainer;
@@ -43,7 +44,14 @@ public class Summary extends UpdateableContainer implements AppConstants {
         this.pages = new HashMap<>();
 
         // page button container setup
+        // set the background styling
+        int marginSize = UIUtils.getPixelSize(FONT_SIZE_REGULAR / 2.0f);
         pageButtonContainer = new Container();
+        pageButtonContainer.getAllStyles().setBgColor(0xD3D3D3);
+        pageButtonContainer.getAllStyles().setBgTransparency(255);
+        pageButtonContainer.getAllStyles().setBorder(RoundRectBorder.create());
+        pageButtonContainer.getAllStyles().setMargin(Component.TOP, marginSize);
+        pageButtonContainer.getAllStyles().setMargin(Component.BOTTOM, marginSize);
         this.add(pageButtonContainer);
 
         // setup pages
@@ -62,12 +70,28 @@ public class Summary extends UpdateableContainer implements AppConstants {
     }
 
     // method to construct page buttons
+    // set the selection styles (default to background transparent)
     private void addPageButton (String text) {
         Button pageButton = new Button (text);
+        pageButton.getAllStyles().setFgColor(0x000000); // black font
+        pageButton.getAllStyles().setBgColor(0xffffff); // white background
+        pageButton.getAllStyles().setBorder(RoundRectBorder.create());
         pageButton.addActionListener((e) -> {
             selectPage(((Button) e.getComponent()).getText());
         });
         pageButtonContainer.add(pageButton);
+    }
+
+    // update selected button styles by updating the transparencies
+    private void setSelectedButtonStyle (String text) {
+        for (int i = 0; i < pageButtonContainer.getComponentCount(); i++) {
+            Button button = (Button) pageButtonContainer.getComponentAt(i);
+            if (button.getText().equals(text)) { // if equal, make bg visible
+                button.getAllStyles().setBgTransparency(255);
+            } else {
+                button.getAllStyles().setBgTransparency(0);
+            }
+        }
     }
 
     // method to add a new page
@@ -80,6 +104,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
 
     // select a page for the given button text
     private void selectPage (String text) {
+        setSelectedButtonStyle(text);
         this.pages.forEach((key, value) -> value.setHidden(true));
         this.pages.get(text).updateContainer(taskList);
         this.pages.get(text).setHidden(false);
