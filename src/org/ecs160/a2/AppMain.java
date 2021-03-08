@@ -12,8 +12,10 @@ import org.ecs160.a2.ui.TaskEditor;
 
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
+import org.ecs160.a2.ui.Toolbars;
 import org.ecs160.a2.utils.Database;
 
+import javax.tools.Tool;
 import java.io.IOException;
 import java.lang.Object;
 
@@ -66,15 +68,8 @@ public class AppMain {
 
       current = new Form("Task Management App", new BorderLayout());
 
-
-      this.summaryToolbar = setToolbar();
-      this.taskListToolbar = setToolbar();
-      //setToolbar();
       setBottomTabs();
-
-      TaskList.addSearch();
-
-      current.setToolbar(this.taskListToolbar);
+      setToolbars();
 
       current.show();
    }
@@ -87,22 +82,10 @@ public class AppMain {
       }
    }
 
-   private Toolbar setToolbar() {
-      Toolbar toolbar = new Toolbar();
-      current.setToolbar(toolbar);
-      toolbar.setTitle("Tasks");
+   private void setToolbars() {
+      new Toolbars(current);
 
-      Button addButton = new Button();
-      addButton.addActionListener(e -> new TaskEditor(TaskEditor.TITLE_CREATE));
-
-      try {
-         addButton.setIcon(Image.createImage("/addbutton.png").scaled(80, 80));
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-
-      toolbar.addComponent(BorderLayout.EAST, addButton);
-      return toolbar;
+      current.setToolbar(Toolbars.getTaskListToolbar());
    }
 
    private void setBottomTabs() {
@@ -122,16 +105,10 @@ public class AppMain {
       // adds and removes the search bar based on what tab we're on
       tabs.addSelectionListener((oldTabIndex, newTabIndex) -> {
          if (newTabIndex == 0) {
-            System.out.println("tab index 0, taskList tab");
-            this.current.setToolbar(this.taskListToolbar);
-//            TaskList.addSearch();
-//            this.current.revalidate();
-//            System.out.println("added search");
+            this.current.setToolbar(Toolbars.getTaskListToolbar());
+            TaskList.refresh();
          } else {
-            System.out.println("tab index 1, summary tab");
-            this.current.setToolbar(this.summaryToolbar);
-//            this.current.revalidate();
-//            System.out.println("removed search");
+            this.current.setToolbar(Toolbars.getSummaryToolbar());
          }
       });
    }

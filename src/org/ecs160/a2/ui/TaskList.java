@@ -4,6 +4,7 @@ import com.codename1.components.Accordion;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.events.ActionEvent;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
@@ -31,6 +32,7 @@ public class TaskList extends Container {
         this.toolbar = currentToolBar;
         this.searchString = "";
 
+        this.configContainer();
         this.refreshContainer();
 
         TaskList.instance = this;
@@ -46,21 +48,34 @@ public class TaskList extends Container {
         }
     }
 
-    public static void addSearch() {
+    public static void addSearch(ActionEvent e) {
         if (instance != null) {
-            instance.addSearchCommand();
+            instance.addSearchEvent(e);
         }
+    }
+
+    /**
+     * Configures anything to do with the Container holding the task list
+     */
+    private void configContainer() {
+        this.addPullToRefresh(this::refreshContainer);
     }
 
     /**
      * Refreshes the content of the taskList Container
      */
-    public void refreshContainer() {
+    private void refreshContainer() {
         this.removeAll();
-        this.configContainer();
         this.loadData();
         this.addLists();
-        this.addSearchCommand();
+    }
+
+    /**
+     * What to do to the taskList in the case of a search event happening
+     */
+    private void addSearchEvent(ActionEvent e) {
+        this.searchString = (String)e.getSource();
+        this.refreshContainer();
     }
 
     /**
@@ -87,20 +102,6 @@ public class TaskList extends Container {
                 this.inactiveList.add(task);
             }
         }
-    }
-
-    /**
-     * Configures anything to do with the Container holding the task list
-     */
-    private void configContainer() {
-        this.addPullToRefresh(this::refreshContainer);
-    }
-
-    private void addSearchCommand() {
-        this.toolbar.addSearchCommand(e -> {
-            this.searchString = (String)e.getSource();
-            this.refreshContainer();
-        });
     }
 
     /**
