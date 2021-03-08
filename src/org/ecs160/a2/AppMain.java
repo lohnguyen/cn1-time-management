@@ -12,6 +12,7 @@ import org.ecs160.a2.ui.TaskEditor;
 
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
+import org.ecs160.a2.ui.containers.UpdateableContainer;
 import org.ecs160.a2.utils.Database;
 
 import java.io.IOException;
@@ -106,6 +107,17 @@ public class AppMain {
       tabs.addTab("Tasks", taskIcon, new TaskList(this.current.getToolbar()));
       tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
+      tabs.addSelectionListener((i, j) -> tabSelectionListener(tabs, i, j));
    }
 
+   private void tabSelectionListener (Tabs origin, int oldIndex, int newIndex) {
+      if (oldIndex == newIndex) return;
+      switch (newIndex) {
+         case 1:
+            UpdateableContainer container;
+            container = ((UpdateableContainer) origin.getTabComponentAt(1));
+            container.updateContainer(null);
+            break;
+      }
+   }
 }

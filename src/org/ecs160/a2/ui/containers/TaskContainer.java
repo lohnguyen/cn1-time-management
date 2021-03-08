@@ -2,6 +2,7 @@ package org.ecs160.a2.ui.containers;
 
 import java.util.List;
 
+import com.codename1.components.SpanLabel;
 import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
@@ -16,24 +17,58 @@ import org.ecs160.a2.utils.UIUtils;
 public class TaskContainer extends UpdateableContainer 
                            implements AppConstants {
 
+    private SpanLabel tasksLabel;
+    private Label totalLabel;
+
+    // inner container constructor
     public TaskContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
+        this.tasksLabel = UIUtils.createSpanLabel("",
+                                                  NATIVE_LIGHT, 
+                                                  COLOR_REGULAR,
+                                                  FONT_SIZE_REGULAR);
+        this.totalLabel = UIUtils.createLabel("Total Time: 0s",
+                                              NATIVE_ITAL_LIGHT,
+                                              COLOR_REGULAR,
+                                              FONT_SIZE_REGULAR);
+        this.add(this.tasksLabel);
+        this.add(this.totalLabel);
     }
 
     /**
-     * Update the labels to reflect the times of the given Tasks
+     * Update the label to reflect the times of the given Tasks
      */
     @Override
     public void updateContainer(List<Task> taskList) {
-        // get a list of labels for the specified number of tasks
-        List<Label> labels = UIUtils.getLabelsToUpdate(this, 
-                                                       taskList.size());
+        // variables used to update labels
+        String labelText = "";
+        long totalTime = 0L;
+
+        // build the text for the internal label
         for (int i = 0; i < taskList.size(); i++) {
-            Task task = taskList.get(i); // update the label w/ its
-            Label label = labels.get(i); // corresponding task
-            label.setText(" - " + 
-                          DurationUtils.timeAsLabelStr(task.getTotalTime()) +
-                          " total for " + task.getTitle());
+            // if second task or later, add a line break
+            if (i > 0) labelText += "\n";
+
+            // get current task
+            Task task = taskList.get(i);
+
+            // add to the total time
+            totalTime += task.getTotalTime();
+
+            // update label text
+            labelText += " - " + 
+                         DurationUtils.timeAsLabelStr(task.getTotalTime()) +
+                         " total for " + task.getTitle();
         }
+
+        // update total time label
+        this.totalLabel.setText("Total Time: " +
+                                DurationUtils.timeAsLabelStr(totalTime));
+
+        // update the text of the internal label
+        this.tasksLabel.setText(labelText);
+        if (labelText.length() == 0) this.tasksLabel.setHidden(true);
+        else this.tasksLabel.setHidden(false);
+        this.forceRevalidate();
     }
 }
