@@ -8,11 +8,8 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
-import org.ecs160.a2.ui.TaskEditor;
+import org.ecs160.a2.ui.*;
 
-import org.ecs160.a2.ui.Summary;
-import org.ecs160.a2.ui.TaskList;
-import org.ecs160.a2.ui.Toolbars;
 import org.ecs160.a2.utils.Database;
 
 import javax.tools.Tool;
@@ -64,8 +61,8 @@ public class AppMain {
 
       current = new Form("Task Management App", new BorderLayout());
 
-      setBottomTabs();
-      setToolbars();
+      setAppTabs();
+      setAppToolbars();
 
       current.show();
    }
@@ -78,35 +75,13 @@ public class AppMain {
       }
    }
 
-   private void setToolbars() {
-      new Toolbars(current);
-
-      current.setToolbar(Toolbars.getTaskListToolbar());
+   private void setAppToolbars() {
+      new AppToolbars(current);
+      current.setToolbar(AppToolbars.getTaskListToolbar());
    }
 
-   private void setBottomTabs() {
-      FontImage taskIcon = FontImage.createMaterial(FontImage.MATERIAL_ALARM,
-              "Label", 6);
-      FontImage summaryIcon =
-              FontImage.createMaterial(FontImage.MATERIAL_ASSESSMENT,
-                      "Label", 6);
-
-      Tabs tabs = new Tabs();
-
-      current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, new TaskList());
-      tabs.addTab("Summary", summaryIcon, new Summary());
-      tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
-
-      // adds and removes the search bar based on what tab we're on
-      tabs.addSelectionListener((oldTabIndex, newTabIndex) -> {
-         if (newTabIndex == 0) {
-            this.current.setToolbar(Toolbars.getTaskListToolbar());
-            TaskList.refresh();
-         } else {
-            this.current.setToolbar(Toolbars.getSummaryToolbar());
-         }
-      });
+   private void setAppTabs() {
+      new AppTabs(current);
+      current.setPreferredTabIndex(0);
    }
-
 }
