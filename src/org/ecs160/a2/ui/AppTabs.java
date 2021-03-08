@@ -74,6 +74,7 @@ public class AppTabs extends Tabs {
     private void selectTaskListTab() {
         this.current.setToolbar(AppToolbars.getTaskListToolbar());
         TaskList.refresh();
+        this.current.revalidate();
     }
 
     /**
@@ -81,5 +82,6 @@ public class AppTabs extends Tabs {
      */
     private void selectSummaryTab() {
         this.current.setToolbar(AppToolbars.getSummaryToolbar());
+        this.current.revalidate();
     }
 }

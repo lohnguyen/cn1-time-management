@@ -12,8 +12,6 @@ import org.ecs160.a2.ui.*;
 
 import org.ecs160.a2.utils.Database;
 
-import javax.tools.Tool;
-import java.io.IOException;
 import java.lang.Object;
 
 /**
@@ -50,6 +48,7 @@ public class AppMain {
                  null);
       });
 
+      Database.reset();
       Database.init();
    }
 

@@ -46,6 +46,12 @@ public class TaskList extends Container {
         }
     }
 
+    /**
+     * Adds an event so an outer class can make a change in the taskList on
+     * the event
+     *
+     * @param e the ActionEvent which will cause the change in the taskList
+     */
     public static void addSearch(ActionEvent e) {
         if (instance != null) {
             instance.addSearchEvent(e);
