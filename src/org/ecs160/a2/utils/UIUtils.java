@@ -1,5 +1,6 @@
 package org.ecs160.a2.utils;
 
+import com.codename1.components.SpanLabel;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
@@ -31,6 +32,29 @@ public class UIUtils implements AppConstants {
         label.getAllStyles().setFont(style.derive(pixelSize, 
                                                   Font.STYLE_PLAIN));
         label.getAllStyles().setFgColor(color);
+
+        return label;
+    }
+
+    /**
+     * Generate a multiline span label for the specified parameters
+     * 
+     * @param labelText The label's text
+     * @param style     The label's font
+     * @param color     The label's color
+     * @param fontSize  The label's size in CN1 "dips"
+     * 
+     * @return The newly generated label
+     */
+    public static SpanLabel createSpanLabel (String labelText, Font style, 
+                                             int color, 
+                                             float fontSize) {
+        SpanLabel label = new SpanLabel(labelText);
+
+        int pixelSize = Display.getInstance().convertToPixels(fontSize);
+        label.getTextAllStyles().setFont(style.derive(pixelSize, 
+                                                  Font.STYLE_PLAIN));
+        label.getTextAllStyles().setFgColor(color);
 
         return label;
     }

@@ -2,6 +2,7 @@ package org.ecs160.a2.ui.containers;
 
 import java.util.List;
 
+import com.codename1.components.SpanLabel;
 import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
@@ -16,24 +17,33 @@ import org.ecs160.a2.utils.UIUtils;
 public class TaskContainer extends UpdateableContainer 
                            implements AppConstants {
 
+    private SpanLabel tasksLabel;
+
     public TaskContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
+        this.tasksLabel = UIUtils.createSpanLabel("",
+                                                  NATIVE_LIGHT, 
+                                                  COLOR_REGULAR,
+                                                  FONT_SIZE_REGULAR);
+        this.add(this.tasksLabel);
     }
 
     /**
-     * Update the labels to reflect the times of the given Tasks
+     * Update the label to reflect the times of the given Tasks
      */
     @Override
     public void updateContainer(List<Task> taskList) {
-        // get a list of labels for the specified number of tasks
-        List<Label> labels = UIUtils.getLabelsToUpdate(this, 
-                                                       taskList.size());
+        String labelText = "";
         for (int i = 0; i < taskList.size(); i++) {
+            if (i > 0) labelText += "\n";
             Task task = taskList.get(i); // update the label w/ its
-            Label label = labels.get(i); // corresponding task
-            label.setText(" - " + 
-                          DurationUtils.timeAsLabelStr(task.getTotalTime()) +
-                          " total for " + task.getTitle());
+            labelText += " - " + 
+                         DurationUtils.timeAsLabelStr(task.getTotalTime()) +
+                         " total for " + task.getTitle();
         }
+        this.tasksLabel.setText(labelText);
+        if (labelText.length() == 0) this.tasksLabel.setHidden(true);
+        else this.tasksLabel.setHidden(false);
+        this.forceRevalidate();
     }
 }
