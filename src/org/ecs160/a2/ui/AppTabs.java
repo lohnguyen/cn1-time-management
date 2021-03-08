@@ -83,7 +83,6 @@ public class AppTabs extends Tabs {
      * What happens when the summary tab is selected
      */
     private void selectSummaryTab() {
-        TaskList.clearSearch();
         current.setToolbar(AppToolbars.getSummaryToolbar());
     }
 }
