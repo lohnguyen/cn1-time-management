@@ -33,7 +33,6 @@ public class Task implements Externalizable {
     private List<TimeSpan> timeSpans;
     private List<String> tags;
 
-
     /**
      * Constructor where a title, description, size, and defaults tags need
      * to be specified

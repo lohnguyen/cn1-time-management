@@ -25,7 +25,7 @@ public class TaskList extends Container {
 
     public TaskList() {
         super(BoxLayout.y());
-        this.setScrollableY(true);
+        this.setScrollableY(false);
 
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
@@ -35,6 +35,10 @@ public class TaskList extends Container {
         this.refreshContainer();
 
         TaskList.instance = this;
+    }
+
+    public int getNumberOfTasks() {
+        return (instance.activeList.size() + instance.inactiveList.size());
     }
 
     /**

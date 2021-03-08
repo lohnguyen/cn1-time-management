@@ -6,6 +6,7 @@ import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.TextModeLayout;
+import com.codename1.ui.spinner.Picker;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
@@ -88,6 +89,7 @@ public class TaskEditor extends Dialog {
         task.setDescription(taskDescription.getText());
         task.setSize(getSizeText());
         task.setTags(extractTags());
+
         Database.update(Task.OBJECT_ID, task);
         dispose();
         TaskList.refresh();

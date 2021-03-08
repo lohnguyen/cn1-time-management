@@ -1,10 +1,10 @@
 package org.ecs160.a2.ui;
 
-import com.codename1.ui.Button;
-import com.codename1.ui.Form;
-import com.codename1.ui.Image;
-import com.codename1.ui.Toolbar;
+import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.plaf.RoundBorder;
+import com.codename1.ui.plaf.Style;
+import org.ecs160.a2.models.Task;
 
 import java.io.IOException;
 
@@ -55,6 +55,7 @@ public class AppToolbars {
         addNewTaskButton(toolbar);
         return toolbar;
     }
+
 
     /**
      * Creates a baseline Toolbar and adds any taskList specific features
