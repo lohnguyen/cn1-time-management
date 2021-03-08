@@ -19,14 +19,26 @@ public class AppToolbars {
         summaryToolbar = createSummaryToolbar();
     }
 
+    /**
+     * @return The taskList Toolbar object
+     */
     public static Toolbar getTaskListToolbar() {
         return taskListToolbar;
     }
 
+    /**
+     * @return The summary Toolbar object
+     */
     public static Toolbar getSummaryToolbar() {
         return summaryToolbar;
     }
 
+    /**
+     * Creates a baseline Toolbar object that has all objects/buttons/etc. we
+     * always want present in a toolbar
+     *
+     * @return A baseline Toolbar object
+     */
     private Toolbar createBaseToolbar() {
         Toolbar toolbar = new Toolbar();
         current.setToolbar(toolbar);
@@ -34,6 +46,11 @@ public class AppToolbars {
         return toolbar;
     }
 
+    /**
+     * Creates a baseline Toolbar and adds any taskList specific features
+     *
+     * @return A Toolbar object for the taskList tab
+     */
     private Toolbar createTaskListToolbar() {
         Toolbar toolbar = createBaseToolbar();
         toolbar.setTitle("Tasks");
@@ -41,12 +58,22 @@ public class AppToolbars {
         return toolbar;
     }
 
+    /**
+     * Creates a baseline Toolbar and adds any summary specific features
+     *
+     * @return A Toolbar object for the summary tab
+     */
     private Toolbar createSummaryToolbar() {
         Toolbar toolbar = createBaseToolbar();
         toolbar.setTitle("Summary");
         return toolbar;
     }
 
+    /**
+     * Adds a newTaskButton to the given toolbar
+     *
+     * @param toolbar The Toolbar we wish to add an addNewTaskButton to
+     */
     private void addNewTaskButton(Toolbar toolbar) {
         Button addButton = new Button();
         addButton.addActionListener(e -> new TaskEditor(TaskEditor.TITLE_CREATE));
@@ -54,6 +81,11 @@ public class AppToolbars {
         toolbar.addComponent(BorderLayout.EAST, addButton);
     }
 
+    /**
+     * Adds the new task icon to a button
+     *
+     * @param button The Button we wish to add the icon to
+     */
     private void setAddNewTaskButtonIcon(Button button) {
         try {
             button.setIcon(Image.createImage("/addbutton.png").scaled(80, 80));
