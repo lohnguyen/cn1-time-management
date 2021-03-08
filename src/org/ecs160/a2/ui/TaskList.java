@@ -9,7 +9,6 @@ import com.codename1.ui.layouts.FlowLayout;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 
-import javax.swing.border.Border;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +20,7 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
-    private Toolbar toolbar;
+    private final Toolbar toolbar;
     private String searchString;
 
     public TaskList(Toolbar currentToolBar) {
@@ -61,8 +60,7 @@ public class TaskList extends Container {
     private void loadData() {
         this.activeList.clear();
         this.inactiveList.clear();
-        List<Task> allTasks =
-                (List) Database.readAll(Task.OBJECT_ID);
+        List<Task> allTasks = (List) Database.readAll(Task.OBJECT_ID);
         this.inputTasks(allTasks);
     }
 
@@ -108,7 +106,6 @@ public class TaskList extends Container {
      * @param tasks The list of tasks that are of type <label>
      */
     private void listTasks(String label, ArrayList<Task> tasks) {
-
         tasks = this.searchTasks(tasks);
 
         Accordion tasksAccordion = createTasksAccordion(label, tasks);
@@ -119,7 +116,6 @@ public class TaskList extends Container {
     private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
         Accordion tasksAccordion = new Accordion();
         tasksAccordion.setScrollableY(false);
-
 
         int taskCountForLabel = tasks.size();
 
