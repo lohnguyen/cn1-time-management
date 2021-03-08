@@ -1,14 +1,10 @@
 package org.ecs160.a2.utils;
 
-import com.codename1.ui.Component;
-import com.codename1.ui.Container;
+import com.codename1.components.SpanLabel;
 import com.codename1.ui.Display;
 import com.codename1.ui.Font;
 import com.codename1.ui.Label;
 import com.codename1.ui.FontImage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UIUtils implements AppConstants {
     
@@ -36,41 +32,26 @@ public class UIUtils implements AppConstants {
     }
 
     /**
-     * Get a list of labels to update in a container for the specified number
+     * Generate a multiline span label for the specified parameters
      * 
-     * @param container  The container that houses the labels
-     * @param labelCount The number of labels that must be visible
+     * @param labelText The label's text
+     * @param style     The label's font
+     * @param color     The label's color
+     * @param fontSize  The label's size in CN1 "dips"
      * 
-     * @return List of visible labels from the specified container
+     * @return The newly generated label
      */
-    public static List<Label> getLabelsToUpdate (Container container, 
-                                                 int labelCount) {
-        int i;
-        List<Label> returnLabels = new ArrayList<Label>();
+    public static SpanLabel createSpanLabel (String labelText, Font style, 
+                                             int color, 
+                                             float fontSize) {
+        SpanLabel label = new SpanLabel(labelText);
 
-        // loop through the task list, adding new labels if necessary
-        for (i = 0; i < labelCount; i++) {
-            Label label;
+        int pixelSize = Display.getInstance().convertToPixels(fontSize);
+        label.getTextAllStyles().setFont(style.derive(pixelSize, 
+                                                  Font.STYLE_PLAIN));
+        label.getTextAllStyles().setFgColor(color);
 
-            if (i < container.getComponentCount()) {
-                label = (Label) container.getComponentAt(i);
-                if (label.isHidden()) label.setHidden(false);
-            } else {
-                label = createLabel("", NATIVE_LIGHT, COLOR_REGULAR, 
-                                    FONT_SIZE_REGULAR);
-                container.add(label);
-            }
-
-            returnLabels.add(label);
-        }
-
-        // hide the extra labels from the component
-        for (int j = i; j < container.getComponentCount(); j++) {
-            Component extraLabel = container.getComponentAt(i);
-            extraLabel.setHidden(true);
-        }
-
-        return returnLabels;
+        return label;
     }
 
     /**

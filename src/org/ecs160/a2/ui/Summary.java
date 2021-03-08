@@ -1,12 +1,15 @@
 package org.ecs160.a2.ui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.codename1.ui.Button;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
-import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.plaf.RoundRectBorder;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.ui.containers.UpdateableContainer;
@@ -22,7 +25,8 @@ public class Summary extends UpdateableContainer implements AppConstants {
     // the current state of TaskList for this page
     private static List<Task> taskList;
 
-    private UpdateableContainer page1, page2;
+    private Container pageButtonContainer;
+    private Map<String, UpdateableContainer> pages;
 
     /**
      * Default constructor that assembles the children of this container
@@ -30,52 +34,85 @@ public class Summary extends UpdateableContainer implements AppConstants {
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.setScrollableY(true); // can scroll vertically
+        
+        // setup pages list
+        this.pages = new HashMap<>();
 
-        // title
-        this.add(UIUtils.createLabel("Summary", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_TITLE));
+        // page button container setup
+        // set the background styling
+        int marginSize = UIUtils.getPixelSize(FONT_SIZE_REGULAR / 2.0f);
+        pageButtonContainer = new Container();
+        pageButtonContainer.getAllStyles().setBgColor(0xD3D3D3);
+        pageButtonContainer.getAllStyles().setBgTransparency(255);
+        pageButtonContainer.getAllStyles().setBorder(RoundRectBorder.create());
+        pageButtonContainer.getAllStyles().setMargin(Component.TOP, marginSize);
+        pageButtonContainer.getAllStyles().setMargin(Component.BOTTOM, marginSize);
+        this.add(pageButtonContainer);
 
-        // Selection
-        Container buttonContainer = new Container(new GridLayout(1, 2));
-        Button page1Button = new Button ("Everything");
-        page1Button.addActionListener((e) -> selectPageButtonAction(e));
-        buttonContainer.add(page1Button);
-        Button page2Button = new Button ("By Size");
-        page2Button.addActionListener((e) -> selectPageButtonAction(e));
-        buttonContainer.add(page2Button);
-        this.add(buttonContainer);
+        // setup pages
+        this.addPage("Everything", new SummaryAll());
+        this.addPage("By Size", new SummarySize());
+        this.addPage("By Tag", new SummaryTags());
 
-        // setup the different summary pages
-        this.page1 = new SummaryAll();
-        this.page1.setHidden(false); // default visible
-        this.add(this.page1);
-        this.page2 = new SummarySize();
-        this.page2.setHidden(true); // default hidden
-        this.add(this.page2);
+        // revalidate the button container
+        pageButtonContainer.setLayout(new GridLayout(1, this.pages.size()));
+        pageButtonContainer.revalidate();
 
         // Setup pull to refresh for this container
         this.addPullToRefresh(() -> updateSubContainers());
         this.updateSubContainers();
-        this.page2.updateContainer(taskList);
+        this.selectPage("Everything");
     }
 
-    // action listener that allows for the selection of a page
-    private void selectPageButtonAction (ActionEvent e) {
-        Button button = (Button) e.getComponent();
-        switch (button.getText()) {
-            case "Everything":
-                this.page2.setHidden(true);
-                this.page1.setHidden(false);
-                break;
-            case "By Size":
-                this.page1.setHidden(true);
-                this.page2.setHidden(false);
+    // method to construct page buttons
+    // set the selection styles (default to background transparent)
+    private void addPageButton (String text) {
+        Button pageButton = new Button (text);
+        pageButton.getAllStyles().setFgColor(0x000000); // black font
+        pageButton.getAllStyles().setBgColor(0xffffff); // white background
+        pageButton.getAllStyles().setBorder(RoundRectBorder.create());
+        pageButton.addActionListener((e) -> {
+            selectPage(((Button) e.getComponent()).getText());
+        });
+        pageButtonContainer.add(pageButton);
+    }
+
+    // update selected button styles by updating the transparencies
+    private void setSelectedButtonStyle (String text) {
+        for (int i = 0; i < pageButtonContainer.getComponentCount(); i++) {
+            Button button = (Button) pageButtonContainer.getComponentAt(i);
+            if (button.getText().equals(text)) { // if equal, make bg visible
+                button.getAllStyles().setBgTransparency(255);
+            } else {
+                button.getAllStyles().setBgTransparency(0);
+            }
         }
+    }
+
+    // method to add a new page
+    private void addPage (String text, UpdateableContainer page) {
+        this.addPageButton(text);
+        page.setHidden(true);
+        this.pages.put(text, page);
+        this.add(page);
+    }
+
+    // select a page for the given button text
+    private void selectPage (String text) {
+        setSelectedButtonStyle(text);
+        this.pages.forEach((key, value) -> value.setHidden(true));
+        this.pages.get(text).updateContainer(taskList);
+        this.pages.get(text).setHidden(false);
     }
 
     // reload the internal task list by reading in from the static Database
     private void reloadTaskList () {
         taskList = (List) Database.readAll(Task.OBJECT_ID);
+    }
+
+    // for a given page, check if not hidden and update
+    private void checkForUpdate (UpdateableContainer page) {
+        if (!page.isHidden()) page.updateContainer(taskList);
     }
 
     /**
@@ -84,14 +121,9 @@ public class Summary extends UpdateableContainer implements AppConstants {
     public void updateSubContainers () {
         this.reloadTaskList(); // refresh the tasks first
         if (taskList.size() > 0) {
-            if (!this.page1.isHidden()) { // which page is visible
-                this.page1.updateContainer(taskList);
-            } else if (!this.page2.isHidden()) {
-                this.page2.updateContainer(taskList);
-            }
+            this.pages.forEach((key, value) -> checkForUpdate(value));
         }
     }
-
 
     /**
      * Update the source child with the internal Task List

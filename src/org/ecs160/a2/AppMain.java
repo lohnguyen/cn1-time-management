@@ -8,13 +8,13 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
 
-import org.ecs160.a2.ui.TaskEditor;
+import org.ecs160.a2.ui.*;
 
 import org.ecs160.a2.ui.Summary;
 import org.ecs160.a2.ui.TaskList;
+import org.ecs160.a2.ui.containers.UpdateableContainer;
 import org.ecs160.a2.utils.Database;
 
-import java.io.IOException;
 import java.lang.Object;
 
 /**
@@ -62,8 +62,8 @@ public class AppMain {
 
       current = new Form("Task Management App", new BorderLayout());
 
-      setToolbar();
-      setBottomTabs();
+      setAppTabs();
+      setAppToolbars();
 
       current.show();
    }
@@ -76,36 +76,13 @@ public class AppMain {
       }
    }
 
-   private void setToolbar() {
-      Toolbar toolbar = new Toolbar();
-      current.setToolbar(toolbar);
-      toolbar.setTitle("Tasks");
-
-      Button addButton = new Button();
-      addButton.addActionListener(e -> new TaskEditor(TaskEditor.TITLE_CREATE));
-
-      try {
-         addButton.setIcon(Image.createImage("/addbutton.png").scaled(80, 80));
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-
-      toolbar.addComponent(BorderLayout.EAST, addButton);
+   private void setAppToolbars() {
+      new AppToolbars(current);
+      current.setToolbar(AppToolbars.getTaskListToolbar());
    }
 
-   private void setBottomTabs() {
-      FontImage taskIcon = FontImage.createMaterial(FontImage.MATERIAL_ALARM,
-              "Label", 6);
-      FontImage summaryIcon =
-              FontImage.createMaterial(FontImage.MATERIAL_ASSESSMENT,
-                      "Label", 6);
-
-      Tabs tabs = new Tabs();
-
-      current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, new TaskList(this.current.getToolbar()));
-      tabs.addTab("Summary", summaryIcon, new Summary());
-      tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
+   private void setAppTabs() {
+      new AppTabs(current);
+      current.setPreferredTabIndex(0);
    }
-
 }
