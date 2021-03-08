@@ -3,6 +3,7 @@ package org.ecs160.a2.ui.containers;
 import java.util.List;
 
 import com.codename1.components.SpanLabel;
+import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
@@ -17,6 +18,7 @@ public class TaskContainer extends UpdateableContainer
                            implements AppConstants {
 
     private SpanLabel tasksLabel;
+    private Label totalLabel;
 
     public TaskContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
@@ -24,7 +26,12 @@ public class TaskContainer extends UpdateableContainer
                                                   NATIVE_LIGHT, 
                                                   COLOR_REGULAR,
                                                   FONT_SIZE_REGULAR);
+        this.totalLabel = UIUtils.createLabel("Total Time: 0s",
+                                              NATIVE_ITALIC_LIGHT,
+                                              COLOR_REGULAR,
+                                              FONT_SIZE_REGULAR);
         this.add(this.tasksLabel);
+        this.add(this.totalLabel);
     }
 
     /**
@@ -32,19 +39,30 @@ public class TaskContainer extends UpdateableContainer
      */
     @Override
     public void updateContainer(List<Task> taskList) {
+        // variables used to update labels
         String labelText = "";
+        long totalTime = 0L;
 
         // build the text for the internal label
         for (int i = 0; i < taskList.size(); i++) {
+            // if second task or later, add a line break
             if (i > 0) labelText += "\n";
 
-            Task task = taskList.get(i); // update the label w/ its
+            // get current task
+            Task task = taskList.get(i);
+
+            // add to the total time
+            totalTime += task.getTotalTime();
 
             // update label text
             labelText += " - " + 
                          DurationUtils.timeAsLabelStr(task.getTotalTime()) +
                          " total for " + task.getTitle();
         }
+
+        // update total time label
+        this.totalLabel.setText("Total Time: " +
+                                DurationUtils.timeAsLabelStr(totalTime));
 
         // update the text of the internal label
         this.tasksLabel.setText(labelText);

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.codename1.components.SpanLabel;
+import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
@@ -19,6 +20,7 @@ public class SizeContainer extends UpdateableContainer
                            implements AppConstants {
 
     private SpanLabel sizesLabel;
+    private Label totalLabel;
 
     public SizeContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
@@ -26,7 +28,12 @@ public class SizeContainer extends UpdateableContainer
                                                   NATIVE_LIGHT, 
                                                   COLOR_REGULAR,
                                                   FONT_SIZE_REGULAR);
+        this.totalLabel = UIUtils.createLabel("Total Time: 0s",
+                                              NATIVE_ITALIC_LIGHT,
+                                              COLOR_REGULAR,
+                                              FONT_SIZE_REGULAR);
         this.add(this.sizesLabel);
+        this.add(this.totalLabel);
     }
 
     /**
@@ -34,7 +41,10 @@ public class SizeContainer extends UpdateableContainer
      */
     @Override
     public void updateContainer(List<Task> taskList) {
+        // variables used to update labels
         String labelText = "";
+        long totalTime = 0L;
+
         // use a map to keep track of the current totals for the sizes
         Map<String, Long> sizeStatsMap = new HashMap<String, Long>();
 
@@ -59,11 +69,18 @@ public class SizeContainer extends UpdateableContainer
             String size = (String) availableSizes[i];
             long sizeTime = sizeStatsMap.get(size);
 
+            // add to the total time
+            totalTime += sizeTime;
+
             // update label text
             labelText += " - " +
                          DurationUtils.timeAsLabelStr(sizeTime) +
                          " total for " + size;
         }
+
+        // update total time label
+        this.totalLabel.setText("Total Time: " +
+                                DurationUtils.timeAsLabelStr(totalTime));
 
         // update the text of the internal label
         this.sizesLabel.setText(labelText);
