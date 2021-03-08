@@ -88,4 +88,11 @@ public class UIUtils implements AppConstants {
         return getIcon(FontImage.MATERIAL_ARROW_BACK_IOS, ICON_SIZE_TOOLBAR);
     }
 
+    /**
+     * Get material chevron right icon for TaskDetail's toolbar
+     */
+    public static FontImage getNextIcon() {
+        return getIcon(FontImage.MATERIAL_ARROW_RIGHT_ALT, ICON_SIZE_TOOLBAR);
+    }
+
 }

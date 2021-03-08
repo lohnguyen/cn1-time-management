@@ -26,7 +26,6 @@ public class TaskCard extends Container implements AppConstants {
     public Consumer<Task> onStopped;
     public Consumer<Task> onDeleted;
 
-
     /**
      * @param task      the task
      * @param onStarted Called after the task is started to inform TaskList
@@ -36,12 +35,8 @@ public class TaskCard extends Container implements AppConstants {
      * @param onDeleted Called after the task is removed from the database to
      *                  inform TaskList to remove this entry
      */
-    public TaskCard(
-            Task task,
-            Consumer<Task> onStarted,
-            Consumer<Task> onStopped,
-            Consumer<Task> onDeleted
-    ) {
+    public TaskCard(Task task, Consumer<Task> onStarted,
+                    Consumer<Task> onStopped, Consumer<Task> onDeleted) {
         super(BoxLayout.y());
         this.task = task;
         this.onStarted = onStarted;
@@ -49,29 +44,23 @@ public class TaskCard extends Container implements AppConstants {
         this.onDeleted = onDeleted;
 
         MultiButton multiButton = new MultiButton(task.getTitle());
-        multiButton.setTextLine2(task.getTotalTimeStr());
-
+        if (task.isInProgress()) multiButton.setTextLine2("In Progress");
+        else multiButton.setTextLine2(task.getTotalTimeStr());
         multiButton.addActionListener(e -> goToDetail(task));
 
         Container buttons = new Container(new FlowLayout());
 
         Button startButton = createControlButton(style);
-        buttons.add(startButton);
-
-        Button editButton = createButton(FontImage.MATERIAL_SETTINGS, style,
+        Button editButton = createButton(FontImage.MATERIAL_EDIT, style,
                 this::onEditButtonClicked);
-        buttons.add(editButton);
-
         Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
                 styleWarn, this::onDeleteButtonClicked);
-
-
-        buttons.add(deleteButton);
+        buttons.addAll(startButton, editButton, deleteButton);
 
         SwipeableContainer swipeContainer = new SwipeableContainer(null, buttons,
                 multiButton);
 
-        this.add(swipeContainer);
+        add(swipeContainer);
     }
 
     public TaskCard(Task task) {
@@ -87,9 +76,8 @@ public class TaskCard extends Container implements AppConstants {
                 this::onStartButtonClicked);
     }
 
-    private Button createButton(char icon, Style style,
-                                Runnable listener) {
-        final Button button = new Button(FontImage.createMaterial(icon, style));
+    private Button createButton(char icon, Style style, Runnable listener) {
+        Button button = new Button(FontImage.createMaterial(icon, style));
         button.addActionListener((ev) -> listener.run());
         return button;
     }
@@ -102,16 +90,12 @@ public class TaskCard extends Container implements AppConstants {
     private void onStartButtonClicked() {
         if (!task.isInProgress()) {
             task.start();
-            if (this.onStarted != null) {
-                this.onStarted.accept(this.task);
-            }
+            if (onStarted != null) onStarted.accept(task);
         } else {
             task.stop();
-            if (this.onStopped != null) {
-                this.onStopped.accept(this.task);
-            }
-            Database.update(Task.OBJECT_ID, task);
+            if (onStopped != null) onStopped.accept(task);
         }
+        Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }
 
@@ -120,9 +104,15 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void onDeleteButtonClicked() {
-        if (this.onDeleted != null) {
-            this.onDeleted.accept(this.task);
-        }
+        Command delete = new Command("Delete");
+        Command cancel = new Command("Cancel");
+        Command[] commands = new Command[]{delete, cancel};
+        Command choice = Dialog.show("Delete this task",
+                "Are you sure you want to delete" + task.getTitle(),
+                commands);
+
+        if (choice == cancel) return;
+        if (this.onDeleted != null) onDeleted.accept(task);
         Database.delete(Task.OBJECT_ID, task.getID());
         TaskList.refresh();
     }

@@ -26,7 +26,6 @@ public class AppMain {
 
    private Form current;
    private Resources theme;
-   public static TaskList taskList;
 
    public void init(Object context) {
       // use two network threads instead of one

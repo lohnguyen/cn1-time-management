@@ -7,6 +7,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.models.TimeSpan;
 import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.UIUtils;
 
@@ -31,6 +32,7 @@ public class TaskDetail extends Form implements AppConstants {
         addDescription();
         addTags();
         addTotalTime();
+        addTimeline();
     }
 
     private void addTitle() {
@@ -42,6 +44,7 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private void addSize() {
+        addHeader("Size");
         Label size = new Label(task.getSize());
         add(size);
     }
@@ -53,7 +56,10 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addDescription() {
         addHeader("Description");
-        add(new Label(task.getDescription()));
+        String description = task.getDescription();
+        if (description.equals(""))
+            description = task.getTitle() + " has no descriptions yet!.";
+        add(new Label(description));
     }
 
     private FontImage getTagIcon() {
@@ -86,11 +92,26 @@ public class TaskDetail extends Form implements AppConstants {
     private void addTags() {
         addHeader("Tags");
 
-        Container container = new Container(new FlowLayout());
-        for (String t : task.getTags()) {
-            container.add(getTag(t));
+        if (task.getTags().size() == 0) {
+            add(new Label(task.getTitle() + " has no tags yet!"));
+            return;
         }
+
+        Container container = new Container(new FlowLayout());
+        for (String t : task.getTags()) container.add(getTag(t));
         add(container);
+    }
+
+    private Container getSpanStr(TimeSpan span) {
+        Label start = new Label(TimeSpan.getTimeStr(span.getStart()));
+        Label end = new Label(TimeSpan.getTimeStr(span.getEnd()));
+        Label arrow = new Label("", UIUtils.getNextIcon());
+        return FlowLayout.encloseCenter(start, arrow, end);
+    }
+
+    private void addTimeline() {
+        addHeader("Timeline");
+        for (TimeSpan s : task.getTimeSpans()) add(getSpanStr(s));
     }
 
     private void addTotalTime() {
