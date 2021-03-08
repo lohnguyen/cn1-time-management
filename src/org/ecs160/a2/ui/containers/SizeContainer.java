@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.codename1.components.SpanLabel;
-import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
