@@ -52,28 +52,10 @@ public class AppToolbars {
     private Toolbar createBaseToolbar() {
         Toolbar toolbar = new Toolbar();
         current.setToolbar(toolbar);
-        displayTotalTasks(toolbar);
         addNewTaskButton(toolbar);
         return toolbar;
     }
 
-    private Container getTotalTasksContainer() {
-        Container container = new Container();
-        Style style = container.getAllStyles();
-        style.setBgTransparency(255);
-        style.setBorder(RoundBorder.create().rectangle(true).color(0xEB5160));
-        return container;
-    }
-
-    public void displayTotalTasks(Toolbar toolbar) {
-        Label numberOfTasks = new Label();
-        numberOfTasks.setText(String.valueOf(TaskList.instance.getNumberOfTasks()));
-
-        Container totalTasksContainer = getTotalTasksContainer();
-        totalTasksContainer.add(numberOfTasks);
-
-        toolbar.addComponent(BorderLayout.WEST, totalTasksContainer);
-    }
 
     /**
      * Creates a baseline Toolbar and adds any taskList specific features
