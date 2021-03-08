@@ -37,6 +37,10 @@ public class TaskList extends Container {
         TaskList.instance = this;
     }
 
+    public int getNumberOfTasks() {
+        return (instance.activeList.size() + instance.inactiveList.size());
+    }
+
     /**
      * Refreshes the content of the taskList Container
      * This static method is for outside code to use

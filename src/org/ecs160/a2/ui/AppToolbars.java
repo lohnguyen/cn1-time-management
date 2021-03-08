@@ -1,10 +1,10 @@
 package org.ecs160.a2.ui;
 
-import com.codename1.ui.Button;
-import com.codename1.ui.Form;
-import com.codename1.ui.Image;
-import com.codename1.ui.Toolbar;
+import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.plaf.RoundBorder;
+import com.codename1.ui.plaf.Style;
+import org.ecs160.a2.models.Task;
 
 import java.io.IOException;
 
@@ -52,8 +52,27 @@ public class AppToolbars {
     private Toolbar createBaseToolbar() {
         Toolbar toolbar = new Toolbar();
         current.setToolbar(toolbar);
+        displayTotalTasks(toolbar);
         addNewTaskButton(toolbar);
         return toolbar;
+    }
+
+    private Container getTotalTasksContainer() {
+        Container container = new Container();
+        Style style = container.getAllStyles();
+        style.setBgTransparency(255);
+        style.setBorder(RoundBorder.create().rectangle(true).color(0xEB5160));
+        return container;
+    }
+
+    public void displayTotalTasks(Toolbar toolbar) {
+        Label numberOfTasks = new Label();
+        numberOfTasks.setText(String.valueOf(TaskList.instance.getNumberOfTasks()));
+
+        Container totalTasksContainer = getTotalTasksContainer();
+        totalTasksContainer.add(numberOfTasks);
+
+        toolbar.addComponent(BorderLayout.WEST, totalTasksContainer);
     }
 
     /**
