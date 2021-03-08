@@ -20,16 +20,14 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
-    public Toolbar toolbar;
     private String searchString;
 
-    public TaskList(Toolbar currentToolBar) {
+    public TaskList() {
         super(BoxLayout.y());
         this.setScrollableY(true);
 
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
-        this.toolbar = currentToolBar;
         this.searchString = "";
 
         this.configContainer();
