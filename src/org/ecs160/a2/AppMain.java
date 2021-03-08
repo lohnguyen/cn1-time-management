@@ -26,6 +26,9 @@ public class AppMain {
    private Form current;
    private Resources theme;
    public static TaskList taskList;
+   private Toolbar toolbar;
+   private Toolbar taskListToolbar;
+   private Toolbar summaryToolbar;
 
    public void init(Object context) {
       // use two network threads instead of one
@@ -63,8 +66,15 @@ public class AppMain {
 
       current = new Form("Task Management App", new BorderLayout());
 
-      setToolbar();
+
+      this.summaryToolbar = setToolbar();
+      this.taskListToolbar = setToolbar();
+      //setToolbar();
       setBottomTabs();
+
+      TaskList.addSearch();
+
+      current.setToolbar(this.taskListToolbar);
 
       current.show();
    }
@@ -77,7 +87,7 @@ public class AppMain {
       }
    }
 
-   private void setToolbar() {
+   private Toolbar setToolbar() {
       Toolbar toolbar = new Toolbar();
       current.setToolbar(toolbar);
       toolbar.setTitle("Tasks");
@@ -92,6 +102,7 @@ public class AppMain {
       }
 
       toolbar.addComponent(BorderLayout.EAST, addButton);
+      return toolbar;
    }
 
    private void setBottomTabs() {
@@ -104,7 +115,7 @@ public class AppMain {
       Tabs tabs = new Tabs();
 
       current.add(BorderLayout.CENTER, tabs);
-      tabs.addTab("Tasks", taskIcon, new TaskList(this.current.getToolbar()));
+      tabs.addTab("Tasks", taskIcon, new TaskList(this.taskListToolbar));
       tabs.addTab("Summary", summaryIcon, new Summary());
       tabs.setSwipeActivated(false); // Disable the swipe to prevent competition with the cards
 
@@ -112,8 +123,15 @@ public class AppMain {
       tabs.addSelectionListener((oldTabIndex, newTabIndex) -> {
          if (newTabIndex == 0) {
             System.out.println("tab index 0, taskList tab");
+            this.current.setToolbar(this.taskListToolbar);
+//            TaskList.addSearch();
+//            this.current.revalidate();
+//            System.out.println("added search");
          } else {
             System.out.println("tab index 1, summary tab");
+            this.current.setToolbar(this.summaryToolbar);
+//            this.current.revalidate();
+//            System.out.println("removed search");
          }
       });
    }

@@ -19,7 +19,7 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
-    private Toolbar toolbar;
+    public Toolbar toolbar;
     private String searchString;
 
     public TaskList(Toolbar currentToolBar) {
@@ -31,7 +31,6 @@ public class TaskList extends Container {
         this.toolbar = currentToolBar;
         this.searchString = "";
 
-        this.configContainer();
         this.refreshContainer();
 
         TaskList.instance = this;
@@ -47,6 +46,12 @@ public class TaskList extends Container {
         }
     }
 
+    public static void addSearch() {
+        if (instance != null) {
+            instance.addSearchCommand();
+        }
+    }
+
     /**
      * Refreshes the content of the taskList Container
      */
@@ -55,6 +60,7 @@ public class TaskList extends Container {
         this.configContainer();
         this.loadData();
         this.addLists();
+        this.addSearchCommand();
     }
 
     /**
@@ -88,6 +94,9 @@ public class TaskList extends Container {
      */
     private void configContainer() {
         this.addPullToRefresh(this::refreshContainer);
+    }
+
+    private void addSearchCommand() {
         this.toolbar.addSearchCommand(e -> {
             this.searchString = (String)e.getSource();
             this.refreshContainer();
