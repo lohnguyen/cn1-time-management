@@ -62,35 +62,49 @@ public class SummaryTags extends UpdateableContainer implements AppConstants {
         this.add(this.stats);
     }
 
-    // filter a task list for the specified size
-    private List<Task> filterTaskList(List<Task> taskList, String size) {
-        List<Task> returnList = new ArrayList<Task>();
-        for (Task task : taskList) {
-            if (task.getTags().contains(size)) returnList.add(task);
-        }
-        return returnList;
-    }
-
+    // build the tags picker option for the given task list
     private void buildTagsPicker(List<Task> taskList) {
+        // clear each time (inefficient)
         this.tagsList.clear();
+
+        // 
         for (Task task : taskList) {
             for (String tag : task.getTags()) {
                 this.tagsList.add(tag);
             }
         }
+
+        // converto array and set the strings of the picker
         String[] tags = tagsList.toArray(new String[tagsList.size()]);
         this.tagsPicker.setStrings(tags);
     }
 
+    // filter a task list for the specified tag
+    private List<Task> filterTaskList(List<Task> taskList, String tag) {
+        List<Task> returnList = new ArrayList<Task>();
+        for (Task task : taskList) {
+            if (task.getTags().contains(tag)) returnList.add(task);
+        }
+        return returnList;
+    }
+
     /**
      * Update the sub containers after filtering the Task List for the current
-     * size
+     * size.
+     * 
+     * Note: Called each time a different picker option is selected and when the
+     * page is refreshed
      */
     @Override
     public void updateContainer(List<Task> taskList) {   
+        // build the picker selections
         this.buildTagsPicker(taskList);
+
+        // filter the list
         List<Task> filteredList;
         filteredList = filterTaskList(taskList, tagsPicker.getSelectedString());
+
+        // update the sub containers with the filtered list
         this.tasks.updateContainer(filteredList);
         this.sizes.updateContainer(filteredList);
         this.stats.updateContainer(filteredList);
