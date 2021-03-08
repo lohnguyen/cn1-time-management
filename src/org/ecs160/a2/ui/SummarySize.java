@@ -68,8 +68,11 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
      */
     @Override
     public void updateContainer(List<Task> taskList) {   
+        // filter the task list
         List<Task> filteredList;
         filteredList = filterTaskList(taskList, sizePicker.getSelectedString());
+
+        // update the sub containers with that filtered list
         this.tasks.updateContainer(filteredList);
         this.stats.updateContainer(filteredList);
     }
