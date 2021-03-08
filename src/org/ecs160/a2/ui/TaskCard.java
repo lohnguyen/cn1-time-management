@@ -108,7 +108,7 @@ public class TaskCard extends Container implements AppConstants {
         Command cancel = new Command("Cancel");
         Command[] commands = new Command[]{delete, cancel};
         Command choice = Dialog.show("Delete this task",
-                "Are you sure you want to delete" + task.getTitle(),
+                "Are you sure you want to delete " + task.getTitle() + "?",
                 commands);
 
         if (choice == cancel) return;
