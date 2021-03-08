@@ -32,6 +32,7 @@ public class TaskDetail extends Form implements AppConstants {
         addDescription();
         addTags();
         addTotalTime();
+        addTimeline();
     }
 
     private void addTitle() {
@@ -43,6 +44,7 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private void addSize() {
+        addHeader("Size");
         Label size = new Label(task.getSize());
         add(size);
     }
@@ -54,7 +56,10 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addDescription() {
         addHeader("Description");
-        add(new Label(task.getDescription()));
+        String description = task.getDescription();
+        if (description.equals(""))
+            description = task.getTitle() + " has no descriptions yet!.";
+        add(new Label(description));
     }
 
     private FontImage getTagIcon() {
@@ -86,6 +91,12 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addTags() {
         addHeader("Tags");
+
+        if (task.getTags().size() == 0) {
+            add(new Label(task.getTitle() + " has no tags yet!"));
+            return;
+        }
+
         Container container = new Container(new FlowLayout());
         for (String t : task.getTags()) container.add(getTag(t));
         add(container);
@@ -98,9 +109,18 @@ public class TaskDetail extends Form implements AppConstants {
         return FlowLayout.encloseCenter(start, arrow, end);
     }
 
-    private void addTotalTime() {
+    private void addTimeline() {
         addHeader("Timeline");
         for (TimeSpan s : task.getTimeSpans()) add(getSpanStr(s));
+    }
+
+    private void addTotalTime() {
+        addHeader("Total Time");
+        Label totalTime = new Label(task.getTotalTimeStr());
+        Style style = totalTime.getAllStyles();
+        style.setFont(UIUtils.getTitleFont());
+        style.setAlignment(Component.CENTER);
+        add(totalTime);
     }
 
     private void setToolbar() {
