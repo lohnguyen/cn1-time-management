@@ -10,7 +10,6 @@ import com.codename1.ui.Container;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.RoundRectBorder;
-import com.codename1.ui.plaf.Style;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.ui.containers.UpdateableContainer;
