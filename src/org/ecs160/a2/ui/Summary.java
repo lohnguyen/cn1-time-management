@@ -34,10 +34,6 @@ public class Summary extends UpdateableContainer implements AppConstants {
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.setScrollableY(true); // can scroll vertically
-
-        // title
-        this.add(UIUtils.createLabel("Summary", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_TITLE));
         
         // setup pages list
         this.pages = new HashMap<>();
