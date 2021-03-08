@@ -77,7 +77,7 @@ public class TaskEditor extends Dialog {
 
     private void addTaskToDatabase() {
         Task newTask = new Task(taskTitle.getText(), taskDescription.getText(),
-                taskSize.getText(), extractTags());
+                getSizeText(), extractTags());
         Database.write(Task.OBJECT_ID, newTask);
         dispose();
         TaskList.refresh();
@@ -86,11 +86,15 @@ public class TaskEditor extends Dialog {
     private void editTaskInDatabase() {
         task.setTitle(taskTitle.getText());
         task.setDescription(taskDescription.getText());
-        task.setSize(taskSize.getText());
+        task.setSize(getSizeText());
         task.setTags(extractTags());
         Database.update(Task.OBJECT_ID, task);
         dispose();
         TaskList.refresh();
+    }
+
+    private String getSizeText() {
+        return taskSize.getText().equals("Size") ? "None" : taskSize.getText();
     }
 
     private List<String> extractTags() {
@@ -107,7 +111,7 @@ public class TaskEditor extends Dialog {
         sizeDialog.setLayout(BoxLayout.y());
         sizeDialog.getContentPane().setScrollableY(true);
 
-        List<String> taskSizes =  Task.sizes;
+        List<String> taskSizes = Task.sizes;
 
         for (int i = 0; i < taskSizes.size(); i++) {
             MultiButton oneSizeButton = new MultiButton(taskSizes.get(i));

@@ -25,8 +25,7 @@ public class Task implements Externalizable {
     public static final String COUNTER_ID = "TaskCounter";
 
     // The possible list of sizes
-    public static final List<String> sizes = Arrays.asList("None", "S", "M", 
-                                                           "L", "XL");
+    public static final List<String> sizes = Arrays.asList("S", "M", "L", "XL");
 
     private int id;
     private String title, description, size;
