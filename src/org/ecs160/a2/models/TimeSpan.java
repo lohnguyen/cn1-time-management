@@ -8,17 +8,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 public class TimeSpan implements Externalizable {
 
     public static final String OBJECT_ID = "TimeSpan";
 
-    static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    static DateTimeFormatter dbFormatter = DateTimeFormatter.ISO_DATE_TIME;
+    static DateTimeFormatter uiFormatter = DateTimeFormatter
+            .ofLocalizedDateTime(FormatStyle.SHORT);
 
     /**
      * The start time of a span. Non-null.
@@ -39,11 +39,11 @@ public class TimeSpan implements Externalizable {
     }
 
     public LocalDateTime getStart() {
-        return this.start;
+        return start;
     }
 
     public LocalDateTime getEnd() {
-        return this.end;
+        return end;
     }
 
     public void setStart(LocalDateTime start) {
@@ -55,21 +55,7 @@ public class TimeSpan implements Externalizable {
     }
 
     boolean isRunning() {
-        return this.end == null;
-    }
-
-    /**
-     * Stops the span if it has not been terminated. Set the end at Duration
-     * .now()
-     *
-     * @return whether the span was previously running.
-     */
-    boolean stopSpan() {
-        if (isRunning()) {
-            this.end = LocalDateTime.now();
-            return true;
-        }
-        return false;
+        return end == null;
     }
 
     /**
@@ -79,24 +65,10 @@ public class TimeSpan implements Externalizable {
      */
     boolean stopSpan(LocalDateTime timestamp) {
         if (isRunning()) {
-            this.end = timestamp;
+            end = timestamp;
             return true;
         }
         return false;
-    }
-
-    /**
-     * Get the duration of the span. If still running, then use Duration.now
-     * () as the stop time.
-     *
-     * @return whether the span was previously running.
-     */
-    Duration getDuration() {
-        if (!isRunning()) {
-            return Duration.between(this.start, this.end);
-        } else {
-            return Duration.between(this.start, LocalDateTime.now());
-        }
     }
 
     /**
@@ -104,11 +76,8 @@ public class TimeSpan implements Externalizable {
      * the stop time.
      */
     Duration getDuration(LocalDateTime timestamp) {
-        if (!isRunning()) {
-            return Duration.between(this.start, this.end);
-        } else {
-            return Duration.between(this.start, timestamp);
-        }
+        if (!isRunning()) return Duration.between(this.start, this.end);
+        else return Duration.between(this.start, timestamp);
     }
 
     /**
@@ -120,14 +89,21 @@ public class TimeSpan implements Externalizable {
         for (int i = 0; i < timespans.size(); i++) {
             final TimeSpan span = timespans.get(i);
             if (i != timespans.size() - 1) {
-                duration =
-                        duration.plus(span.getDuration(timespans.get(i + 1).start));
+                duration = duration.plus(span.getDuration(
+                        timespans.get(i + 1).start));
             } else {
-                duration =
-                        duration.plus(span.getDuration(LocalDateTime.now()));
+                duration = duration.plus(span.getDuration(LocalDateTime.now()));
             }
         }
         return duration;
+    }
+
+    /**
+     * Get the time point string in format mm/dd/yy hh:mm AM/PM
+     */
+    static public String getTimeStr(LocalDateTime time) {
+        if (time == null) return "Still In Progress";
+        return uiFormatter.format(time);
     }
 
     @Override
@@ -137,17 +113,17 @@ public class TimeSpan implements Externalizable {
 
     @Override
     public void externalize(DataOutputStream out) throws IOException {
-        Util.writeUTF(start.format(formatter), out);
+        Util.writeUTF(start.format(dbFormatter), out);
         if (end == null) Util.writeUTF("", out);
-        else Util.writeUTF(end.format(formatter), out);
+        else Util.writeUTF(end.format(dbFormatter), out);
     }
 
     @Override
     public void internalize(int version, DataInputStream in) throws IOException {
-        start = LocalDateTime.parse(Util.readUTF(in), formatter);
+        start = LocalDateTime.parse(Util.readUTF(in), dbFormatter);
         String endStr = Util.readUTF(in);
         if (endStr.equals("")) end = null;
-        else end = LocalDateTime.parse(endStr, formatter);
+        else end = LocalDateTime.parse(endStr, dbFormatter);
     }
 
     @Override

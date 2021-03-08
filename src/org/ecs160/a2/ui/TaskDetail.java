@@ -7,6 +7,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
+import org.ecs160.a2.models.TimeSpan;
 import org.ecs160.a2.utils.AppConstants;
 import org.ecs160.a2.utils.UIUtils;
 
@@ -85,21 +86,21 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addTags() {
         addHeader("Tags");
-
         Container container = new Container(new FlowLayout());
-        for (String t : task.getTags()) {
-            container.add(getTag(t));
-        }
+        for (String t : task.getTags()) container.add(getTag(t));
         add(container);
     }
 
+    private Container getSpanStr(TimeSpan span) {
+        Label start = new Label(TimeSpan.getTimeStr(span.getStart()));
+        Label end = new Label(TimeSpan.getTimeStr(span.getEnd()));
+        Label arrow = new Label("", UIUtils.getNextIcon());
+        return FlowLayout.encloseCenter(start, arrow, end);
+    }
+
     private void addTotalTime() {
-        addHeader("Total Time");
-        Label totalTime = new Label(task.getTotalTimeStr());
-        Style style = totalTime.getAllStyles();
-        style.setFont(UIUtils.getTitleFont());
-        style.setAlignment(Component.CENTER);
-        add(totalTime);
+        addHeader("Timeline");
+        for (TimeSpan s : task.getTimeSpans()) add(getSpanStr(s));
     }
 
     private void setToolbar() {
