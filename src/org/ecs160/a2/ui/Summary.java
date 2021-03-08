@@ -56,7 +56,7 @@ public class Summary extends UpdateableContainer implements AppConstants {
         // setup pages
         this.addPage("Everything", new SummaryAll());
         this.addPage("By Size", new SummarySize());
-        this.addPage("By Tags", new SummaryTags());
+        this.addPage("By Tag", new SummaryTags());
 
         // revalidate the button container
         pageButtonContainer.setLayout(new GridLayout(1, this.pages.size()));
