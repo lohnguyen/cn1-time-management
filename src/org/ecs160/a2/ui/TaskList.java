@@ -5,6 +5,7 @@ import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.events.ActionEvent;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
@@ -20,16 +21,14 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
-    private final Toolbar toolbar;
     private String searchString;
 
-    public TaskList(Toolbar currentToolBar) {
+    public TaskList() {
         super(BoxLayout.y());
         this.setScrollableY(true);
 
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
-        this.toolbar = currentToolBar;
         this.searchString = "";
 
         this.configContainer();
@@ -38,6 +37,10 @@ public class TaskList extends Container {
         TaskList.instance = this;
     }
 
+    /**
+     * Refreshes the content of the taskList Container
+     * This static method is for outside code to use
+     */
     public static void refresh() {
         if (instance != null) {
             instance.refreshContainer();
@@ -45,13 +48,48 @@ public class TaskList extends Container {
     }
 
     /**
+     * Adds an event so an outer class can make a change in the taskList on
+     * the event
+     *
+     * @param e the ActionEvent which will cause the change in the taskList
+     */
+    public static void addSearch(ActionEvent e) {
+        if (instance != null) {
+            instance.addSearchEvent(e);
+        }
+    }
+
+    /**
+     * Clears the search string so the taskList shows everything
+     */
+    public static void clearSearch() {
+        if (instance != null) {
+            instance.searchString = "";
+        }
+    }
+
+    /**
+     * Configures anything to do with the Container holding the task list
+     */
+    private void configContainer() {
+        this.addPullToRefresh(this::refreshContainer);
+    }
+
+    /**
      * Refreshes the content of the taskList Container
      */
-    public void refreshContainer() {
+    private void refreshContainer() {
         this.removeAll();
         this.loadData();
         this.addLists();
-        this.revalidate();
+    }
+
+    /**
+     * What to do to the taskList in the case of a search event happening
+     */
+    private void addSearchEvent(ActionEvent e) {
+        this.searchString = (String)e.getSource();
+        this.refreshContainer();
     }
 
     /**
@@ -80,17 +118,6 @@ public class TaskList extends Container {
     }
 
     /**
-     * Configures anything to do with the Container holding the task list
-     */
-    private void configContainer() {
-        this.addPullToRefresh(this::refreshContainer);
-        this.toolbar.addSearchCommand(e -> {
-            this.searchString = (String)e.getSource();
-            this.refreshContainer();
-        });
-    }
-
-    /**
      * Adds the task lists to the taskList Container
      */
     private void addLists() {
@@ -115,7 +142,7 @@ public class TaskList extends Container {
 
     private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
         Accordion tasksAccordion = new Accordion();
-        tasksAccordion.setScrollableY(false);
+        tasksAccordion.setScrollableY(true);
 
         int taskCountForLabel = tasks.size();
 
@@ -214,9 +241,6 @@ public class TaskList extends Container {
      */
     private boolean substringInTags(Task task, String substring) {
         for (String tag : task.getTags()) {
-            System.out.println(
-                    "tag: '" + tag + "'\n" +
-                            "substring: '" + this.searchString + "'");
             if (tag.toLowerCase(Locale.ROOT).contains(
                     substring.toLowerCase(Locale.ROOT))) {
                 return true;
