@@ -3,6 +3,8 @@ package org.ecs160.a2.ui;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 
+import org.ecs160.a2.ui.containers.UpdateableContainer;
+
 public class AppTabs extends Tabs {
     public static AppTabs instance;
     private Form current;
@@ -83,5 +85,10 @@ public class AppTabs extends Tabs {
      */
     private void selectSummaryTab() {
         current.setToolbar(AppToolbars.getSummaryToolbar());
-    }
+
+        // update container properly
+        UpdateableContainer container;
+        container = ((UpdateableContainer) this.getTabComponentAt(1));
+        container.updateContainer(null);
+   }
 }
