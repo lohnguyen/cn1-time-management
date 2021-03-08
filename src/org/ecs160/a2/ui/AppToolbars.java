@@ -9,6 +9,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import java.io.IOException;
 
 public class AppToolbars {
+    public static AppToolbars instance;
     private Form current;
     private static Toolbar taskListToolbar;
     private static Toolbar summaryToolbar;
@@ -17,6 +18,7 @@ public class AppToolbars {
         this.current = current;
         taskListToolbar = createTaskListToolbar();
         summaryToolbar = createSummaryToolbar();
+        AppToolbars.instance = this;
     }
 
     /**
@@ -31,6 +33,14 @@ public class AppToolbars {
      */
     public static Toolbar getSummaryToolbar() {
         return summaryToolbar;
+    }
+
+    /**
+     * Resets the TaskListToolbar because CodeNameOne has a bug when
+     * switching to a toolbar that has a search in progress
+     */
+    public static void resetTaskListToolbar() {
+        taskListToolbar = instance.createTaskListToolbar();
     }
 
     /**

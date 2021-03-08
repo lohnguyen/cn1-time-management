@@ -48,7 +48,6 @@ public class AppMain {
                  null);
       });
 
-      Database.reset();
       Database.init();
    }
 

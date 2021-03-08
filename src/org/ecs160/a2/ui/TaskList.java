@@ -59,6 +59,15 @@ public class TaskList extends Container {
     }
 
     /**
+     * Clears the search string so the taskList shows everything
+     */
+    public static void clearSearch() {
+        if (instance != null) {
+            instance.searchString = "";
+        }
+    }
+
+    /**
      * Configures anything to do with the Container holding the task list
      */
     private void configContainer() {
@@ -124,8 +133,6 @@ public class TaskList extends Container {
      * @param tasks The list of tasks that are of type <label>
      */
     private void listTasks(String label, ArrayList<Task> tasks) {
-
-
         tasks = this.searchTasks(tasks);
 
         Accordion tasksAccordion = new Accordion();

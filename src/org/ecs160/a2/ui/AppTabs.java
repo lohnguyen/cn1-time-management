@@ -1,6 +1,7 @@
 package org.ecs160.a2.ui;
 
 import com.codename1.ui.*;
+import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BorderLayout;
 
 public class AppTabs extends Tabs {
@@ -72,16 +73,17 @@ public class AppTabs extends Tabs {
      * What happens when the taskList tab is selected
      */
     private void selectTaskListTab() {
-        this.current.setToolbar(AppToolbars.getTaskListToolbar());
+        AppToolbars.resetTaskListToolbar();
+        current.setToolbar(AppToolbars.getTaskListToolbar());
+        TaskList.clearSearch();
         TaskList.refresh();
-        this.current.revalidate();
     }
 
     /**
      * What happens when the summary tab is selected
      */
     private void selectSummaryTab() {
-        this.current.setToolbar(AppToolbars.getSummaryToolbar());
-        this.current.revalidate();
+        TaskList.clearSearch();
+        current.setToolbar(AppToolbars.getSummaryToolbar());
     }
 }
