@@ -11,15 +11,14 @@ public interface AppConstants {
     Font NATIVE_ITAL_REGULAR = Font.createTrueTypeFont("native:ItalicRegular");
     Font NATIVE_ITAL_BOLD = Font.createTrueTypeFont("native:ItalicBold");
 
-    float FONT_SIZE_TITLE = 8.0f;
-    float FONT_SIZE_SUB_TITLE = 5.0f;
+    float FONT_SIZE_TITLE = 5.0f;
+    float FONT_SIZE_SUB_TITLE = 4.0f;
     float FONT_SIZE_REGULAR = 3.0f;
+    float FONT_SIZE_TIME = 8.0f;
 
     int COLOR_TITLE = 0x000000;
     int COLOR_REGULAR = 0x000000;
 
     float ICON_SIZE_TOOLBAR = 4.7f;
-
-    long MILIS_TO_HOURS = 3600000L;
 
 }

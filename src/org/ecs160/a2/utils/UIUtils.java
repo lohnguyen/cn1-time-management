@@ -18,13 +18,13 @@ public class UIUtils implements AppConstants {
      * 
      * @return The newly generated label
      */
-    public static Label createLabel (String labelText, Font style, 
-                                                       int color, 
-                                                       float fontSize) {
+    public static Label createLabel (String labelText, Font style,
+                                     int color,
+                                     float fontSize) {
         Label label = new Label(labelText);
 
         int pixelSize = Display.getInstance().convertToPixels(fontSize);
-        label.getAllStyles().setFont(style.derive(pixelSize, 
+        label.getAllStyles().setFont(style.derive(pixelSize,
                                                   Font.STYLE_PLAIN));
         label.getAllStyles().setFgColor(color);
 
