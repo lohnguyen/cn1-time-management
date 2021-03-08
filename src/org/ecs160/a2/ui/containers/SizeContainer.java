@@ -22,6 +22,7 @@ public class SizeContainer extends UpdateableContainer
     private SpanLabel sizesLabel;
     private Label totalLabel;
 
+    // inner container constructor
     public SizeContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.sizesLabel = UIUtils.createSpanLabel("",
@@ -36,6 +37,24 @@ public class SizeContainer extends UpdateableContainer
         this.add(this.totalLabel);
     }
 
+    // get size totals for each map available in the task list
+    private Map<String, Long> getTaskSizeTotals (List<Task> taskList) {
+        // use a map to keep track of the current totals for the sizes
+        Map<String, Long> returnMap = new HashMap<String, Long>();
+
+        // add up totals for the different sizes
+        for (Task task : taskList) {
+            if (task.getSize().equals("None")) continue; // no empty
+            long sizeTime = task.getTotalTime();
+            if (returnMap.containsKey(task.getSize())) {
+                sizeTime += returnMap.get(task.getSize());
+            }
+            returnMap.put(task.getSize(), sizeTime);
+        }
+
+        return returnMap;
+    }
+
     /**
      * Update the labels to reflect the statistics for each sizes
      */
@@ -46,17 +65,7 @@ public class SizeContainer extends UpdateableContainer
         long totalTime = 0L;
 
         // use a map to keep track of the current totals for the sizes
-        Map<String, Long> sizeStatsMap = new HashMap<String, Long>();
-
-        // add up totals for the different sizes
-        for (Task task : taskList) {
-            if (task.getSize().equals("None")) continue; // no empty
-            long sizeTime = task.getTotalTime();
-            if (sizeStatsMap.containsKey(task.getSize())) {
-                sizeTime += sizeStatsMap.get(task.getSize());
-            }
-            sizeStatsMap.put(task.getSize(), sizeTime);
-        }
+        Map<String, Long> sizeStatsMap = getTaskSizeTotals(taskList);
 
         // make sure label count is proper, then update the text
         Object[] availableSizes = sizeStatsMap.keySet().toArray();

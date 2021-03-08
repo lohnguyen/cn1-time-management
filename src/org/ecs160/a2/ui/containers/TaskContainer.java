@@ -20,6 +20,7 @@ public class TaskContainer extends UpdateableContainer
     private SpanLabel tasksLabel;
     private Label totalLabel;
 
+    // inner container constructor
     public TaskContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.tasksLabel = UIUtils.createSpanLabel("",
@@ -27,7 +28,7 @@ public class TaskContainer extends UpdateableContainer
                                                   COLOR_REGULAR,
                                                   FONT_SIZE_REGULAR);
         this.totalLabel = UIUtils.createLabel("Total Time: 0s",
-                                              NATIVE_ITALIC_LIGHT,
+                                              NATIVE_ITAL_LIGHT,
                                               COLOR_REGULAR,
                                               FONT_SIZE_REGULAR);
         this.add(this.tasksLabel);

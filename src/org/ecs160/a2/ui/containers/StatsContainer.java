@@ -18,6 +18,7 @@ public class StatsContainer extends UpdateableContainer
 
     private SpanLabel statsLabel;
 
+    // inner container constructor
     public StatsContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
         this.statsLabel = UIUtils.createSpanLabel("",

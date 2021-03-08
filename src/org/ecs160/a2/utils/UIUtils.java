@@ -1,15 +1,10 @@
 package org.ecs160.a2.utils;
 
 import com.codename1.components.SpanLabel;
-import com.codename1.ui.Component;
-import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Font;
 import com.codename1.ui.Label;
 import com.codename1.ui.FontImage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UIUtils implements AppConstants {
     
