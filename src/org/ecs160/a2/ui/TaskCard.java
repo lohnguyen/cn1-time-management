@@ -57,8 +57,7 @@ public class TaskCard extends Container implements AppConstants {
                 styleWarn, this::onDeleteButtonClicked);
         buttons.addAll(startButton, editButton, deleteButton);
 
-        Button archiveButton = createButton(FontImage.MATERIAL_ARCHIVE, style,
-                this::onArchiveButtonClicked);
+        Button archiveButton = createArchiveButton(style);
 
         SwipeableContainer swipeContainer = new SwipeableContainer(archiveButton, buttons,
                 multiButton);
@@ -66,7 +65,14 @@ public class TaskCard extends Container implements AppConstants {
         add(swipeContainer);
     }
 
-
+    private Button createArchiveButton(Style style) {
+        if (task.isArchived()) {
+            return createButton(FontImage.MATERIAL_UNARCHIVE, style,
+                    this::onArchiveButtonClicked);
+        }
+        return createButton(FontImage.MATERIAL_ARCHIVE, style,
+                this::onArchiveButtonClicked);
+    }
 
     public TaskCard(Task task) {
         this(task, null, null, null);
@@ -123,8 +129,13 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     private void onArchiveButtonClicked() {
-        task.stop();
-        task.setArchived(true);
+        if (task.isArchived()) {
+            task.setArchived(false);
+        } else {
+            task.stop();
+            task.setArchived(true);
+        }
+
         Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }

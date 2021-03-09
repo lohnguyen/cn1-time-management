@@ -164,7 +164,13 @@ public class TaskList extends Container {
         labelContainer.add(BorderLayout.EAST, new Label(String.valueOf(taskCountForLabel)));
 
         tasksAccordion.addContent(labelContainer, tasksContainer);
-        tasksAccordion.expand(tasksContainer);
+
+        if (label.equals("Archived Tasks")) {
+            tasksAccordion.collapse(tasksContainer);
+        } else {
+            tasksAccordion.expand(tasksContainer);
+        }
+
 
         return tasksAccordion;
     }
