@@ -49,6 +49,10 @@ public class TaskEditor extends Dialog {
         init();
     }
 
+    /**
+     * Initialize view with all the UI. This is also called when a time span is
+     * removed to refresh the view.
+     */
     public void init() {
         constructView();
         setDisposeWhenPointerOutOfBounds(true);
@@ -132,6 +136,10 @@ public class TaskEditor extends Dialog {
         add(BorderLayout.CENTER, form);
     }
 
+    /**
+     * Create a delete button for time intervals' removal
+     * @return A CN1 Button instance
+     */
     private Button getDeleteButton() {
         Button button = new Button("Delete");
         Style s = button.getAllStyles();
@@ -142,6 +150,11 @@ public class TaskEditor extends Dialog {
         return button;
     }
 
+    /**
+     * Listener of delete click to show confirm dialog
+     *
+     * @param span The TimeSpan instance to remove
+     */
     private void onDeleteButtonClicked(TimeSpan span) {
         Command delete = new Command("Delete");
         Command cancel = new Command("Cancel");
