@@ -57,7 +57,8 @@ public class TaskCard extends Container implements AppConstants {
                 styleWarn, this::onDeleteButtonClicked);
         buttons.addAll(startButton, editButton, deleteButton);
 
-        Button archiveButton = createButton(FontImage.MATERIAL_ARCHIVE, style, this::onArchived);
+        Button archiveButton = createButton(FontImage.MATERIAL_ARCHIVE, style,
+                this::onArchiveButtonClicked);
 
         SwipeableContainer swipeContainer = new SwipeableContainer(archiveButton, buttons,
                 multiButton);
@@ -65,9 +66,7 @@ public class TaskCard extends Container implements AppConstants {
         add(swipeContainer);
     }
 
-    private void onArchived() {
-        System.out.println("Archived!");
-    }
+
 
     public TaskCard(Task task) {
         this(task, null, null, null);
@@ -120,6 +119,13 @@ public class TaskCard extends Container implements AppConstants {
         if (choice == cancel) return;
         if (this.onDeleted != null) onDeleted.accept(task);
         Database.delete(Task.OBJECT_ID, task.getID());
+        TaskList.refresh();
+    }
+
+    private void onArchiveButtonClicked() {
+        task.stop();
+        task.setArchived(true);
+        Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }
 

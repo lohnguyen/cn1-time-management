@@ -100,6 +100,7 @@ public class TaskList extends Container {
     private void loadData() {
         this.activeList.clear();
         this.inactiveList.clear();
+        this.archivedList.clear();
         List<Task> allTasks = (List) Database.readAll(Task.OBJECT_ID);
         this.inputTasks(allTasks);
     }
@@ -127,7 +128,7 @@ public class TaskList extends Container {
     private void addLists() {
         this.listTasks("Active Tasks", this.activeList);
         this.listTasks("Inactive Tasks", this.inactiveList);
-        this.listTasks("Archived Tasks", this.activeList);
+        this.listTasks("Archived Tasks", this.archivedList);
     }
 
     /**
@@ -166,43 +167,6 @@ public class TaskList extends Container {
         tasksAccordion.expand(tasksContainer);
 
         return tasksAccordion;
-    }
-
-    /**
-     * Creates the task type label, either "Active Tasks" or "Inactive Tasks"
-     *
-     * @param label The label of the task, expects "active" or "inactive"
-     *
-     * @return The container holding the task type label
-     */
-    private Container makeTaskTypeLabel(String label) {
-        Container taskTypeCont =
-                new Container(new FlowLayout(Component.CENTER));
-
-        Label taskTypeLabel = new Label(label);
-        if (label.equals("Active Tasks")) {
-            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_ON);
-        } else {
-            taskTypeLabel.setMaterialIcon(FontImage.MATERIAL_ALARM_OFF);
-        }
-        taskTypeCont.addComponent(taskTypeLabel);
-
-        return taskTypeCont;
-    }
-
-    /**
-     * Creates the no tasks label
-     *
-     * @return The container holding the no tasks label
-     */
-    private Container makeNoTaskLabel() {
-        Container emptyCont =
-                new Container(new FlowLayout(Component.CENTER));
-
-        Label emptyLabel = new Label("no tasks");
-        emptyCont.addComponent(emptyLabel);
-
-        return emptyCont;
     }
 
     /**

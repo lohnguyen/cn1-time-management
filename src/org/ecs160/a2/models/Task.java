@@ -121,6 +121,8 @@ public class Task implements Externalizable {
         this.tags = tags;
     }
 
+    public void setArchived(Boolean archived) { this.archived = archived; }
+
     public List<String> getTags() {
         return this.tags;
     }
@@ -260,6 +262,7 @@ public class Task implements Externalizable {
         out.writeLong(totalTime);
         Util.writeObject(tags, out);
         Util.writeObject(timeSpans, out);
+        out.writeBoolean(archived);
     }
 
     /**
@@ -274,6 +277,7 @@ public class Task implements Externalizable {
         totalTime = in.readLong();
         tags = (List<String>) Util.readObject(in);
         timeSpans = (List<TimeSpan>) Util.readObject(in);
+        archived = in.readBoolean();
     }
 
     @Override
