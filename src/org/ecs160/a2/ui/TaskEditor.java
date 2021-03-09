@@ -5,10 +5,12 @@ import com.codename1.components.SpanLabel;
 import com.codename1.io.Log;
 import com.codename1.ui.*;
 
+import com.codename1.ui.animations.CommonTransitions;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.TextModeLayout;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.spinner.Picker;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.models.TimeSpan;
@@ -90,26 +92,6 @@ public class TaskEditor extends Dialog {
     }
 
     /**
-     * Check if the editor is for editing or creating.
-     *
-     * @return whether the editor is for editing or not
-     */
-    private boolean isEditForm() {
-        return task != null;
-    }
-
-    /**
-     * Create a CN1 form with a title and specific layout
-     *
-     * @param title The title for the form
-     * @return A new CN1 Form instance
-     */
-    private Form getForm(String title) {
-        TextModeLayout textLayout = new TextModeLayout(3, 2);
-        return new Form(title, textLayout);
-    }
-
-    /**
      * Create a CN1 picker for time span editing
      *
      * @param ldt The initial time to set the picker
@@ -141,9 +123,41 @@ public class TaskEditor extends Dialog {
                 end.addActionListener(e -> span.setEnd(end.getDate()));
                 form.add(FlowLayout.encloseCenter(start, arrow, end));
             }
+
+            Button delete = getDeleteButton();
+            delete.addActionListener(e -> onDeleteButtonClicked(span));
+            form.add(BorderLayout.EAST, delete);
         }
 
         add(BorderLayout.CENTER, form);
+    }
+
+    private Button getDeleteButton() {
+        Button button = new Button("Delete");
+        Style s = button.getAllStyles();
+        s.setBgColor(0xd62d20);
+        s.setBgTransparency(225);
+        s.setFgColor(0xffffff);
+        s.setMarginBottom(50);
+        return button;
+    }
+
+    private void onDeleteButtonClicked(TimeSpan span) {
+        Command delete = new Command("Delete");
+        Command cancel = new Command("Cancel");
+        Command[] commands = new Command[]{delete, cancel};
+        Command choice = Dialog.show("Delete this time interval",
+                "Are you sure you want to proceed? This action cannot be " +
+                        "reverted.",
+                commands);
+
+        if (choice == cancel) return;
+
+        timeSpans.remove(span);
+        task.setTimeSpans(timeSpans);
+        Database.update(Task.OBJECT_ID, task);
+        TaskList.refresh();
+        init();
     }
 
     /**
@@ -215,8 +229,8 @@ public class TaskEditor extends Dialog {
 
         List<String> taskSizes = Task.sizes;
 
-        for (int i = 0; i < taskSizes.size(); i++) {
-            MultiButton oneSizeButton = new MultiButton(taskSizes.get(i));
+        for (String size : taskSizes) {
+            MultiButton oneSizeButton = new MultiButton(size);
             sizeDialog.add(oneSizeButton);
             oneSizeButton.addActionListener(e ->
                     displaySelectedSize(sizeDialog, oneSizeButton, sizeButton)
@@ -236,6 +250,26 @@ public class TaskEditor extends Dialog {
         sizeButton.setText(oneSizeButton.getText());
         sizeDialog.dispose();
         sizeButton.revalidate();
+    }
+
+    /**
+     * Check if the editor is for editing or creating.
+     *
+     * @return whether the editor is for editing or not
+     */
+    private boolean isEditForm() {
+        return task != null;
+    }
+
+    /**
+     * Create a CN1 form with a title and specific layout
+     *
+     * @param title The title for the form
+     * @return A new CN1 Form instance
+     */
+    private Form getForm(String title) {
+        TextModeLayout textLayout = new TextModeLayout(3, 2);
+        return new Form(title, textLayout);
     }
 
 }

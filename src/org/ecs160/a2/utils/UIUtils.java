@@ -2,8 +2,6 @@ package org.ecs160.a2.utils;
 
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.*;
-import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 
 public class UIUtils implements AppConstants {
@@ -62,14 +60,6 @@ public class UIUtils implements AppConstants {
     }
 
     /**
-     * Get font for displaying task's title in TaskDetail
-     */
-    public static Font getTitleFont() {
-        return NATIVE_REGULAR.derive(getPixelSize(FONT_SIZE_TITLE),
-                Font.STYLE_PLAIN);
-    }
-
-    /**
      * Get material icon for TaskDetail
      */
     public static FontImage getIcon(char icon, Style style, float size) {
@@ -102,14 +92,6 @@ public class UIUtils implements AppConstants {
         s.setBgColor(0xff884b);
         s.setFgColor(0xffffff);
         return getIcon(FontImage.MATERIAL_LOCAL_OFFER, s, ICON_SIZE_REGULAR);
-    }
-
-    public static Container getIconRoundContainer(int color) {
-        Container container = new Container(new FlowLayout());
-        Style style = container.getAllStyles();
-        style.setBgTransparency(225);
-        style.setBorder(RoundBorder.create().rectangle(true).color(color));
-        return container;
     }
 
 }
