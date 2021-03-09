@@ -19,10 +19,8 @@ public class TaskDetail extends Form implements AppConstants {
 
     TaskDetail(Task t) {
         super(BoxLayout.y());
-
         prev = Display.getInstance().getCurrent();
         task = t;
-
         constructView();
     }
 
@@ -62,13 +60,6 @@ public class TaskDetail extends Form implements AppConstants {
         add(new SpanLabel(description));
     }
 
-    private FontImage getTagIcon() {
-        Style s = new Style();
-        s.setBgColor(0xff884b);
-        s.setFgColor(0xffffff);
-        return FontImage.createMaterial(FontImage.MATERIAL_LOCAL_OFFER, s, 3);
-    }
-
     private Container getTagContainer() {
         Container container = new Container(new FlowLayout());
         Style style = container.getAllStyles();
@@ -80,7 +71,7 @@ public class TaskDetail extends Form implements AppConstants {
 
     private Container getTag(String t) {
         Container tag = getTagContainer();
-        tag.add(getTagIcon());
+        tag.add(UIUtils.getTagIcon());
 
         Label label = new Label(t);
         label.getAllStyles().setFgColor(0xffffff);

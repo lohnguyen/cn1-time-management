@@ -20,5 +20,6 @@ public interface AppConstants {
     int COLOR_REGULAR = 0x000000;
 
     float ICON_SIZE_TOOLBAR = 4.7f;
+    float ICON_SIZE_REGULAR = 3.0f;
 
 }

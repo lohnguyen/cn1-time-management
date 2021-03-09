@@ -171,11 +171,11 @@ public class TaskEditor extends Dialog {
      * Resets task details to update in database
      */
     private void editTaskInDatabase() {
-        task.setTitle(taskTitle.getText());
-        task.setDescription(taskDescription.getText());
-        task.setSize(getSizeText());
-        task.setTags(extractTags());
-        task.setTimeSpans(timeSpans);
+        task.setTitle(taskTitle.getText())
+            .setDescription(taskDescription.getText())
+            .setSize(getSizeText())
+            .setTags(extractTags())
+            .setTimeSpans(timeSpans);
 
         Database.update(Task.OBJECT_ID, task);
         dispose();
