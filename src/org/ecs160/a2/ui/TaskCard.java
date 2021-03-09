@@ -101,6 +101,7 @@ public class TaskCard extends Container implements AppConstants {
     private void onStartButtonClicked() {
         if (!task.isInProgress()) {
             task.start();
+            task.setArchived(false);
             if (onStarted != null) onStarted.accept(task);
         } else {
             task.stop();
