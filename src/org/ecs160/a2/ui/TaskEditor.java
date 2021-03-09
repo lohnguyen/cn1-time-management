@@ -55,7 +55,9 @@ public class TaskEditor extends Dialog {
     }
 
     /**
-     * Add TextFields and Multibuttons to display Task Addition dialog
+     * Construct the editor's view depending on the purpose:
+     *   - With DetailForm for creating a task
+     *   - With DetailForm and TimeSpanForm for editing a task
      */
     private void constructView() {
         setDetailForm();
@@ -69,6 +71,10 @@ public class TaskEditor extends Dialog {
         add(BorderLayout.SOUTH, addButton);
     }
 
+    /**
+     * Attach a CN1 form for all task details (e.g. title, tags, description,
+     * size) and prefill all data if the editor is for editing
+     */
     private void setDetailForm() {
         Form form = getForm("Task Details");
 
@@ -79,20 +85,36 @@ public class TaskEditor extends Dialog {
         taskSize.addActionListener(e -> showSizePopup(taskSize));
 
         if (isEditForm()) fillOutFields();
-
         form.addAll(taskTitle, taskSize, taskTags, taskDescription);
         add(BorderLayout.NORTH, form);
     }
 
+    /**
+     * Check if the editor is for editing or creating.
+     *
+     * @return whether the editor is for editing or not
+     */
     private boolean isEditForm() {
         return task != null;
     }
 
+    /**
+     * Create a CN1 form with a title and specific layout
+     *
+     * @param title The title for the form
+     * @return A new CN1 Form instance
+     */
     private Form getForm(String title) {
         TextModeLayout textLayout = new TextModeLayout(3, 2);
         return new Form(title, textLayout);
     }
 
+    /**
+     * Create a CN1 picker for time span editing
+     *
+     * @param ldt The initial time to set the picker
+     * @return A new CN1 Picker instance
+     */
     private Picker getDateTimePicker(LocalDateTime ldt) {
         Picker picker = new Picker();
         picker.setType(Display.PICKER_TYPE_DATE_AND_TIME);
@@ -100,6 +122,9 @@ public class TaskEditor extends Dialog {
         return picker;
     }
 
+    /**
+     * Attach a CN1 form for editing the task's all time intervals
+     */
     private void setTimeSpanForm() {
         Form form = getForm("Time Intervals");
 
@@ -159,6 +184,7 @@ public class TaskEditor extends Dialog {
 
     /**
      * Gets size text selected from dialog window
+     *
      * @return Returns selected size. If not selected, returns "None"
      */
     private String getSizeText() {
@@ -181,7 +207,6 @@ public class TaskEditor extends Dialog {
      * Searches a list of tasks for specific tag or title
      *
      * @param sizeButton Multibutton holder for all single buttons (one size buttons)
-     *
      */
     private void showSizePopup(MultiButton sizeButton) {
         Dialog sizeDialog = new Dialog();
@@ -206,7 +231,6 @@ public class TaskEditor extends Dialog {
      * @param sizeDialog The dialog to be populated with sizes
      * @param oneSizeButton Single button with a specific size
      * @param sizeButton Multibutton holder for all single buttons (one size buttons)
-     *
      */
     private void displaySelectedSize(Dialog sizeDialog, MultiButton oneSizeButton, MultiButton sizeButton) {
         sizeButton.setText(oneSizeButton.getText());

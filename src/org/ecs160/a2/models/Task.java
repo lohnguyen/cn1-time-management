@@ -227,6 +227,7 @@ public class Task implements Externalizable {
     /**
      * Retrieve the current total time of the stopped time spans as a
      * formatted String
+     *
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
      * milliseconds-to-string-formatted-time-in-java/16520928#16520928
@@ -240,6 +241,7 @@ public class Task implements Externalizable {
     /**
      * Retrieve the current total time of the stopped time spans as a properly
      * formatted String for labels
+     *
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
      * milliseconds-to-string-formatted-time-in-java/16520928#16520928

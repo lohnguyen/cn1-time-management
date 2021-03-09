@@ -38,20 +38,22 @@ public class TimeSpan implements Externalizable {
     public TimeSpan() {
     }
 
-    /*
+    /**
      * Convert Date to LocalDateTime
-     * https://stackoverflow.com/questions/19431234/converting-between-java-
-     * time-localdatetime-and-java-util-date
+     *
+     * Reference: https://stackoverflow.com/questions/19431234/converting-
+     * between-java-time-localdatetime-and-java-util-date
      */
     public static LocalDateTime toLocalDateTime(Date date) {
         Instant instant = Instant.ofEpochMilli(date.getTime());
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
-    /*
+    /**
      * Convert LocalDateTime to Date
-     * https://stackoverflow.com/questions/36286922/convert-localdatetime-to-
-     * date
+     *
+     * Reference: https://stackoverflow.com/questions/36286922/convert-
+     * localdatetime-to-date
      */
     public static Date toDate(LocalDateTime ldt) {
         Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
@@ -79,9 +81,9 @@ public class TimeSpan implements Externalizable {
     }
 
     /**
-     * Stops the span if it has not been terminated. Set the end at timestamp.
+     * Stop the span if it has not been terminated. Set the end at timestamp
      *
-     * @return whether the span was previously running.
+     * @return whether the span was previously running
      */
     boolean stopSpan(LocalDateTime timestamp) {
         if (isRunning()) {
@@ -93,7 +95,7 @@ public class TimeSpan implements Externalizable {
 
     /**
      * Get the duration of the span. If still running, then use timestamp as
-     * the stop time.
+     * the stop time
      */
     Duration getDuration(LocalDateTime timestamp) {
         if (!isRunning()) return Duration.between(this.start, this.end);
@@ -102,7 +104,7 @@ public class TimeSpan implements Externalizable {
 
     /**
      * Get the duration of all the timespans. If the last one is still
-     * running, then use Duration.now() as the stop time.
+     * running, then use Duration.now() as the stop time
      */
     static Duration getTotalDuration(List<TimeSpan> timespans) {
         Duration duration = Duration.ZERO;
