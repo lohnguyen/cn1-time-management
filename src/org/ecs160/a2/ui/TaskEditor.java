@@ -1,6 +1,7 @@
 package org.ecs160.a2.ui;
 
 import com.codename1.components.MultiButton;
+import com.codename1.io.Log;
 import com.codename1.ui.*;
 
 import com.codename1.ui.layouts.BorderLayout;
@@ -23,6 +24,7 @@ public class TaskEditor extends Dialog {
     static public final String TITLE_EDIT = "Edit Task";
 
     private Task task;
+    private List<TimeSpan> timeSpans;
     private final String title;
 
     private TextComponent taskTitle;
@@ -39,6 +41,7 @@ public class TaskEditor extends Dialog {
     public TaskEditor(Task task, String title) {
         super(title, new BorderLayout());
         this.task = task;
+        this.timeSpans = task.getTimeSpans();
         this.title = title;
         init();
     }
@@ -96,11 +99,21 @@ public class TaskEditor extends Dialog {
     private void setTimeSpanForm() {
         Form form = getForm("Time Intervals");
 
-        for (TimeSpan span : task.getTimeSpans()) {
-            Picker startPicker = getDateTimePicker(span.getStart());
-            Picker endPicker = getDateTimePicker(span.getEnd());
+        for (TimeSpan span : timeSpans) {
+            if (span.isRunning()) continue;
+
+            Picker start = getDateTimePicker(span.getStart());
+            start.addActionListener(e -> {
+                span.setStart(start.getDate());
+//                Log.p(start.getDate().toString());
+//                Log.p(timeSpans.get(0).getStart().toString());
+            });
+
+            Picker end = getDateTimePicker(span.getEnd());
+            end.addActionListener(e -> span.setEnd(end.getDate()));
+
             Label arrow = new Label("", UIUtils.getNextIcon());
-            form.add(FlowLayout.encloseCenter(startPicker, arrow, endPicker));
+            form.add(FlowLayout.encloseCenter(start, arrow, end));
         }
 
         add(BorderLayout.CENTER, form);
@@ -135,6 +148,7 @@ public class TaskEditor extends Dialog {
         task.setDescription(taskDescription.getText());
         task.setSize(getSizeText());
         task.setTags(extractTags());
+        task.setTimeSpans(timeSpans);
 
         Database.update(Task.OBJECT_ID, task);
         dispose();

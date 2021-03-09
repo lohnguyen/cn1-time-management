@@ -105,6 +105,12 @@ public class Task implements Externalizable {
         return this.size;
     }
 
+    public List<String> getTags() {
+        return this.tags;
+    }
+
+    public Boolean isArchived() { return this.archived; }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -117,17 +123,16 @@ public class Task implements Externalizable {
         this.size = size;
     }
 
+    public void setTimeSpans(List<TimeSpan> timeSpans) {
+        this.timeSpans = timeSpans;
+        this.totalTime = this.calculateTotalTime().toMillis();
+    }
+
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
     public void setArchived(Boolean archived) { this.archived = archived; }
-
-    public List<String> getTags() {
-        return this.tags;
-    }
-
-    public Boolean isArchived() { return this.archived; }
 
     /**
      * @return The list of accumulated time spans so far for this Task

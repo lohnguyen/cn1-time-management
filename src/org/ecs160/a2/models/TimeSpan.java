@@ -66,15 +66,15 @@ public class TimeSpan implements Externalizable {
         return end;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public void setStart(Date start) {
+        this.start = toLocalDateTime(start);
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setEnd(Date end) {
+        this.end = toLocalDateTime(end);
     }
 
-    boolean isRunning() {
+    public boolean isRunning() {
         return end == null;
     }
 
