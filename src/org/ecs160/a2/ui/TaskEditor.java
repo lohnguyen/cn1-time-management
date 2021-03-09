@@ -1,6 +1,7 @@
 package org.ecs160.a2.ui;
 
 import com.codename1.components.MultiButton;
+import com.codename1.components.SpanLabel;
 import com.codename1.io.Log;
 import com.codename1.ui.*;
 
@@ -58,7 +59,7 @@ public class TaskEditor extends Dialog {
      */
     private void constructView() {
         setDetailForm();
-        setTimeSpanForm();
+        if (isEditForm()) setTimeSpanForm();
 
         Button addButton = new Button(title);
         addButton.addActionListener(e ->  {
@@ -77,10 +78,14 @@ public class TaskEditor extends Dialog {
         taskSize = new MultiButton("Size");
         taskSize.addActionListener(e -> showSizePopup(taskSize));
 
-        if (task != null) fillOutFields();
+        if (isEditForm()) fillOutFields();
 
         form.addAll(taskTitle, taskSize, taskTags, taskDescription);
         add(BorderLayout.NORTH, form);
+    }
+
+    private boolean isEditForm() {
+        return task != null;
     }
 
     private Form getForm(String title) {
@@ -91,7 +96,6 @@ public class TaskEditor extends Dialog {
     private Picker getDateTimePicker(LocalDateTime ldt) {
         Picker picker = new Picker();
         picker.setType(Display.PICKER_TYPE_DATE_AND_TIME);
-        picker.setMinuteStep(1);
         picker.setDate(TimeSpan.toDate(ldt));
         return picker;
     }
@@ -100,20 +104,18 @@ public class TaskEditor extends Dialog {
         Form form = getForm("Time Intervals");
 
         for (TimeSpan span : timeSpans) {
-            if (span.isRunning()) continue;
-
-            Picker start = getDateTimePicker(span.getStart());
-            start.addActionListener(e -> {
-                span.setStart(start.getDate());
-//                Log.p(start.getDate().toString());
-//                Log.p(timeSpans.get(0).getStart().toString());
-            });
-
-            Picker end = getDateTimePicker(span.getEnd());
-            end.addActionListener(e -> span.setEnd(end.getDate()));
-
             Label arrow = new Label("", UIUtils.getNextIcon());
-            form.add(FlowLayout.encloseCenter(start, arrow, end));
+            Picker start = getDateTimePicker(span.getStart());
+            start.addActionListener(e -> span.setStart(start.getDate()));
+
+            if (span.isRunning()) {
+                SpanLabel end = new SpanLabel(TimeSpan.getTimeStr(span.getEnd()));
+                form.add(FlowLayout.encloseCenter(start, arrow, end));
+            } else {
+                Picker end = getDateTimePicker(span.getEnd());
+                end.addActionListener(e -> span.setEnd(end.getDate()));
+                form.add(FlowLayout.encloseCenter(start, arrow, end));
+            }
         }
 
         add(BorderLayout.CENTER, form);
