@@ -105,7 +105,6 @@ public class Database {
      * Read all objects of a class from Storage
      *
      * @param key The Storage's key of the objects to be retrieved
-     *
      * @return List of objects saved in Storage with key
      */
     public static Vector<Object> readAll(String key) {

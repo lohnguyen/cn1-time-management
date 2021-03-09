@@ -6,10 +6,10 @@ import com.codename1.io.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Date;
 import java.util.List;
 
 public class TimeSpan implements Externalizable {
@@ -38,6 +38,28 @@ public class TimeSpan implements Externalizable {
     public TimeSpan() {
     }
 
+    /**
+     * Convert Date to LocalDateTime
+     *
+     * Reference: https://stackoverflow.com/questions/19431234/converting-
+     * between-java-time-localdatetime-and-java-util-date
+     */
+    public static LocalDateTime toLocalDateTime(Date date) {
+        Instant instant = Instant.ofEpochMilli(date.getTime());
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    /**
+     * Convert LocalDateTime to Date
+     *
+     * Reference: https://stackoverflow.com/questions/36286922/convert-
+     * localdatetime-to-date
+     */
+    public static Date toDate(LocalDateTime ldt) {
+        Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
+    }
+
     public LocalDateTime getStart() {
         return start;
     }
@@ -46,22 +68,22 @@ public class TimeSpan implements Externalizable {
         return end;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public void setStart(Date start) {
+        this.start = toLocalDateTime(start);
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setEnd(Date end) {
+        this.end = toLocalDateTime(end);
     }
 
-    boolean isRunning() {
+    public boolean isRunning() {
         return end == null;
     }
 
     /**
-     * Stops the span if it has not been terminated. Set the end at timestamp.
+     * Stop the span if it has not been terminated. Set the end at timestamp
      *
-     * @return whether the span was previously running.
+     * @return whether the span was previously running
      */
     boolean stopSpan(LocalDateTime timestamp) {
         if (isRunning()) {
@@ -73,7 +95,7 @@ public class TimeSpan implements Externalizable {
 
     /**
      * Get the duration of the span. If still running, then use timestamp as
-     * the stop time.
+     * the stop time
      */
     Duration getDuration(LocalDateTime timestamp) {
         if (!isRunning()) return Duration.between(this.start, this.end);
@@ -82,7 +104,7 @@ public class TimeSpan implements Externalizable {
 
     /**
      * Get the duration of all the timespans. If the last one is still
-     * running, then use Duration.now() as the stop time.
+     * running, then use Duration.now() as the stop time
      */
     static Duration getTotalDuration(List<TimeSpan> timespans) {
         Duration duration = Duration.ZERO;

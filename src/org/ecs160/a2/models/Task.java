@@ -105,6 +105,12 @@ public class Task implements Externalizable {
         return this.size;
     }
 
+    public List<String> getTags() {
+        return this.tags;
+    }
+
+    public Boolean isArchived() { return this.archived; }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -117,17 +123,16 @@ public class Task implements Externalizable {
         this.size = size;
     }
 
+    public void setTimeSpans(List<TimeSpan> timeSpans) {
+        this.timeSpans = timeSpans;
+        this.totalTime = this.calculateTotalTime().toMillis();
+    }
+
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
     public void setArchived(Boolean archived) { this.archived = archived; }
-
-    public List<String> getTags() {
-        return this.tags;
-    }
-
-    public Boolean isArchived() { return this.archived; }
 
     /**
      * @return The list of accumulated time spans so far for this Task
@@ -222,6 +227,7 @@ public class Task implements Externalizable {
     /**
      * Retrieve the current total time of the stopped time spans as a
      * formatted String
+     *
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
      * milliseconds-to-string-formatted-time-in-java/16520928#16520928
@@ -235,6 +241,7 @@ public class Task implements Externalizable {
     /**
      * Retrieve the current total time of the stopped time spans as a properly
      * formatted String for labels
+     *
      * Reference: calculate time difference from milliseconds
      * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
      * milliseconds-to-string-formatted-time-in-java/16520928#16520928
