@@ -129,6 +129,11 @@ public class TaskCard extends Container implements AppConstants {
         TaskList.refresh();
     }
 
+    /**
+     * Sets the task's archive field and updates database
+     *
+     */
+
     private void onArchiveButtonClicked() {
         if (task.isArchived()) {
             task.setArchived(false);

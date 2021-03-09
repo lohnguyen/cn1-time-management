@@ -46,6 +46,11 @@ public class TaskEditor extends Dialog {
         show(displayHeight/8, 0, 0, 0);
     }
 
+    /**
+     * Add TextFields and Multibuttons to display Task Addition dialog
+     *
+     */
+
     private void constructView() {
         TextModeLayout textLayout = new TextModeLayout(3, 2);
         Form form = new Form("Enter Task Details", textLayout);
@@ -69,12 +74,22 @@ public class TaskEditor extends Dialog {
         add(BorderLayout.SOUTH, addButton);
     }
 
+    /**
+     * Repopulate task entry dialog for further editing
+     *
+     */
+
     private void fillOutFields() {
         taskTitle.text(task.getTitle());
         taskTags.text(String.join(" ", task.getTags()));
         taskDescription.text(task.getDescription());
         taskSize.setTextLine1(task.getSize());
     }
+
+    /**
+     * Extract task details entered and write into database
+     *
+     */
 
     private void addTaskToDatabase() {
         Task newTask = new Task(taskTitle.getText(), taskDescription.getText(),
@@ -83,6 +98,11 @@ public class TaskEditor extends Dialog {
         dispose();
         TaskList.refresh();
     }
+
+    /**
+     * Resets task details to update in database
+     *
+     */
 
     private void editTaskInDatabase() {
         task.setTitle(taskTitle.getText());
@@ -95,9 +115,19 @@ public class TaskEditor extends Dialog {
         TaskList.refresh();
     }
 
+    /**
+     * Gets size text selected from dialog window
+     * @return Returns selected size. If not selected, returns "None"
+     */
+
     private String getSizeText() {
         return taskSize.getText().equals("Size") ? "None" : taskSize.getText();
     }
+
+    /**
+     * Splits the tags TextField into multiple tags
+     *
+     */
 
     private List<String> extractTags() {
         List<String> tags = new ArrayList<>();
@@ -107,6 +137,13 @@ public class TaskEditor extends Dialog {
         }
         return tags;
     }
+
+    /**
+     * Searches a list of tasks for specific tag or title
+     *
+     * @param sizeButton Multibutton holder for all single buttons (one size buttons)
+     *
+     */
 
     private void showSizePopup(MultiButton sizeButton) {
         Dialog sizeDialog = new Dialog();
@@ -124,6 +161,15 @@ public class TaskEditor extends Dialog {
         }
         sizeDialog.showPopupDialog(sizeButton);
     }
+
+    /**
+     * Searches a list of tasks for specific tag or title
+     *
+     * @param sizeDialog The dialog to be populated with sizes
+     * @param oneSizeButton Single button with a specific size
+     * @param sizeButton Multibutton holder for all single buttons (one size buttons)
+     *
+     */
 
     private void displaySelectedSize(Dialog sizeDialog, MultiButton oneSizeButton, MultiButton sizeButton) {
         sizeButton.setText(oneSizeButton.getText());
