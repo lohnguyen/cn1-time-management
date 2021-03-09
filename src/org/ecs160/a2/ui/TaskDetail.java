@@ -10,12 +10,7 @@ import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.models.TimeSpan;
 import org.ecs160.a2.utils.AppConstants;
-import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.UIUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 public class TaskDetail extends Form implements AppConstants {
 
@@ -63,7 +58,7 @@ public class TaskDetail extends Form implements AppConstants {
         addHeader("Description");
         String description = task.getDescription();
         if (description.equals(""))
-            description = task.getTitle() + " has no descriptions yet!.";
+            description = task.getTitle() + " has no descriptions yet!";
         add(new SpanLabel(description));
     }
 

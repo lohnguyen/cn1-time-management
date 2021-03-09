@@ -6,10 +6,10 @@ import com.codename1.io.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Date;
 import java.util.List;
 
 public class TimeSpan implements Externalizable {
@@ -36,6 +36,26 @@ public class TimeSpan implements Externalizable {
     }
 
     public TimeSpan() {
+    }
+
+    /*
+     * Convert Date to LocalDateTime
+     * https://stackoverflow.com/questions/19431234/converting-between-java-
+     * time-localdatetime-and-java-util-date
+     */
+    public static LocalDateTime toLocalDateTime(Date date) {
+        Instant instant = Instant.ofEpochMilli(date.getTime());
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    /*
+     * Convert LocalDateTime to Date
+     * https://stackoverflow.com/questions/36286922/convert-localdatetime-to-
+     * date
+     */
+    public static Date toDate(LocalDateTime ldt) {
+        Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
     }
 
     public LocalDateTime getStart() {
