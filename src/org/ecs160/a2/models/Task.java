@@ -32,6 +32,7 @@ public class Task implements Externalizable {
     private long totalTime; // total time spent (excluding in progress)
     private List<TimeSpan> timeSpans;
     private List<String> tags;
+    private Boolean archived;
 
     /**
      * Constructor where a title, description, size, and defaults tags need
@@ -55,6 +56,7 @@ public class Task implements Externalizable {
         this.totalTime = 0L;
         this.timeSpans = new ArrayList<>();
         this.tags = tags;
+        this.archived = false;
     }
 
     /**
@@ -119,9 +121,13 @@ public class Task implements Externalizable {
         this.tags = tags;
     }
 
+    public void setArchived(Boolean archived) { this.archived = archived; }
+
     public List<String> getTags() {
         return this.tags;
     }
+
+    public Boolean isArchived() { return this.archived; }
 
     /**
      * @return The list of accumulated time spans so far for this Task
@@ -256,6 +262,7 @@ public class Task implements Externalizable {
         out.writeLong(totalTime);
         Util.writeObject(tags, out);
         Util.writeObject(timeSpans, out);
+        out.writeBoolean(archived);
     }
 
     /**
@@ -270,6 +277,7 @@ public class Task implements Externalizable {
         totalTime = in.readLong();
         tags = (List<String>) Util.readObject(in);
         timeSpans = (List<TimeSpan>) Util.readObject(in);
+        archived = in.readBoolean();
     }
 
     @Override

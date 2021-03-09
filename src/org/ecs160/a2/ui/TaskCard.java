@@ -57,10 +57,21 @@ public class TaskCard extends Container implements AppConstants {
                 styleWarn, this::onDeleteButtonClicked);
         buttons.addAll(startButton, editButton, deleteButton);
 
-        SwipeableContainer swipeContainer = new SwipeableContainer(null, buttons,
+        Button archiveButton = createArchiveButton(style);
+
+        SwipeableContainer swipeContainer = new SwipeableContainer(archiveButton, buttons,
                 multiButton);
 
         add(swipeContainer);
+    }
+
+    private Button createArchiveButton(Style style) {
+        if (task.isArchived()) {
+            return createButton(FontImage.MATERIAL_UNARCHIVE, style,
+                    this::onArchiveButtonClicked);
+        }
+        return createButton(FontImage.MATERIAL_ARCHIVE, style,
+                this::onArchiveButtonClicked);
     }
 
     public TaskCard(Task task) {
@@ -90,6 +101,7 @@ public class TaskCard extends Container implements AppConstants {
     private void onStartButtonClicked() {
         if (!task.isInProgress()) {
             task.start();
+            task.setArchived(false);
             if (onStarted != null) onStarted.accept(task);
         } else {
             task.stop();
@@ -114,6 +126,23 @@ public class TaskCard extends Container implements AppConstants {
         if (choice == cancel) return;
         if (this.onDeleted != null) onDeleted.accept(task);
         Database.delete(Task.OBJECT_ID, task.getID());
+        TaskList.refresh();
+    }
+
+    /**
+     * Sets the task's archive field and updates database
+     *
+     */
+
+    private void onArchiveButtonClicked() {
+        if (task.isArchived()) {
+            task.setArchived(false);
+        } else {
+            task.stop();
+            task.setArchived(true);
+        }
+
+        Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }
 
