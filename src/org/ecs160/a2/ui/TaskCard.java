@@ -57,10 +57,16 @@ public class TaskCard extends Container implements AppConstants {
                 styleWarn, this::onDeleteButtonClicked);
         buttons.addAll(startButton, editButton, deleteButton);
 
-        SwipeableContainer swipeContainer = new SwipeableContainer(null, buttons,
+        Button archiveButton = createButton(FontImage.MATERIAL_ARCHIVE, style, this::onArchived);
+
+        SwipeableContainer swipeContainer = new SwipeableContainer(archiveButton, buttons,
                 multiButton);
 
         add(swipeContainer);
+    }
+
+    private void onArchived() {
+        System.out.println("Archived!");
     }
 
     public TaskCard(Task task) {

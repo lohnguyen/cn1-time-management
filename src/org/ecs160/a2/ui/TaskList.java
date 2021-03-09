@@ -21,6 +21,7 @@ public class TaskList extends Container {
 
     private final ArrayList<Task> activeList;
     private final ArrayList<Task> inactiveList;
+    private final ArrayList<Task> archivedList;
     private String searchString;
 
     public TaskList() {
@@ -29,16 +30,13 @@ public class TaskList extends Container {
 
         this.activeList = new ArrayList<>();
         this.inactiveList = new ArrayList<>();
+        this.archivedList = new ArrayList<>();
         this.searchString = "";
 
         this.configContainer();
         this.refreshContainer();
 
         TaskList.instance = this;
-    }
-
-    public int getNumberOfTasks() {
-        return (instance.activeList.size() + instance.inactiveList.size());
     }
 
     /**
@@ -115,6 +113,8 @@ public class TaskList extends Container {
         for (Task task : allTasks) {
             if (task.isInProgress()) {
                 this.activeList.add(task);
+            } else if (task.isArchived()) {
+                this.archivedList.add(task);
             } else {
                 this.inactiveList.add(task);
             }
@@ -127,6 +127,7 @@ public class TaskList extends Container {
     private void addLists() {
         this.listTasks("Active Tasks", this.activeList);
         this.listTasks("Inactive Tasks", this.inactiveList);
+        this.listTasks("Archived Tasks", this.activeList);
     }
 
     /**
