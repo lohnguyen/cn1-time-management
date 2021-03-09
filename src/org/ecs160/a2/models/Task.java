@@ -111,28 +111,36 @@ public class Task implements Externalizable {
 
     public Boolean isArchived() { return this.archived; }
 
-    public void setTitle(String title) {
+    public Task setTitle(String title) {
         this.title = title;
+        return this;
     }
 
-    public void setDescription(String desc) {
+    public Task setDescription(String desc) {
         this.description = desc;
+        return this;
     }
 
-    public void setSize(String size) {
+    public Task setSize(String size) {
         this.size = size;
+        return this;
     }
 
-    public void setTimeSpans(List<TimeSpan> timeSpans) {
+    public Task setTimeSpans(List<TimeSpan> timeSpans) {
         this.timeSpans = timeSpans;
         this.totalTime = this.calculateTotalTime().toMillis();
+        return this;
     }
 
-    public void setTags(List<String> tags) {
+    public Task setTags(List<String> tags) {
         this.tags = tags;
+        return this;
     }
 
-    public void setArchived(Boolean archived) { this.archived = archived; }
+    public Task setArchived(Boolean archived) {
+        this.archived = archived;
+        return this;
+    }
 
     /**
      * @return The list of accumulated time spans so far for this Task

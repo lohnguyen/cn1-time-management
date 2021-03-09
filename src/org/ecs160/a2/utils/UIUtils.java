@@ -1,10 +1,8 @@
 package org.ecs160.a2.utils;
 
 import com.codename1.components.SpanLabel;
-import com.codename1.ui.Display;
-import com.codename1.ui.Font;
-import com.codename1.ui.Label;
-import com.codename1.ui.FontImage;
+import com.codename1.ui.*;
+import com.codename1.ui.plaf.Style;
 
 public class UIUtils implements AppConstants {
     
@@ -62,32 +60,38 @@ public class UIUtils implements AppConstants {
     }
 
     /**
-     * Get font for displaying task's title in TaskDetail
-     */
-    public static Font getTitleFont() {
-        return NATIVE_REGULAR.derive(getPixelSize(FONT_SIZE_TITLE),
-                Font.STYLE_PLAIN);
-    }
-
-    /**
      * Get material icon for TaskDetail
      */
-    public static FontImage getIcon(char icon, float size) {
-        return FontImage.createMaterial(icon, "TitleCommand", size);
+    public static FontImage getIcon(char icon, Style style, float size) {
+        if (style != null) return FontImage.createMaterial(icon, style, size);
+        else return FontImage.createMaterial(icon, "TitleCommand", size);
+
     }
 
     /**
      * Get material chevron left icon for TaskDetail's toolbar
      */
     public static FontImage getBackIcon() {
-        return getIcon(FontImage.MATERIAL_ARROW_BACK_IOS, ICON_SIZE_TOOLBAR);
+        return getIcon(FontImage.MATERIAL_ARROW_BACK_IOS, null,
+                ICON_SIZE_TOOLBAR);
     }
 
     /**
      * Get material chevron right icon for TaskDetail's toolbar
      */
     public static FontImage getNextIcon() {
-        return getIcon(FontImage.MATERIAL_ARROW_RIGHT_ALT, ICON_SIZE_TOOLBAR);
+        return getIcon(FontImage.MATERIAL_ARROW_RIGHT_ALT, null,
+                ICON_SIZE_TOOLBAR);
+    }
+
+    /**
+     * Get material tag icon for task's tags
+     */
+    public static FontImage getTagIcon() {
+        Style s = new Style();
+        s.setBgColor(0xff884b);
+        s.setFgColor(0xffffff);
+        return getIcon(FontImage.MATERIAL_LOCAL_OFFER, s, ICON_SIZE_REGULAR);
     }
 
 }
