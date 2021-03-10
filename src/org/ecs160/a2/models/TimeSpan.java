@@ -2,6 +2,7 @@ package org.ecs160.a2.models;
 
 import com.codename1.io.Externalizable;
 import com.codename1.io.Util;
+import org.ecs160.a2.utils.TimeUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,50 +15,25 @@ import java.util.List;
 
 public class TimeSpan implements Externalizable {
 
+    // CN1 Storage field for database
     public static final String OBJECT_ID = "TimeSpan";
 
     static DateTimeFormatter dbFormatter = DateTimeFormatter.ISO_DATE_TIME;
     static DateTimeFormatter uiFormatter = DateTimeFormatter
             .ofLocalizedDateTime(FormatStyle.SHORT);
 
-    /**
-     * The start time of a span. Non-null.
-     */
     private LocalDateTime start;
+    private LocalDateTime end;
 
     /**
-     * The end time of a span. If null, it means this span is still running.
+     * Default constructor for CN1 Storage
      */
-    private LocalDateTime end;
+    public TimeSpan() {
+    }
 
     public TimeSpan(LocalDateTime start, LocalDateTime end) {
         this.start = start;
         this.end = end;
-    }
-
-    public TimeSpan() {
-    }
-
-    /**
-     * Convert Date to LocalDateTime
-     *
-     * Reference: https://stackoverflow.com/questions/19431234/converting-
-     * between-java-time-localdatetime-and-java-util-date
-     */
-    public static LocalDateTime toLocalDateTime(Date date) {
-        Instant instant = Instant.ofEpochMilli(date.getTime());
-        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-    }
-
-    /**
-     * Convert LocalDateTime to Date
-     *
-     * Reference: https://stackoverflow.com/questions/36286922/convert-
-     * localdatetime-to-date
-     */
-    public static Date toDate(LocalDateTime ldt) {
-        Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
-        return Date.from(instant);
     }
 
     public LocalDateTime getStart() {
@@ -69,11 +45,11 @@ public class TimeSpan implements Externalizable {
     }
 
     public void setStart(Date start) {
-        this.start = toLocalDateTime(start);
+        this.start = TimeUtils.toLocalDateTime(start);
     }
 
     public void setEnd(Date end) {
-        this.end = toLocalDateTime(end);
+        this.end = TimeUtils.toLocalDateTime(end);
     }
 
     public boolean isRunning() {

@@ -94,4 +94,10 @@ public class UIUtils implements AppConstants {
         return getIcon(FontImage.MATERIAL_LOCAL_OFFER, s, ICON_SIZE_REGULAR);
     }
 
+    public static Style getCardIconStyle(int color) {
+        Font font = NATIVE_LIGHT.derive(Display.getInstance()
+                .convertToPixels(5, true), Font.STYLE_PLAIN);
+        return new Style(color, 0, font, (byte) 0);
+    }
+
 }

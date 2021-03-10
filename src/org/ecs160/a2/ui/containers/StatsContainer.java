@@ -7,7 +7,7 @@ import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
-import org.ecs160.a2.utils.DurationUtils;
+import org.ecs160.a2.utils.TimeUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 /**
@@ -47,13 +47,13 @@ public class StatsContainer extends UpdateableContainer
 
         // update the constant labels
         labelText += " - " + 
-                     DurationUtils.timeAsLabelStr(min) +
+                     TimeUtils.timeAsLabelStr(min) +
                      " minimum\n" +
                      " - " + 
-                     DurationUtils.timeAsLabelStr(max) +
+                     TimeUtils.timeAsLabelStr(max) +
                      " maximum\n" +
                      " - " + 
-                     DurationUtils.timeAsLabelStr(average) +
+                     TimeUtils.timeAsLabelStr(average) +
                      " average";
 
         // update the text of the internal label

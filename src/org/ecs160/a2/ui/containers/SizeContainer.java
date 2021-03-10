@@ -10,7 +10,7 @@ import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
-import org.ecs160.a2.utils.DurationUtils;
+import org.ecs160.a2.utils.TimeUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 /**
@@ -83,13 +83,13 @@ public class SizeContainer extends UpdateableContainer
 
             // update label text
             labelText += " - " +
-                         DurationUtils.timeAsLabelStr(sizeTime) +
+                         TimeUtils.timeAsLabelStr(sizeTime) +
                          " total for " + size;
         }
 
         // update total time label
         this.totalLabel.setText("Total Time: " +
-                                DurationUtils.timeAsLabelStr(totalTime));
+                                TimeUtils.timeAsLabelStr(totalTime));
 
         // update the text of the internal label
         this.sizesLabel.setText(labelText);

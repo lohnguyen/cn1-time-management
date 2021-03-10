@@ -10,6 +10,7 @@ import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.models.TimeSpan;
 import org.ecs160.a2.utils.AppConstants;
+import org.ecs160.a2.utils.TimeUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 public class TaskDetail extends Form implements AppConstants {
@@ -111,7 +112,8 @@ public class TaskDetail extends Form implements AppConstants {
 
     private void addTotalTime() {
         addHeader("Total Time");
-        Label totalTime = UIUtils.createLabel(task.getTotalTimeStr(),
+        Label totalTime = UIUtils.createLabel(
+                TimeUtils.timeAsString(task.getTotalTime()),
                 AppConstants.NATIVE_REGULAR, COLOR_REGULAR, FONT_SIZE_TIME);
         totalTime.getAllStyles().setAlignment(Component.CENTER);
         add(totalTime);

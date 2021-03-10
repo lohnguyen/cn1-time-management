@@ -9,86 +9,61 @@ import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.AppConstants;
-
-import java.util.function.Consumer;
-
+import org.ecs160.a2.utils.TimeUtils;
+import org.ecs160.a2.utils.UIUtils;
 
 public class TaskCard extends Container implements AppConstants {
 
-    static private final Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
-            .convertToPixels(5, true), Font.STYLE_PLAIN);
-    static private final Style style = new Style(0, 0, fnt, (byte) 0);
-    static private final Style styleWarn = new Style(0xF44336, 0, fnt, (byte) 0);
-
     private final Task task;
+    private final Style btnStyle;
 
-    public Consumer<Task> onStarted;
-    public Consumer<Task> onStopped;
-    public Consumer<Task> onDeleted;
-
-    /**
-     * @param task      the task
-     * @param onStarted Called after the task is started to inform TaskList
-     *                  of moving this task into active
-     * @param onStopped Called after the task is stopped to inform TaskList
-     *                  of moving this task into inactive
-     * @param onDeleted Called after the task is removed from the database to
-     *                  inform TaskList to remove this entry
-     */
-    public TaskCard(Task task, Consumer<Task> onStarted,
-                    Consumer<Task> onStopped, Consumer<Task> onDeleted) {
+    public TaskCard(Task task) {
         super(BoxLayout.y());
         this.task = task;
-        this.onStarted = onStarted;
-        this.onStopped = onStopped;
-        this.onDeleted = onDeleted;
+        this.btnStyle = UIUtils.getCardIconStyle(0x000000);
+        constructView();
+    }
 
-        MultiButton multiButton = new MultiButton(task.getTitle());
-        if (task.isInProgress()) multiButton.setTextLine2("In Progress");
-        else multiButton.setTextLine2(task.getTotalTimeStr());
-        multiButton.addActionListener(e -> goToDetail(task));
+    private void constructView() {
+        MultiButton multiBtn = new MultiButton(task.getTitle());
+        if (task.isInProgress()) multiBtn.setTextLine2("In Progress");
+        else multiBtn.setTextLine2(TimeUtils.timeAsString(task.getTotalTime()));
+        multiBtn.addActionListener(e -> goToDetail(task));
 
+        Container rightBtns = createRightButtons();
+        Button archiveBtn = createArchiveButton();
+        add(new SwipeableContainer(archiveBtn, rightBtns, multiBtn));
+    }
+
+    private Container createRightButtons() {
         Container buttons = new Container(new FlowLayout());
 
-        Button startButton = createControlButton();
-        Button editButton = createButton(FontImage.MATERIAL_EDIT, style,
-                this::onEditButtonClicked);
-        Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
-                styleWarn, this::onDeleteButtonClicked);
-        buttons.addAll(startButton, editButton, deleteButton);
+        Button start = createControlButton();
+        Button edit = createButton(FontImage.MATERIAL_EDIT, this::onEdit);
+        Button delete = createButton(FontImage.MATERIAL_REMOVE_CIRCLE, this::onDelete);
 
-        Button archiveButton = createArchiveButton();
+        buttons.addAll(start, edit, delete);
 
-        SwipeableContainer swipeContainer = new SwipeableContainer(
-                archiveButton, buttons, multiButton);
-
-        add(swipeContainer);
+        return buttons;
     }
 
     private Button createArchiveButton() {
-        if (task.isArchived())
-            return createButton(FontImage.MATERIAL_UNARCHIVE, style,
-                    this::onArchiveButtonClicked);
-        return createButton(FontImage.MATERIAL_ARCHIVE, style,
-                this::onArchiveButtonClicked);
+        char i = task.isArchived() ? FontImage.MATERIAL_UNARCHIVE :
+                FontImage.MATERIAL_ARCHIVE;
+        return createButton(i, this::onArchive);
     }
-
-    public TaskCard(Task task) {
-        this(task, null, null, null);
-    }
-
 
     private Button createControlButton() {
-        if (!task.isInProgress())
-            return createButton(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style,
-                    this::onStartButtonClicked);
-        return createButton(FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE, style,
-                this::onStartButtonClicked);
+        char i = !task.isInProgress() ? FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE
+                : FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE;
+        return createButton(i, this::onControl);
     }
 
-    private Button createButton(char icon, Style style, Runnable listener) {
-        Button button = new Button(FontImage.createMaterial(icon, style));
-        button.addActionListener((ev) -> listener.run());
+    private Button createButton(char icon, Runnable listener) {
+        Style s = icon != FontImage.MATERIAL_REMOVE_CIRCLE ? btnStyle :
+                UIUtils.getCardIconStyle(0xF44336);
+        Button button = new Button(FontImage.createMaterial(icon, s));
+        button.addActionListener(e -> listener.run());
         return button;
     }
 
@@ -97,24 +72,22 @@ public class TaskCard extends Container implements AppConstants {
         detail.show();
     }
 
-    private void onStartButtonClicked() {
-        if (!task.isInProgress()) {
+    private void onControl() {
+        if (task.isInProgress()) {
+            task.stop();
+        } else {
             task.start();
             task.setArchived(false);
-            if (onStarted != null) onStarted.accept(task);
-        } else {
-            task.stop();
-            if (onStopped != null) onStopped.accept(task);
         }
         Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }
 
-    private void onEditButtonClicked() {
+    private void onEdit() {
         new TaskEditor(task, TaskEditor.TITLE_EDIT);
     }
 
-    private void onDeleteButtonClicked() {
+    private void onDelete() {
         Command delete = new Command("Delete");
         Command cancel = new Command("Cancel");
         Command[] commands = new Command[]{delete, cancel};
@@ -123,7 +96,6 @@ public class TaskCard extends Container implements AppConstants {
                 commands);
 
         if (choice == cancel) return;
-        if (this.onDeleted != null) onDeleted.accept(task);
         Database.delete(Task.OBJECT_ID, task.getID());
         TaskList.refresh();
     }
@@ -131,7 +103,7 @@ public class TaskCard extends Container implements AppConstants {
     /**
      * Sets the task's archive field and updates database
      */
-    private void onArchiveButtonClicked() {
+    private void onArchive() {
         if (task.isArchived()) {
             task.setArchived(false);
         } else {

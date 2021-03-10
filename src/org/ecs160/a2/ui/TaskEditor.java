@@ -13,6 +13,7 @@ import com.codename1.ui.spinner.Picker;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.models.TimeSpan;
 import org.ecs160.a2.utils.Database;
+import org.ecs160.a2.utils.TimeUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 import java.time.LocalDateTime;
@@ -99,7 +100,7 @@ public class TaskEditor extends Dialog {
     private Picker createDateTimePicker(LocalDateTime ldt) {
         Picker picker = new Picker();
         picker.setType(Display.PICKER_TYPE_DATE_AND_TIME);
-        picker.setDate(TimeSpan.toDate(ldt));
+        picker.setDate(TimeUtils.toDate(ldt));
         return picker;
     }
 
