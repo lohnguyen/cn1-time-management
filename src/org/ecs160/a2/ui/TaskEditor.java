@@ -33,11 +33,17 @@ public class TaskEditor extends Dialog {
     private TextComponent taskDescription;
     private MultiButton taskSize;
 
+    /**
+     * Constructor for creating a task.
+     */
     public TaskEditor(String title) {
         super(title, new BorderLayout());
         init();
     }
 
+    /**
+     * Constructor for editing a task.
+     */
     public TaskEditor(Task task, String title) {
         super(title, new BorderLayout());
         this.task = task;
@@ -116,7 +122,7 @@ public class TaskEditor extends Dialog {
             start.addActionListener(e -> span.setStart(start.getDate()));
 
             if (span.isRunning()) {
-                SpanLabel end = new SpanLabel(TimeSpan.getTimeStr(span.getEnd()));
+                SpanLabel end = UIUtils.createTimeLabel(span.getEnd());
                 form.add(FlowLayout.encloseCenter(start, arrow, end));
             } else {
                 Picker end = createDateTimePicker(span.getEnd());

@@ -8,8 +8,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.List;
 
@@ -17,10 +15,6 @@ public class TimeSpan implements Externalizable {
 
     // CN1 Storage field for database
     public static final String OBJECT_ID = "TimeSpan";
-
-    static DateTimeFormatter dbFormatter = DateTimeFormatter.ISO_DATE_TIME;
-    static DateTimeFormatter uiFormatter = DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.SHORT);
 
     private LocalDateTime start;
     private LocalDateTime end;
@@ -84,24 +78,15 @@ public class TimeSpan implements Externalizable {
      */
     static Duration getTotalDuration(List<TimeSpan> timespans) {
         Duration duration = Duration.ZERO;
-        for (int i = 0; i < timespans.size(); i++) {
-            final TimeSpan span = timespans.get(i);
-            if (i != timespans.size() - 1) {
-                duration = duration.plus(span.getDuration(
-                        timespans.get(i + 1).start));
-            } else {
-                duration = duration.plus(span.getDuration(LocalDateTime.now()));
-            }
-        }
-        return duration;
-    }
 
-    /**
-     * Get the time point string in format mm/dd/yy hh:mm AM/PM
-     */
-    static public String getTimeStr(LocalDateTime time) {
-        if (time == null) return "Still In Progress";
-        return uiFormatter.format(time);
+        for (int i = 0; i < timespans.size(); i++) {
+            TimeSpan span = timespans.get(i);
+            LocalDateTime ldt = (i < timespans.size() - 1) ?
+                    timespans.get(i + 1).start : LocalDateTime.now();
+            duration = duration.plus(span.getDuration(ldt));
+        }
+
+        return duration;
     }
 
     @Override
@@ -111,17 +96,16 @@ public class TimeSpan implements Externalizable {
 
     @Override
     public void externalize(DataOutputStream out) throws IOException {
-        Util.writeUTF(start.format(dbFormatter), out);
+        Util.writeUTF(TimeUtils.timeAsDBString(start), out);
         if (end == null) Util.writeUTF("", out);
-        else Util.writeUTF(end.format(dbFormatter), out);
+        else Util.writeUTF(TimeUtils.timeAsDBString(end), out);
     }
 
     @Override
     public void internalize(int version, DataInputStream in) throws IOException {
-        start = LocalDateTime.parse(Util.readUTF(in), dbFormatter);
+        start = TimeUtils.fromDBString(Util.readUTF(in));
         String endStr = Util.readUTF(in);
-        if (endStr.equals("")) end = null;
-        else end = LocalDateTime.parse(endStr, dbFormatter);
+        end = (endStr.equals("")) ? null : TimeUtils.fromDBString(endStr);
     }
 
     @Override

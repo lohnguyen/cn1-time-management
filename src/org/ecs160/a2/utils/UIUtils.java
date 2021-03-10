@@ -4,6 +4,8 @@ import com.codename1.components.SpanLabel;
 import com.codename1.ui.*;
 import com.codename1.ui.plaf.Style;
 
+import java.time.LocalDateTime;
+
 public class UIUtils implements AppConstants {
     
     /**
@@ -98,6 +100,10 @@ public class UIUtils implements AppConstants {
         Font font = NATIVE_LIGHT.derive(Display.getInstance()
                 .convertToPixels(5, true), Font.STYLE_PLAIN);
         return new Style(color, 0, font, (byte) 0);
+    }
+
+    public static SpanLabel createTimeLabel(LocalDateTime time) {
+        return new SpanLabel(TimeUtils.timeAsUIString(time));
     }
 
 }

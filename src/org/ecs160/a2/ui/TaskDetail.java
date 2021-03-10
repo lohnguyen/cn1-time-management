@@ -95,8 +95,8 @@ public class TaskDetail extends Form implements AppConstants {
     }
 
     private Container getSpanStr(TimeSpan span) {
-        SpanLabel start = new SpanLabel(TimeSpan.getTimeStr(span.getStart()));
-        SpanLabel end = new SpanLabel(TimeSpan.getTimeStr(span.getEnd()));
+        SpanLabel start = UIUtils.createTimeLabel(span.getStart());
+        SpanLabel end = UIUtils.createTimeLabel(span.getEnd());
         Label arrow = new Label("", UIUtils.getNextIcon());
         return FlowLayout.encloseCenter(start, arrow, end);
     }

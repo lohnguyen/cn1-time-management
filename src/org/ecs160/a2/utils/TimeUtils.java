@@ -1,12 +1,20 @@
 package org.ecs160.a2.utils;
 
+import com.codename1.io.Util;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 
 public class TimeUtils {
+
+    static DateTimeFormatter dbFormatter = DateTimeFormatter.ISO_DATE_TIME;
+    static DateTimeFormatter uiFormatter = DateTimeFormatter
+            .ofLocalizedDateTime(FormatStyle.SHORT);
 
     public static String durationStr(Duration duration) {
         if (duration == null) return "N/A";
@@ -75,4 +83,26 @@ public class TimeUtils {
         Instant instant = ldt.atZone(ZoneId.systemDefault()).toInstant();
         return Date.from(instant);
     }
+
+    /**
+     * Parse LocalDateTime to String for db saving
+     */
+    public static String timeAsDBString(LocalDateTime time) {
+        return time.format(dbFormatter);
+    }
+
+    /**
+     * Parse String from db to LocalDateTime
+     */
+    public static LocalDateTime fromDBString(String time) {
+        return LocalDateTime.parse(time, dbFormatter);
+    }
+
+    /**
+     * Get the time point string in format mm/dd/yy hh:mm AM/PM
+     */
+    public static String timeAsUIString(LocalDateTime time) {
+        return time == null ? "Still In Progress" : uiFormatter.format(time);
+    }
+
 }
