@@ -2,10 +2,8 @@ package org.ecs160.a2.ui;
 
 import com.codename1.components.MultiButton;
 import com.codename1.components.SpanLabel;
-import com.codename1.io.Log;
 import com.codename1.ui.*;
 
-import com.codename1.ui.animations.CommonTransitions;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -28,7 +26,6 @@ public class TaskEditor extends Dialog {
 
     private Task task;
     private List<TimeSpan> timeSpans;
-    private final String title;
 
     private TextComponent taskTitle;
     private TextComponent taskTags;
@@ -37,7 +34,6 @@ public class TaskEditor extends Dialog {
 
     public TaskEditor(String title) {
         super(title, new BorderLayout());
-        this.title = title;
         init();
     }
 
@@ -45,7 +41,6 @@ public class TaskEditor extends Dialog {
         super(title, new BorderLayout());
         this.task = task;
         this.timeSpans = task.getTimeSpans();
-        this.title = title;
         init();
     }
 
@@ -69,7 +64,7 @@ public class TaskEditor extends Dialog {
         setDetailForm();
         if (isEditForm()) setTimeSpanForm();
 
-        Button addButton = new Button(title);
+        Button addButton = new Button(isEditForm() ? "Save" : "Create");
         addButton.addActionListener(e ->  {
             if (task == null) addTaskToDatabase();
             else editTaskInDatabase();
@@ -82,7 +77,7 @@ public class TaskEditor extends Dialog {
      * size) and prefill all data if the editor is for editing
      */
     private void setDetailForm() {
-        Form form = getForm("Task Details");
+        Form form = createForm("Task Details");
 
         taskTitle = new TextComponent().label("Title");
         taskTags = new TextComponent().label("Tags");
@@ -101,7 +96,7 @@ public class TaskEditor extends Dialog {
      * @param ldt The initial time to set the picker
      * @return A new CN1 Picker instance
      */
-    private Picker getDateTimePicker(LocalDateTime ldt) {
+    private Picker createDateTimePicker(LocalDateTime ldt) {
         Picker picker = new Picker();
         picker.setType(Display.PICKER_TYPE_DATE_AND_TIME);
         picker.setDate(TimeSpan.toDate(ldt));
@@ -112,23 +107,23 @@ public class TaskEditor extends Dialog {
      * Attach a CN1 form for editing the task's all time intervals
      */
     private void setTimeSpanForm() {
-        Form form = getForm("Time Intervals");
+        Form form = createForm("Time Intervals");
 
         for (TimeSpan span : timeSpans) {
             Label arrow = new Label("", UIUtils.getNextIcon());
-            Picker start = getDateTimePicker(span.getStart());
+            Picker start = createDateTimePicker(span.getStart());
             start.addActionListener(e -> span.setStart(start.getDate()));
 
             if (span.isRunning()) {
                 SpanLabel end = new SpanLabel(TimeSpan.getTimeStr(span.getEnd()));
                 form.add(FlowLayout.encloseCenter(start, arrow, end));
             } else {
-                Picker end = getDateTimePicker(span.getEnd());
+                Picker end = createDateTimePicker(span.getEnd());
                 end.addActionListener(e -> span.setEnd(end.getDate()));
                 form.add(FlowLayout.encloseCenter(start, arrow, end));
             }
 
-            Button delete = getDeleteButton();
+            Button delete = createDeleteButton();
             delete.addActionListener(e -> onDeleteButtonClicked(span));
             form.add(BorderLayout.EAST, delete);
         }
@@ -140,7 +135,7 @@ public class TaskEditor extends Dialog {
      * Create a delete button for time intervals' removal
      * @return A CN1 Button instance
      */
-    private Button getDeleteButton() {
+    private Button createDeleteButton() {
         Button button = new Button("Delete");
         Style s = button.getAllStyles();
         s.setBgColor(0xd62d20);
@@ -188,7 +183,7 @@ public class TaskEditor extends Dialog {
      */
     private void addTaskToDatabase() {
         Task newTask = new Task(taskTitle.getText(), taskDescription.getText(),
-                getSizeText(), extractTags());
+                createSizeText(), extractTags());
         Database.write(Task.OBJECT_ID, newTask);
         dispose();
         TaskList.refresh();
@@ -200,7 +195,7 @@ public class TaskEditor extends Dialog {
     private void editTaskInDatabase() {
         task.setTitle(taskTitle.getText())
             .setDescription(taskDescription.getText())
-            .setSize(getSizeText())
+            .setSize(createSizeText())
             .setTags(extractTags())
             .setTimeSpans(timeSpans);
 
@@ -214,7 +209,7 @@ public class TaskEditor extends Dialog {
      *
      * @return Returns selected size. If not selected, returns "None"
      */
-    private String getSizeText() {
+    private String createSizeText() {
         return taskSize.getText().equals("Size") ? "None" : taskSize.getText();
     }
 
@@ -280,7 +275,7 @@ public class TaskEditor extends Dialog {
      * @param title The title for the form
      * @return A new CN1 Form instance
      */
-    private Form getForm(String title) {
+    private Form createForm(String title) {
         TextModeLayout textLayout = new TextModeLayout(3, 2);
         return new Form(title, textLayout);
     }

@@ -35,9 +35,15 @@ public class Task implements Externalizable {
     private Boolean archived;
 
     /**
+     * Default constructor for Tasks
+     */
+    public Task() {
+    }
+
+    /**
      * Constructor where a title, description, size, and defaults tags need
      * to be specified
-     * 
+     *
      * @param title The title/name of the new Task
      * @param desc  A description of the new Task
      * @param size  The size of the new Task (@see #sizes)
@@ -57,33 +63,6 @@ public class Task implements Externalizable {
         this.timeSpans = new ArrayList<>();
         this.tags = tags;
         this.archived = false;
-    }
-
-    /**
-     * Constructor where a title and description can be specified
-     * 
-     * @param title       The title/name of the new Task
-     * @param description A description of the new Task
-     */
-    public Task(String title, String description) {
-        // take advantage of previous constructor
-        this(title, description, "None", new ArrayList<>());
-    }
-
-    /**
-     * Constructor where a title can be specified
-     * 
-     * @param title The title/name of the new Task
-     */
-    public Task(String title) {
-        this(title, "None");
-    }
-
-    /**
-     * Default constructor for Tasks
-     */
-    public Task() {
-        this("Task");
     }
 
     /**
@@ -244,20 +223,6 @@ public class Task implements Externalizable {
      */
     public String getTotalTimeStr() {
         return DurationUtils.timeAsString(this.totalTime);
-    }
-
-    /**
-     * Retrieve the current total time of the stopped time spans as a properly
-     * formatted String for labels
-     *
-     * Reference: calculate time difference from milliseconds
-     * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
-     * milliseconds-to-string-formatted-time-in-java/16520928#16520928
-     * 
-     * @return The formatted total time as "HR hrs M min S s"
-     */
-    public String getTotalTimeFormattedString() {
-        return DurationUtils.timeAsLabelStr(this.totalTime);
     }
 
     @Override

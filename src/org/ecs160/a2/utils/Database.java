@@ -1,5 +1,6 @@
 package org.ecs160.a2.utils;
 
+import com.codename1.io.Log;
 import com.codename1.io.Storage;
 import com.codename1.io.Util;
 import org.ecs160.a2.models.Task;
@@ -37,6 +38,7 @@ public class Database {
      */
     public static int generateID(String key) {
         int id = readID(key);
+        Log.p(String.valueOf(id));
         db.writeObject(key, id + 1);
         return id;
     }

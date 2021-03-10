@@ -50,26 +50,25 @@ public class TaskCard extends Container implements AppConstants {
 
         Container buttons = new Container(new FlowLayout());
 
-        Button startButton = createControlButton(style);
+        Button startButton = createControlButton();
         Button editButton = createButton(FontImage.MATERIAL_EDIT, style,
                 this::onEditButtonClicked);
         Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
                 styleWarn, this::onDeleteButtonClicked);
         buttons.addAll(startButton, editButton, deleteButton);
 
-        Button archiveButton = createArchiveButton(style);
+        Button archiveButton = createArchiveButton();
 
-        SwipeableContainer swipeContainer = new SwipeableContainer(archiveButton, buttons,
-                multiButton);
+        SwipeableContainer swipeContainer = new SwipeableContainer(
+                archiveButton, buttons, multiButton);
 
         add(swipeContainer);
     }
 
-    private Button createArchiveButton(Style style) {
-        if (task.isArchived()) {
+    private Button createArchiveButton() {
+        if (task.isArchived())
             return createButton(FontImage.MATERIAL_UNARCHIVE, style,
                     this::onArchiveButtonClicked);
-        }
         return createButton(FontImage.MATERIAL_ARCHIVE, style,
                 this::onArchiveButtonClicked);
     }
@@ -79,7 +78,7 @@ public class TaskCard extends Container implements AppConstants {
     }
 
 
-    private Button createControlButton(Style style) {
+    private Button createControlButton() {
         if (!task.isInProgress())
             return createButton(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style,
                     this::onStartButtonClicked);
@@ -131,9 +130,7 @@ public class TaskCard extends Container implements AppConstants {
 
     /**
      * Sets the task's archive field and updates database
-     *
      */
-
     private void onArchiveButtonClicked() {
         if (task.isArchived()) {
             task.setArchived(false);
