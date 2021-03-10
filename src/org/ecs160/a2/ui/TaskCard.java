@@ -9,113 +9,120 @@ import com.codename1.ui.plaf.Style;
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.Database;
 import org.ecs160.a2.utils.AppConstants;
-
-import java.util.function.Consumer;
-
+import org.ecs160.a2.utils.TimeUtils;
+import org.ecs160.a2.utils.UIUtils;
 
 public class TaskCard extends Container implements AppConstants {
 
-    static private final Font fnt = NATIVE_LIGHT.derive(Display.getInstance()
-            .convertToPixels(5, true), Font.STYLE_PLAIN);
-    static private final Style style = new Style(0, 0, fnt, (byte) 0);
-    static private final Style styleWarn = new Style(0xF44336, 0, fnt, (byte) 0);
-
     private final Task task;
-
-    public Consumer<Task> onStarted;
-    public Consumer<Task> onStopped;
-    public Consumer<Task> onDeleted;
-
-    /**
-     * @param task      the task
-     * @param onStarted Called after the task is started to inform TaskList
-     *                  of moving this task into active
-     * @param onStopped Called after the task is stopped to inform TaskList
-     *                  of moving this task into inactive
-     * @param onDeleted Called after the task is removed from the database to
-     *                  inform TaskList to remove this entry
-     */
-    public TaskCard(Task task, Consumer<Task> onStarted,
-                    Consumer<Task> onStopped, Consumer<Task> onDeleted) {
-        super(BoxLayout.y());
-        this.task = task;
-        this.onStarted = onStarted;
-        this.onStopped = onStopped;
-        this.onDeleted = onDeleted;
-
-        MultiButton multiButton = new MultiButton(task.getTitle());
-        if (task.isInProgress()) multiButton.setTextLine2("In Progress");
-        else multiButton.setTextLine2(task.getTotalTimeStr());
-        multiButton.addActionListener(e -> goToDetail(task));
-
-        Container buttons = new Container(new FlowLayout());
-
-        Button startButton = createControlButton(style);
-        Button editButton = createButton(FontImage.MATERIAL_EDIT, style,
-                this::onEditButtonClicked);
-        Button deleteButton = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
-                styleWarn, this::onDeleteButtonClicked);
-        buttons.addAll(startButton, editButton, deleteButton);
-
-        Button archiveButton = createArchiveButton(style);
-
-        SwipeableContainer swipeContainer = new SwipeableContainer(archiveButton, buttons,
-                multiButton);
-
-        add(swipeContainer);
-    }
-
-    private Button createArchiveButton(Style style) {
-        if (task.isArchived()) {
-            return createButton(FontImage.MATERIAL_UNARCHIVE, style,
-                    this::onArchiveButtonClicked);
-        }
-        return createButton(FontImage.MATERIAL_ARCHIVE, style,
-                this::onArchiveButtonClicked);
-    }
+    private final Style btnStyle;
 
     public TaskCard(Task task) {
-        this(task, null, null, null);
+        super(BoxLayout.y());
+        this.task = task;
+        this.btnStyle = UIUtils.createCardIconStyle(0x000000);
+        constructView();
     }
 
+    private void constructView() {
+        MultiButton multiBtn = new MultiButton(task.getTitle());
+        if (task.isInProgress()) multiBtn.setTextLine2("In Progress");
+        else multiBtn.setTextLine2(TimeUtils.timeAsString(task.getTotalTime()));
+        multiBtn.addActionListener(e -> goToDetail(task));
 
-    private Button createControlButton(Style style) {
-        if (!task.isInProgress())
-            return createButton(FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE, style,
-                    this::onStartButtonClicked);
-        return createButton(FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE, style,
-                this::onStartButtonClicked);
+        Container rightBtns = createRightButtons();
+        Button archiveBtn = createArchiveButton();
+        add(new SwipeableContainer(archiveBtn, rightBtns, multiBtn));
     }
 
-    private Button createButton(char icon, Style style, Runnable listener) {
-        Button button = new Button(FontImage.createMaterial(icon, style));
-        button.addActionListener((ev) -> listener.run());
+    /**
+     * Create all the right buttons for the card's Swipable
+     *
+     * @return A CN1 Container of all buttons for the right of Swipeable
+     */
+    private Container createRightButtons() {
+        Container buttons = new Container(new FlowLayout());
+
+        Button start = createControlButton();
+        Button edit = createButton(FontImage.MATERIAL_EDIT, this::onEdit);
+        Button delete = createButton(FontImage.MATERIAL_REMOVE_CIRCLE,
+                this::onDelete);
+
+        buttons.addAll(start, edit, delete);
+
+        return buttons;
+    }
+
+    /**
+     * Create the control button as archive or unarchive
+     *
+     * @return A CN1 Button for the left of Swipeable
+     */
+    private Button createArchiveButton() {
+        char i = task.isArchived() ? FontImage.MATERIAL_UNARCHIVE :
+                FontImage.MATERIAL_ARCHIVE;
+        return createButton(i, this::onArchive);
+    }
+
+    /**
+     * Create the control button as start or stop
+     *
+     * @return A CN1 Button for start or stop
+     */
+    private Button createControlButton() {
+        char i = !task.isInProgress() ? FontImage.MATERIAL_PLAY_CIRCLE_OUTLINE
+                : FontImage.MATERIAL_PAUSE_CIRCLE_OUTLINE;
+        return createButton(i, this::onControl);
+    }
+
+    /**
+     * Create a button for CN1 Swipeable
+     *
+     * @param icon The icon for the button
+     * @param listener The callback for the button's click
+     * @return A CN1 Button
+     */
+    private Button createButton(char icon, Runnable listener) {
+        Style s = icon != FontImage.MATERIAL_REMOVE_CIRCLE ? btnStyle :
+                UIUtils.createCardIconStyle(0xF44336);
+        Button button = new Button(FontImage.createMaterial(icon, s));
+        button.addActionListener(e -> listener.run());
         return button;
     }
 
+    /**
+     * Show all task's details in a new form when user clicks on the card
+     */
     private void goToDetail(Task task) {
         TaskDetail detail = new TaskDetail(task);
         detail.show();
     }
 
-    private void onStartButtonClicked() {
-        if (!task.isInProgress()) {
+    /**
+     * Start or stop the task, update db, and refresh
+     */
+    private void onControl() {
+        if (task.isInProgress()) {
+            task.stop();
+        } else {
             task.start();
             task.setArchived(false);
-            if (onStarted != null) onStarted.accept(task);
-        } else {
-            task.stop();
-            if (onStopped != null) onStopped.accept(task);
         }
         Database.update(Task.OBJECT_ID, task);
         TaskList.refresh();
     }
 
-    private void onEditButtonClicked() {
+    /**
+     * Open up TaskEditor for task editing
+     */
+    private void onEdit() {
         new TaskEditor(task, TaskEditor.TITLE_EDIT);
     }
 
-    private void onDeleteButtonClicked() {
+    /**
+     * Show confirm dialog before deleting task in db and refresh
+     */
+    private void onDelete() {
         Command delete = new Command("Delete");
         Command cancel = new Command("Cancel");
         Command[] commands = new Command[]{delete, cancel};
@@ -124,17 +131,14 @@ public class TaskCard extends Container implements AppConstants {
                 commands);
 
         if (choice == cancel) return;
-        if (this.onDeleted != null) onDeleted.accept(task);
         Database.delete(Task.OBJECT_ID, task.getID());
         TaskList.refresh();
     }
 
     /**
-     * Sets the task's archive field and updates database
-     *
+     * Set the task's archive field and updates database
      */
-
-    private void onArchiveButtonClicked() {
+    private void onArchive() {
         if (task.isArchived()) {
             task.setArchived(false);
         } else {

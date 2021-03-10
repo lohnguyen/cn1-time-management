@@ -4,6 +4,8 @@ import com.codename1.components.SpanLabel;
 import com.codename1.ui.*;
 import com.codename1.ui.plaf.Style;
 
+import java.time.LocalDateTime;
+
 public class UIUtils implements AppConstants {
     
     /**
@@ -16,9 +18,8 @@ public class UIUtils implements AppConstants {
      * 
      * @return The newly generated label
      */
-    public static Label createLabel (String labelText, Font style,
-                                     int color,
-                                     float fontSize) {
+    public static Label createLabel(String labelText, Font style,
+                                     int color, float fontSize) {
         Label label = new Label(labelText);
 
         int pixelSize = Display.getInstance().convertToPixels(fontSize);
@@ -39,9 +40,8 @@ public class UIUtils implements AppConstants {
      * 
      * @return The newly generated label
      */
-    public static SpanLabel createSpanLabel (String labelText, Font style, 
-                                             int color, 
-                                             float fontSize) {
+    public static SpanLabel createSpanLabel(String labelText, Font style,
+                                            int color, float fontSize) {
         SpanLabel label = new SpanLabel(labelText);
 
         int pixelSize = Display.getInstance().convertToPixels(fontSize);
@@ -60,38 +60,57 @@ public class UIUtils implements AppConstants {
     }
 
     /**
-     * Get material icon for TaskDetail
+     * Create material icon for TaskDetail
      */
-    public static FontImage getIcon(char icon, Style style, float size) {
+    public static FontImage createIcon(char icon, Style style, float size) {
         if (style != null) return FontImage.createMaterial(icon, style, size);
         else return FontImage.createMaterial(icon, "TitleCommand", size);
 
     }
 
     /**
-     * Get material chevron left icon for TaskDetail's toolbar
+     * Create material chevron left icon for TaskDetail's toolbar
      */
-    public static FontImage getBackIcon() {
-        return getIcon(FontImage.MATERIAL_ARROW_BACK_IOS, null,
+    public static FontImage createBackIcon() {
+        return createIcon(FontImage.MATERIAL_ARROW_BACK_IOS, null,
                 ICON_SIZE_TOOLBAR);
     }
 
     /**
-     * Get material chevron right icon for TaskDetail's toolbar
+     * Create material chevron right icon for TaskDetail's toolbar
      */
-    public static FontImage getNextIcon() {
-        return getIcon(FontImage.MATERIAL_ARROW_RIGHT_ALT, null,
+    public static FontImage createNextIcon() {
+        return createIcon(FontImage.MATERIAL_ARROW_RIGHT_ALT, null,
                 ICON_SIZE_TOOLBAR);
     }
 
     /**
-     * Get material tag icon for task's tags
+     * Create material tag icon for task's tags
      */
-    public static FontImage getTagIcon() {
+    public static FontImage createTagIcon() {
         Style s = new Style();
         s.setBgColor(0xff884b);
         s.setFgColor(0xffffff);
-        return getIcon(FontImage.MATERIAL_LOCAL_OFFER, s, ICON_SIZE_REGULAR);
+        return createIcon(FontImage.MATERIAL_LOCAL_OFFER, s, ICON_SIZE_REGULAR);
+    }
+
+    /**
+     * Create an icon for TaskCard's Swipeable
+     *
+     * @param color The color for the card icon
+     * @return
+     */
+    public static Style createCardIconStyle(int color) {
+        Font font = NATIVE_LIGHT.derive(Display.getInstance()
+                .convertToPixels(5, true), Font.STYLE_PLAIN);
+        return new Style(color, 0, font, (byte) 0);
+    }
+
+    /**
+     * Create a TimeLabel for UI
+     */
+    public static SpanLabel createTimeLabel(LocalDateTime time) {
+        return new SpanLabel(TimeUtils.timeAsUIString(time));
     }
 
 }

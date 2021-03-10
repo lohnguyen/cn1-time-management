@@ -8,7 +8,7 @@ import com.codename1.ui.layouts.BoxLayout;
 
 import org.ecs160.a2.models.Task;
 import org.ecs160.a2.utils.AppConstants;
-import org.ecs160.a2.utils.DurationUtils;
+import org.ecs160.a2.utils.TimeUtils;
 import org.ecs160.a2.utils.UIUtils;
 
 /**
@@ -57,13 +57,13 @@ public class TaskContainer extends UpdateableContainer
 
             // update label text
             labelText += " - " + 
-                         DurationUtils.timeAsLabelStr(task.getTotalTime()) +
+                         TimeUtils.timeAsLabelStr(task.getTotalTime()) +
                          " total for " + task.getTitle();
         }
 
         // update total time label
         this.totalLabel.setText("Total Time: " +
-                                DurationUtils.timeAsLabelStr(totalTime));
+                                TimeUtils.timeAsLabelStr(totalTime));
 
         // update the text of the internal label
         this.tasksLabel.setText(labelText);

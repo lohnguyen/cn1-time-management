@@ -1,5 +1,6 @@
 package org.ecs160.a2.utils;
 
+import com.codename1.io.Log;
 import com.codename1.io.Storage;
 import com.codename1.io.Util;
 import org.ecs160.a2.models.Task;

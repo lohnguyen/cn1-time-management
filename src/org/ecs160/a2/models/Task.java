@@ -3,7 +3,6 @@ package org.ecs160.a2.models;
 import com.codename1.io.Externalizable;
 import com.codename1.io.Util;
 import org.ecs160.a2.utils.Database;
-import org.ecs160.a2.utils.DurationUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class Task implements Externalizable {
 
-    // Database fields for this object
+    // CN1 Storage fields for database
     public static final String OBJECT_ID = "Task";
     public static final String COUNTER_ID = "TaskCounter";
 
@@ -35,9 +34,17 @@ public class Task implements Externalizable {
     private Boolean archived;
 
     /**
+     * Default constructor for CN1 Storage
+     */
+    public Task() {
+    }
+
+    /**
      * Constructor where a title, description, size, and defaults tags need
-     * to be specified
-     * 
+     * to be specified.
+     * NOTE: This constructor should only be used for creating a new
+     * task to avoid unnecessary id generating
+     *
      * @param title The title/name of the new Task
      * @param desc  A description of the new Task
      * @param size  The size of the new Task (@see #sizes)
@@ -59,36 +66,6 @@ public class Task implements Externalizable {
         this.archived = false;
     }
 
-    /**
-     * Constructor where a title and description can be specified
-     * 
-     * @param title       The title/name of the new Task
-     * @param description A description of the new Task
-     */
-    public Task(String title, String description) {
-        // take advantage of previous constructor
-        this(title, description, "None", new ArrayList<>());
-    }
-
-    /**
-     * Constructor where a title can be specified
-     * 
-     * @param title The title/name of the new Task
-     */
-    public Task(String title) {
-        this(title, "None");
-    }
-
-    /**
-     * Default constructor for Tasks
-     */
-    public Task() {
-        this("Task");
-    }
-
-    /**
-     * @return The auto-generated Task ID
-     */
     public int getID() {
         return this.id;
     }
@@ -230,34 +207,6 @@ public class Task implements Externalizable {
      */
     public long getTotalTime() {
         return this.totalTime;
-    }
-
-    /**
-     * Retrieve the current total time of the stopped time spans as a
-     * formatted String
-     *
-     * Reference: calculate time difference from milliseconds
-     * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
-     * milliseconds-to-string-formatted-time-in-java/16520928#16520928
-     * 
-     * @return The formatted total time as "HR:MIN:SEC"
-     */
-    public String getTotalTimeStr() {
-        return DurationUtils.timeAsString(this.totalTime);
-    }
-
-    /**
-     * Retrieve the current total time of the stopped time spans as a properly
-     * formatted String for labels
-     *
-     * Reference: calculate time difference from milliseconds
-     * https://stackoverflow.com/questions/4142313/convert-timestamp-in-
-     * milliseconds-to-string-formatted-time-in-java/16520928#16520928
-     * 
-     * @return The formatted total time as "HR hrs M min S s"
-     */
-    public String getTotalTimeFormattedString() {
-        return DurationUtils.timeAsLabelStr(this.totalTime);
     }
 
     @Override
