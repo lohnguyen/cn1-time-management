@@ -4,7 +4,6 @@ import com.codename1.components.Accordion;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.events.ActionEvent;
 
 import org.ecs160.a2.models.Task;
@@ -146,22 +145,24 @@ public class TaskList extends Container {
         this.addComponent(tasksAccordion);
     }
 
+    /**
+     * Creates a task accordion full of tasks as task cards
+     *
+     * @param label The label of the task accordion, Active Tasks, Inactive
+     *              Tasks, or Archived Tasks
+     * @param tasks The list of tasks to put in the accordion
+     * @return Returns the accordion container
+     */
     private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
         Accordion tasksAccordion = new Accordion();
         tasksAccordion.setScrollableY(true);
 
         int taskCountForLabel = tasks.size();
 
-        Container tasksContainer =
-                new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        tasksContainer.setScrollableY(false);
-        for (Task task : tasks) {
-            tasksContainer.addComponent(new TaskCard(task));
-        }
+        Container tasksContainer = createAccordionTaskContainer(tasks);
 
-        Container labelContainer = new Container(new BorderLayout());
-        labelContainer.add(BorderLayout.WEST, new Label(label));
-        labelContainer.add(BorderLayout.EAST, new Label(String.valueOf(taskCountForLabel)));
+        Container labelContainer = createAccordionLabelContainer(label,
+                taskCountForLabel);
 
         tasksAccordion.addContent(labelContainer, tasksContainer);
 
@@ -171,8 +172,44 @@ public class TaskList extends Container {
             tasksAccordion.expand(tasksContainer);
         }
 
-
         return tasksAccordion;
+    }
+
+    /**
+     * Creates a container full of task cards to put in the accordion
+     *
+     * @param tasks The tasks to list in the container
+     * @return Returns the container full of the task cards
+     */
+    private Container createAccordionTaskContainer(ArrayList<Task> tasks) {
+        Container tasksContainer =
+                new Container(new BoxLayout(BoxLayout.Y_AXIS));
+
+        tasksContainer.setScrollableY(false);
+        for (Task task : tasks) {
+            tasksContainer.addComponent(new TaskCard(task));
+        }
+
+        return tasksContainer;
+    }
+
+    /**
+     * Creates a container for the label of an accordion
+     *
+     * @param label The tasks to list in the container
+     * @param taskCountForLabel The number of tasks so we can add that to the
+     *                         label
+     * @return Returns the container of the label
+     */
+    private Container createAccordionLabelContainer(String label,
+                                                    int taskCountForLabel) {
+        Container labelContainer = new Container(new BorderLayout());
+
+        labelContainer.add(BorderLayout.WEST, new Label(label));
+        labelContainer.add(BorderLayout.EAST,
+                new Label(String.valueOf(taskCountForLabel)));
+
+        return labelContainer;
     }
 
     /**
