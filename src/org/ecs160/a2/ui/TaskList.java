@@ -4,7 +4,6 @@ import com.codename1.components.Accordion;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.events.ActionEvent;
 
 import org.ecs160.a2.models.Task;
@@ -146,6 +145,14 @@ public class TaskList extends Container {
         this.addComponent(tasksAccordion);
     }
 
+    /**
+     * Creates a task accordion full of tasks as task cards
+     *
+     * @param label The label of the task accordion, Active Tasks, Inactive
+     *              Tasks, or Archived Tasks
+     * @param tasks The list of tasks to put in the accordion
+     * @return Returns the accordion container
+     */
     private Accordion createTasksAccordion(String label, ArrayList<Task> tasks) {
         Accordion tasksAccordion = new Accordion();
         tasksAccordion.setScrollableY(true);
@@ -170,7 +177,6 @@ public class TaskList extends Container {
         } else {
             tasksAccordion.expand(tasksContainer);
         }
-
 
         return tasksAccordion;
     }
