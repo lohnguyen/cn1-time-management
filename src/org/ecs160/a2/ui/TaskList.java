@@ -159,16 +159,10 @@ public class TaskList extends Container {
 
         int taskCountForLabel = tasks.size();
 
-        Container tasksContainer =
-                new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        tasksContainer.setScrollableY(false);
-        for (Task task : tasks) {
-            tasksContainer.addComponent(new TaskCard(task));
-        }
+        Container tasksContainer = createAccordionTaskContainer(tasks);
 
-        Container labelContainer = new Container(new BorderLayout());
-        labelContainer.add(BorderLayout.WEST, new Label(label));
-        labelContainer.add(BorderLayout.EAST, new Label(String.valueOf(taskCountForLabel)));
+        Container labelContainer = createAccordionLabelContainer(label,
+                taskCountForLabel);
 
         tasksAccordion.addContent(labelContainer, tasksContainer);
 
@@ -179,6 +173,43 @@ public class TaskList extends Container {
         }
 
         return tasksAccordion;
+    }
+
+    /**
+     * Creates a container full of task cards to put in the accordion
+     *
+     * @param tasks The tasks to list in the container
+     * @return Returns the container full of the task cards
+     */
+    private Container createAccordionTaskContainer(ArrayList<Task> tasks) {
+        Container tasksContainer =
+                new Container(new BoxLayout(BoxLayout.Y_AXIS));
+
+        tasksContainer.setScrollableY(false);
+        for (Task task : tasks) {
+            tasksContainer.addComponent(new TaskCard(task));
+        }
+
+        return tasksContainer;
+    }
+
+    /**
+     * Creates a container for the label of an accordion
+     *
+     * @param label The tasks to list in the container
+     * @param taskCountForLabel The number of tasks so we can add that to the
+     *                         label
+     * @return Returns the container of the label
+     */
+    private Container createAccordionLabelContainer(String label,
+                                                    int taskCountForLabel) {
+        Container labelContainer = new Container(new BorderLayout());
+
+        labelContainer.add(BorderLayout.WEST, new Label(label));
+        labelContainer.add(BorderLayout.EAST,
+                new Label(String.valueOf(taskCountForLabel)));
+
+        return labelContainer;
     }
 
     /**
