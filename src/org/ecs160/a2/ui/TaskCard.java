@@ -20,13 +20,10 @@ public class TaskCard extends Container implements AppConstants {
     public TaskCard(Task task) {
         super(BoxLayout.y());
         this.task = task;
-        this.btnStyle = UIUtils.getCardIconStyle(0x000000);
+        this.btnStyle = UIUtils.createCardIconStyle(0x000000);
         constructView();
     }
 
-    /**
-     * Construct the card's view
-     */
     private void constructView() {
         MultiButton multiBtn = new MultiButton(task.getTitle());
         if (task.isInProgress()) multiBtn.setTextLine2("In Progress");
@@ -39,7 +36,7 @@ public class TaskCard extends Container implements AppConstants {
     }
 
     /**
-     * Create the control button as a start or stop button
+     * Create all the right buttons for the card's Swipable
      *
      * @return A CN1 Container of all buttons for the right of Swipeable
      */
@@ -87,14 +84,14 @@ public class TaskCard extends Container implements AppConstants {
      */
     private Button createButton(char icon, Runnable listener) {
         Style s = icon != FontImage.MATERIAL_REMOVE_CIRCLE ? btnStyle :
-                UIUtils.getCardIconStyle(0xF44336);
+                UIUtils.createCardIconStyle(0xF44336);
         Button button = new Button(FontImage.createMaterial(icon, s));
         button.addActionListener(e -> listener.run());
         return button;
     }
 
     /**
-     * Show all task's details in a new form
+     * Show all task's details in a new form when user clicks on the card
      */
     private void goToDetail(Task task) {
         TaskDetail detail = new TaskDetail(task);

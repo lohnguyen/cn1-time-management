@@ -117,7 +117,7 @@ public class TaskEditor extends Dialog {
         Form form = createForm("Time Intervals");
 
         for (TimeSpan span : timeSpans) {
-            Label arrow = new Label("", UIUtils.getNextIcon());
+            Label arrow = new Label("", UIUtils.createNextIcon());
             Picker start = createDateTimePicker(span.getStart());
             start.addActionListener(e -> span.setStart(start.getDate()));
 
