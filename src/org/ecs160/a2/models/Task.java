@@ -52,70 +52,70 @@ public class Task implements Externalizable {
      */
     public Task(String title, String desc, String size, List<String> tags) {
         // generate the id
-        this.id = Database.generateID(COUNTER_ID);
+        id = Database.generateID(COUNTER_ID);
 
         // basic task internals
         this.title = title;
         this.description = desc;
         this.size = size;
+        this.tags = tags;
 
         // task time internals
-        this.totalTime = 0L;
-        this.timeSpans = new ArrayList<>();
-        this.tags = tags;
-        this.archived = false;
+        totalTime = 0L;
+        timeSpans = new ArrayList<>();
+        archived = false;
     }
 
     public int getID() {
-        return this.id;
+        return id;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public String getSize() {
-        return this.size;
+        return size;
     }
 
     public List<String> getTags() {
-        return this.tags;
+        return tags;
     }
 
-    public Boolean isArchived() { return this.archived; }
+    public Boolean isArchived() { return archived; }
 
-    public Task setTitle(String title) {
-        this.title = title;
+    public Task setTitle(String newTitle) {
+        title = newTitle;
         return this;
     }
 
-    public Task setDescription(String desc) {
-        this.description = desc;
+    public Task setDescription(String newDesc) {
+        description = newDesc;
         return this;
     }
 
-    public Task setSize(String size) {
-        this.size = size;
+    public Task setSize(String newSize) {
+        size = newSize;
         return this;
     }
 
-    public Task setTimeSpans(List<TimeSpan> timeSpans) {
-        this.timeSpans = timeSpans;
-        this.totalTime = this.calculateTotalTime().toMillis();
+    public Task setTimeSpans(List<TimeSpan> newTimeSpans) {
+        timeSpans = newTimeSpans;
+        totalTime = calculateTotalTime().toMillis();
         return this;
     }
 
-    public Task setTags(List<String> tags) {
-        this.tags = tags;
+    public Task setTags(List<String> newTags) {
+        tags = newTags;
         return this;
     }
 
-    public Task setArchived(Boolean archived) {
-        this.archived = archived;
+    public Task setArchived(Boolean newArchived) {
+        archived = newArchived;
         return this;
     }
 
@@ -123,7 +123,7 @@ public class Task implements Externalizable {
      * @return The list of accumulated time spans so far for this Task
      */
     public List<TimeSpan> getTimeSpans() {
-        return this.timeSpans;
+        return timeSpans;
     }
 
     /**
@@ -133,7 +133,7 @@ public class Task implements Externalizable {
      */
     public TimeSpan getMostRecentTimeSpan() {
         if (timeSpans.size() == 0) return null;
-        else return this.timeSpans.get(timeSpans.size() - 1);
+        else return timeSpans.get(timeSpans.size() - 1);
     }
 
     /**
@@ -142,7 +142,7 @@ public class Task implements Externalizable {
      * @return Boolean that indicates whether the Task is running
      */
     public boolean isInProgress() {
-        TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
+        TimeSpan currentTimeSpan = getMostRecentTimeSpan();
         return currentTimeSpan != null && currentTimeSpan.isRunning();
     }
 
@@ -152,14 +152,12 @@ public class Task implements Externalizable {
      * @param startTime The start time of the new TimeSpan
      */
     public void start(LocalDateTime startTime) {
-        TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
+        TimeSpan currentTimeSpan = getMostRecentTimeSpan();
         // task not running
 
         if (currentTimeSpan == null || (currentTimeSpan != null && 
                                         !currentTimeSpan.isRunning())) {
-            this.timeSpans.add(new TimeSpan(startTime, null));
-        } else {
-            // TODO throw a custom exception if something is running
+            timeSpans.add(new TimeSpan(startTime, null));
         }
     }
 
@@ -167,7 +165,7 @@ public class Task implements Externalizable {
      * Starts the task at the current system time
      */
     public void start() {
-        this.start(LocalDateTime.now());
+        start(LocalDateTime.now());
     }
 
     /**
@@ -176,12 +174,10 @@ public class Task implements Externalizable {
      * @param stopTime The stop time of the currently running TimeSpan
      */
     public void stop(LocalDateTime stopTime) {
-        TimeSpan currentTimeSpan = this.getMostRecentTimeSpan();
+        TimeSpan currentTimeSpan = getMostRecentTimeSpan();
         if (currentTimeSpan != null && currentTimeSpan.isRunning()) {
             currentTimeSpan.stopSpan(stopTime);
-            this.totalTime = this.calculateTotalTime().toMillis();
-        } else {
-            // TODO throw a custom exception if nothing is running
+            totalTime = calculateTotalTime().toMillis();
         }
     }
 
@@ -189,7 +185,7 @@ public class Task implements Externalizable {
      * Stops the task at the current system time
      */
     public void stop() {
-        this.stop(LocalDateTime.now());
+        stop(LocalDateTime.now());
     }
 
     /**
@@ -199,14 +195,14 @@ public class Task implements Externalizable {
      * @return The total time of the time spans as a Duration object
      */
     private Duration calculateTotalTime() {
-        return TimeSpan.getTotalDuration(this.timeSpans);
+        return TimeSpan.getTotalDuration(timeSpans);
     }
 
     /**
      * @return The total time of stopped time spans in miliseconds
      */
     public long getTotalTime() {
-        return this.totalTime;
+        return totalTime;
     }
 
     @Override
