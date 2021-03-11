@@ -35,48 +35,48 @@ public class SummaryTags extends UpdateableContainer implements AppConstants {
     public SummaryTags () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
 
-        this.tagsList = new ArrayList<>();
+        tagsList = new ArrayList<>();
 
         // size picker that updates everything on state change
-        this.tagsPicker = new Picker();
-        this.tagsPicker.setType(Display.PICKER_TYPE_STRINGS);
-        this.tagsPicker.addActionListener((e) -> askParentForUpdate());
-        this.add(this.tagsPicker);
+        tagsPicker = new Picker();
+        tagsPicker.setType(Display.PICKER_TYPE_STRINGS);
+        tagsPicker.addActionListener((e) -> askParentForUpdate());
+        add(tagsPicker);
 
         // Tasks
-        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.tasks = new TaskContainer();
-        this.add(this.tasks);
+        add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        tasks = new TaskContainer();
+        add(tasks);
 
         // Sizes
-        this.add(UIUtils.createLabel("Sizes", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.sizes = new SizeContainer();
-        this.add(this.sizes);  
+        add(UIUtils.createLabel("Sizes", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        sizes = new SizeContainer();
+        add(sizes);  
 
         // Stats
-        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.stats = new StatsContainer();
-        this.add(this.stats);
+        add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        stats = new StatsContainer();
+        add(stats);
     }
 
     // build the tags picker option for the given task list
     private void buildTagsPicker(List<Task> taskList) {
         // clear each time (inefficient)
-        this.tagsList.clear();
+        tagsList.clear();
 
-        // 
+        // buikd the tags list
         for (Task task : taskList) {
             for (String tag : task.getTags()) {
-                this.tagsList.add(tag);
+                tagsList.add(tag);
             }
         }
 
-        // converto array and set the strings of the picker
+        // convert to array and set the strings of the picker
         String[] tags = tagsList.toArray(new String[tagsList.size()]);
-        this.tagsPicker.setStrings(tags);
+        tagsPicker.setStrings(tags);
     }
 
     // filter a task list for the specified tag
@@ -98,15 +98,15 @@ public class SummaryTags extends UpdateableContainer implements AppConstants {
     @Override
     public void updateContainer(List<Task> taskList) {   
         // build the picker selections
-        this.buildTagsPicker(taskList);
+        buildTagsPicker(taskList);
 
         // filter the list
         List<Task> filteredList;
         filteredList = filterTaskList(taskList, tagsPicker.getSelectedString());
 
         // update the sub containers with the filtered list
-        this.tasks.updateContainer(filteredList);
-        this.sizes.updateContainer(filteredList);
-        this.stats.updateContainer(filteredList);
+        tasks.updateContainer(filteredList);
+        sizes.updateContainer(filteredList);
+        stats.updateContainer(filteredList);
     }
 }

@@ -21,11 +21,11 @@ public class StatsContainer extends UpdateableContainer
     // inner container constructor
     public StatsContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
-        this.statsLabel = UIUtils.createSpanLabel("",
-                                                  NATIVE_LIGHT, 
-                                                  COLOR_REGULAR,
-                                                  FONT_SIZE_REGULAR);
-        this.add(this.statsLabel);
+        statsLabel = UIUtils.createSpanLabel("",
+                                             NATIVE_LIGHT, 
+                                             COLOR_REGULAR,
+                                             FONT_SIZE_REGULAR);
+        add(statsLabel);
     }
 
     /**
@@ -57,9 +57,9 @@ public class StatsContainer extends UpdateableContainer
                      " average";
 
         // update the text of the internal label
-        this.statsLabel.setText(labelText);
-        if (labelText.length() == 0) this.statsLabel.setHidden(true);
-        else this.statsLabel.setHidden(false);
-        this.forceRevalidate();
+        statsLabel.setText(labelText);
+        if (labelText.length() == 0) statsLabel.setHidden(true);
+        else statsLabel.setHidden(false);
+        forceRevalidate();
     }
 }

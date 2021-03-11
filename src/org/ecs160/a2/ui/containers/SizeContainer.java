@@ -25,16 +25,16 @@ public class SizeContainer extends UpdateableContainer
     // inner container constructor
     public SizeContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
-        this.sizesLabel = UIUtils.createSpanLabel("",
-                                                  NATIVE_LIGHT, 
-                                                  COLOR_REGULAR,
-                                                  FONT_SIZE_REGULAR);
-        this.totalLabel = UIUtils.createLabel("Total Time: 0s",
-                                              NATIVE_ITAL_LIGHT,
-                                              COLOR_REGULAR,
-                                              FONT_SIZE_REGULAR);
-        this.add(this.sizesLabel);
-        this.add(this.totalLabel);
+        sizesLabel = UIUtils.createSpanLabel("",
+                                             NATIVE_LIGHT, 
+                                             COLOR_REGULAR,
+                                             FONT_SIZE_REGULAR);
+        totalLabel = UIUtils.createLabel("Total Time: 0s",
+                                         NATIVE_ITAL_LIGHT,
+                                         COLOR_REGULAR,
+                                         FONT_SIZE_REGULAR);
+        add(sizesLabel);
+        add(totalLabel);
     }
 
     // get size totals for each map available in the task list
@@ -88,13 +88,13 @@ public class SizeContainer extends UpdateableContainer
         }
 
         // update total time label
-        this.totalLabel.setText("Total Time: " +
-                                TimeUtils.timeAsLabelStr(totalTime));
+        totalLabel.setText("Total Time: " +
+                           TimeUtils.timeAsLabelStr(totalTime));
 
         // update the text of the internal label
-        this.sizesLabel.setText(labelText);
-        if (labelText.length() == 0) this.sizesLabel.setHidden(true);
-        else this.sizesLabel.setHidden(false);
-        this.forceRevalidate();
+        sizesLabel.setText(labelText);
+        if (labelText.length() == 0) sizesLabel.setHidden(true);
+        else sizesLabel.setHidden(false);
+        forceRevalidate();
     }
 }

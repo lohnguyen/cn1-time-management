@@ -23,16 +23,16 @@ public class TaskContainer extends UpdateableContainer
     // inner container constructor
     public TaskContainer () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
-        this.tasksLabel = UIUtils.createSpanLabel("",
-                                                  NATIVE_LIGHT, 
-                                                  COLOR_REGULAR,
-                                                  FONT_SIZE_REGULAR);
-        this.totalLabel = UIUtils.createLabel("Total Time: 0s",
-                                              NATIVE_ITAL_LIGHT,
-                                              COLOR_REGULAR,
-                                              FONT_SIZE_REGULAR);
-        this.add(this.tasksLabel);
-        this.add(this.totalLabel);
+        tasksLabel = UIUtils.createSpanLabel("",
+                                             NATIVE_LIGHT, 
+                                             COLOR_REGULAR,
+                                             FONT_SIZE_REGULAR);
+        totalLabel = UIUtils.createLabel("Total Time: 0s",
+                                         NATIVE_ITAL_LIGHT,
+                                         COLOR_REGULAR,
+                                         FONT_SIZE_REGULAR);
+        add(tasksLabel);
+        add(totalLabel);
     }
 
     /**

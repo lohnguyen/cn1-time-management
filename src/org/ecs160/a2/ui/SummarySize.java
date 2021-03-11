@@ -33,24 +33,24 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
 
         // size picker that updates everything on state change
         String[] sizes = Task.sizes.toArray(new String[Task.sizes.size()]);
-        this.sizePicker = new Picker();
-        this.sizePicker.setType(Display.PICKER_TYPE_STRINGS);
-        this.sizePicker.setStrings(sizes);
-        this.sizePicker.setSelectedStringIndex(1); // default to "S"
-        this.sizePicker.addActionListener((e) -> askParentForUpdate());
-        this.add(this.sizePicker);
+        sizePicker = new Picker();
+        sizePicker.setType(Display.PICKER_TYPE_STRINGS);
+        sizePicker.setStrings(sizes);
+        sizePicker.setSelectedStringIndex(1); // default to "S"
+        sizePicker.addActionListener((e) -> askParentForUpdate());
+        add(sizePicker);
 
         // Tasks
-        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
+        add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
                                      FONT_SIZE_SUB_TITLE));
-        this.tasks = new TaskContainer();
-        this.add(this.tasks);
+        tasks = new TaskContainer();
+        add(tasks);
 
         // Stats
-        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.stats = new StatsContainer();
-        this.add(this.stats);
+        add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        stats = new StatsContainer();
+        add(stats);
     }
 
     // filter a task list for the specified size
@@ -73,7 +73,7 @@ public class SummarySize extends UpdateableContainer implements AppConstants {
         filteredList = filterTaskList(taskList, sizePicker.getSelectedString());
 
         // update the sub containers with that filtered list
-        this.tasks.updateContainer(filteredList);
-        this.stats.updateContainer(filteredList);
+        tasks.updateContainer(filteredList);
+        stats.updateContainer(filteredList);
     }
 }
