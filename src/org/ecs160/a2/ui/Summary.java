@@ -33,10 +33,10 @@ public class Summary extends UpdateableContainer implements AppConstants {
      */
     public Summary () {
         super(new BoxLayout(BoxLayout.Y_AXIS));
-        this.setScrollableY(true); // can scroll vertically
+        setScrollableY(true); // can scroll vertically
         
         // setup pages list
-        this.pages = new HashMap<>();
+        pages = new HashMap<>();
 
         // page button container setup
         // set the background styling
@@ -47,21 +47,21 @@ public class Summary extends UpdateableContainer implements AppConstants {
         pageButtonContainer.getAllStyles().setBorder(RoundRectBorder.create());
         pageButtonContainer.getAllStyles().setMargin(Component.TOP, marginSize);
         pageButtonContainer.getAllStyles().setMargin(Component.BOTTOM, marginSize);
-        this.add(pageButtonContainer);
+        add(pageButtonContainer);
 
         // setup pages
-        this.addPage("Everything", new SummaryAll());
-        this.addPage("By Size", new SummarySize());
-        this.addPage("By Tag", new SummaryTags());
+        addPage("Everything", new SummaryAll());
+        addPage("By Size", new SummarySize());
+        addPage("By Tag", new SummaryTags());
 
         // revalidate the button container
-        pageButtonContainer.setLayout(new GridLayout(1, this.pages.size()));
+        pageButtonContainer.setLayout(new GridLayout(1, pages.size()));
         pageButtonContainer.revalidate();
 
         // Setup pull to refresh for this container
-        this.addPullToRefresh(() -> updateSubContainers());
-        this.updateSubContainers();
-        this.selectPage("Everything");
+        addPullToRefresh(() -> updateSubContainers());
+        updateSubContainers();
+        selectPage("Everything");
     }
 
     // method to construct page buttons
@@ -91,18 +91,18 @@ public class Summary extends UpdateableContainer implements AppConstants {
 
     // method to add a new page
     private void addPage (String text, UpdateableContainer page) {
-        this.addPageButton(text);
+        addPageButton(text);
         page.setHidden(true);
-        this.pages.put(text, page);
-        this.add(page);
+        pages.put(text, page);
+        add(page);
     }
 
     // select a page for the given button text
     private void selectPage (String text) {
         setSelectedButtonStyle(text);
-        this.pages.forEach((key, value) -> value.setHidden(true));
-        this.pages.get(text).updateContainer(taskList);
-        this.pages.get(text).setHidden(false);
+        pages.forEach((key, value) -> value.setHidden(true));
+        pages.get(text).updateContainer(taskList);
+        pages.get(text).setHidden(false);
     }
 
     // reload the internal task list by reading in from the static Database
@@ -119,9 +119,9 @@ public class Summary extends UpdateableContainer implements AppConstants {
      * Update the visible subpages of this Container
      */
     public void updateSubContainers () {
-        this.reloadTaskList(); // refresh the tasks first
+        reloadTaskList(); // refresh the tasks first
         if (taskList.size() > 0) {
-            this.pages.forEach((key, value) -> checkForUpdate(value));
+            pages.forEach((key, value) -> checkForUpdate(value));
         }
     }
 
@@ -138,6 +138,6 @@ public class Summary extends UpdateableContainer implements AppConstants {
      */
     @Override
     public void updateContainer(List<Task> taskList) {
-        this.updateSubContainers();
+        updateSubContainers();
     }
 }

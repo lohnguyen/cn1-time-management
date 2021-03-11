@@ -44,7 +44,7 @@ public abstract class UpdateableContainer extends Container {
      * an UpdateableContainer
      */
     protected void askParentForUpdate () {
-        Container parent = this.getParent();
+        Container parent = getParent();
         if (parent instanceof UpdateableContainer) {
             UpdateableContainer parentCast = (UpdateableContainer) parent;
             parentCast.childAsksForUpdate(this);

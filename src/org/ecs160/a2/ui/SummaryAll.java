@@ -27,22 +27,22 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
         super(new BoxLayout(BoxLayout.Y_AXIS));
 
         // Tasks
-        this.add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.tasks = new TaskContainer();
-        this.add(this.tasks);  
+        add(UIUtils.createLabel("Tasks", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        tasks = new TaskContainer();
+        add(tasks);  
 
         // Sizes
-        this.add(UIUtils.createLabel("Sizes", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.sizes = new SizeContainer();
-        this.add(this.sizes);  
+        add(UIUtils.createLabel("Sizes", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        sizes = new SizeContainer();
+        add(sizes);  
 
         // Stats
-        this.add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
-                                     FONT_SIZE_SUB_TITLE));
-        this.stats = new StatsContainer();
-        this.add(this.stats);
+        add(UIUtils.createLabel("Statistics", NATIVE_BOLD, COLOR_TITLE,
+                                FONT_SIZE_SUB_TITLE));
+        stats = new StatsContainer();
+        add(stats);
     }
 
     /**
@@ -50,8 +50,8 @@ public class SummaryAll extends UpdateableContainer implements AppConstants {
      */
     @Override
     public void updateContainer(List<Task> taskList) {
-        this.tasks.updateContainer(taskList);
-        this.sizes.updateContainer(taskList);
-        this.stats.updateContainer(taskList);
+        tasks.updateContainer(taskList);
+        sizes.updateContainer(taskList);
+        stats.updateContainer(taskList);
     }
 }
