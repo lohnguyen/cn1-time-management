@@ -59,20 +59,20 @@ public class TaskEditor extends Dialog {
         constructView();
         setDisposeWhenPointerOutOfBounds(true);
         int displayHeight = Display.getInstance().getDisplayHeight();
-        show(displayHeight/8, 0, 0, 0);
+        show(displayHeight / 8, 0, 0, 0);
     }
 
     /**
      * Construct the editor's view depending on the purpose:
-     *   - With DetailForm for creating a task
-     *   - With DetailForm and TimeSpanForm for editing a task
+     * - With DetailForm for creating a task
+     * - With DetailForm and TimeSpanForm for editing a task
      */
     private void constructView() {
         setDetailForm();
         if (isEditForm()) setTimeSpanForm();
 
         Button addButton = new Button(isEditForm() ? "Save" : "Create");
-        addButton.addActionListener(e ->  {
+        addButton.addActionListener(e -> {
             if (task == null) addTaskToDatabase();
             else editTaskInDatabase();
         });
@@ -140,6 +140,7 @@ public class TaskEditor extends Dialog {
 
     /**
      * Create a delete button for time intervals' removal
+     *
      * @return A CN1 Button instance
      */
     private Button createDeleteButton() {
@@ -163,8 +164,7 @@ public class TaskEditor extends Dialog {
         Command[] commands = new Command[]{delete, cancel};
         Command choice = Dialog.show("Delete this time interval",
                 "Are you sure you want to proceed? This action cannot be " +
-                        "reverted.",
-                commands);
+                        "reverted.", commands);
 
         if (choice == cancel) return;
 
@@ -201,10 +201,10 @@ public class TaskEditor extends Dialog {
      */
     private void editTaskInDatabase() {
         task.setTitle(taskTitle.getText())
-            .setDescription(taskDescription.getText())
-            .setSize(createSizeText())
-            .setTags(extractTags())
-            .setTimeSpans(timeSpans);
+                .setDescription(taskDescription.getText())
+                .setSize(createSizeText())
+                .setTags(extractTags())
+                .setTimeSpans(timeSpans);
 
         Database.update(Task.OBJECT_ID, task);
         dispose();
@@ -257,9 +257,9 @@ public class TaskEditor extends Dialog {
     /**
      * Searches a list of tasks for specific tag or title
      *
-     * @param sizeDialog The dialog to be populated with sizes
+     * @param sizeDialog    The dialog to be populated with sizes
      * @param oneSizeButton Single button with a specific size
-     * @param sizeButton Multibutton holder for all single buttons (one size buttons)
+     * @param sizeButton    Multibutton holder for all single buttons (one size buttons)
      */
     private void displaySelectedSize(Dialog sizeDialog, MultiButton oneSizeButton, MultiButton sizeButton) {
         sizeButton.setText(oneSizeButton.getText());

@@ -1,31 +1,15 @@
-# Final Project
+# CN1 Time Tracking Application
 
-## Models
+A simple task management mobile application for ECS 160 Final Project (Winter 2021).
 
-### Task
+More details and documentations can be found in the submission.
 
-- title: String
-- description: String
-- size: String
-- totalTime: long
-- timeSpans: [TimeSpan]
-- tags: [String]
+## Team Members (Group 4)
 
-### TimeSpan
-
-- start: LocalDateTime
-- end: LocalDateTime
-
-## Database
-
-- storage: Storage
+- Ajay Bhungal
+- Akash Malode
+- Charles Nguyen
+- Troi-Ryan Stoeffler
+- Zhennan Wu
 
 
-## User Interface Design
-
-Notes:
-
-- Summary button at the top (tabs)
-- Tasks as a list of "cards"
-- Separate the stopped/running tasks
-- Drop down for tags/sizes
